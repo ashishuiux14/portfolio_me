@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iPhone Charging Dock — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --surface2: #161616;
+  --surface3: #1e1e1e;
+  --bordergray: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.12);
+  --text: #f5f5f5;
+  --muted: rgba(245,245,245,0.48);
+  --dim: rgba(245,245,245,0.26);
+  --silver: #c8cdd4;
+  --silver-dim: rgba(200,205,212,0.1);
+  --silver-glow: rgba(200,205,212,0.15);
+  --white: #ffffff;
+  --accent: #e0e4ea;
+  --ff: 'Syne', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+  --max: 1080px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.45s}
+
+/* ══ HERO — full cinematic product shot ══ */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.hero-img-wrap {
+  position: absolute; inset: 0;
+}
+.hero-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(0.55) contrast(1.05);
+}
+/* dark overlay gradients */
+.hero-overlay-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, transparent 100%);
+}
+.hero-overlay-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 70%;
+  background: linear-gradient(to top, rgba(8,8,8,1) 0%, rgba(8,8,8,0.7) 40%, transparent 100%);
+}
+/* Subtle silver glow behind product */
+.hero-glow {
+  position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(200,205,212,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 0 80px;
+}
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.hero-line { width: 28px; height: 1px; background: var(--silver); opacity: 0.5; }
+.hero-kicker { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--silver); }
+
+.hero-title {
+  font-family: var(--ff);
+  font-size: clamp(52px,7vw,100px);
+  font-weight: 800; line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+.hero-title em { font-style: normal; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
+
+.hero-sub {
+  font-size: 18px; font-weight: 300;
+  color: var(--muted); max-width: 520px; line-height: 1.7;
+  margin-bottom: 48px;
+}
+
+.hero-meta { display: flex; gap: 48px; flex-wrap: wrap; }
+.hm-item { display: flex; flex-direction: column; gap: 4px; }
+.hm-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+.hm-value { font-size: 13px; font-weight: 500; color: var(--muted); }
+
+/* Scroll cue */
+.scroll-cue {
+  position: absolute; bottom: 88px; right: 48px; z-index: 2;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--dim); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.scroll-line { width: 36px; height: 1px; background: var(--dim); }
+
+/* ══ SECTIONS ══ */
+section { padding: 96px 0; }
+.section-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--silver); display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.section-label::before { content: ''; width: 20px; height: 1px; background: var(--silver); opacity: 0.5; }
+.section-ghost {
+  font-family: var(--ff); font-size: 100px; font-weight: 800; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+  position: absolute; right: 0; top: 60px; pointer-events: none; user-select: none;
+}
+.section-title {
+  font-family: var(--ff); font-size: clamp(28px,3.5vw,46px); font-weight: 700;
+  line-height: 1.1; letter-spacing: -0.025em;
+}
+.section-title span { color: var(--silver); }
+.section-header { margin-bottom: 64px; position: relative; }
+
+/* ══ FULL-BLEED IMAGE ══ */
+.img-full {
+  width: 100%; border-radius: 20px; overflow: hidden;
+  margin: 52px 0;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+}
+.img-full img { width: 100%; height: auto; display: block; }
+.img-full.tall img { max-height: 600px; object-fit: cover; object-position: center; }
+
+/* ══ SPLIT ══ */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 52px 0; }
+.split.rev { direction: rtl; }
+.split.rev > * { direction: ltr; }
+.split-img { border-radius: 20px; overflow: hidden; box-shadow: 0 24px 72px rgba(0,0,0,0.7); }
+.split-img img { width: 100%; height: auto; display: block; }
+.split-img.cover img { height: 460px; object-fit: cover; }
+.split-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--silver); margin-bottom: 14px; }
+.split-title { font-family: var(--ff); font-size: clamp(22px,2.6vw,32px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+.split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
+.split-quote { border-left: 2px solid var(--silver); padding: 14px 20px; background: var(--silver-dim); border-radius: 0 10px 10px 0; font-size: 15px; color: var(--text); line-height: 1.6; }
+
+/* ══ PULL QUOTE ══ */
+.pull {
+  background: var(--surface); border: 1px solid var(--bordergray);
+  border-radius: 24px; padding: 56px 64px; margin: 72px 0;
+  position: relative; overflow: hidden;
+}
+.pull::before {
+  content: '"'; font-family: var(--ff); font-size: 220px; font-weight: 800;
+  color: rgba(200,205,212,0.07); position: absolute; top: -30px; left: 24px; line-height: 1;
+}
+.pull-text {
+  font-family: var(--ff); font-size: clamp(22px,2.8vw,38px); font-weight: 700;
+  letter-spacing: -0.02em; color: var(--text); line-height: 1.2;
+  position: relative; z-index: 1; max-width: 760px;
+}
+.pull-text em { font-style: normal; color: var(--silver); }
+.pull-attr { font-size: 13px; color: var(--dim); margin-top: 20px; position: relative; z-index: 1; }
+
+/* ══ STATS ══ */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 18px; overflow: hidden; margin: 52px 0; }
+.stat-card { background: var(--surface); padding: 36px 28px; }
+.stat-num { font-family: var(--ff); font-size: 48px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 8px; color: var(--silver); }
+.stat-label { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.stat-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ══ REVIEW CARDS — the social proof section ══ */
+.reviews-section {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 64px 48px;
+  margin: 72px 0;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--bordergray);
+}
+.reviews-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(200,205,212,0.05) 0%, transparent 65%);
+}
+.reviews-header { text-align: center; margin-bottom: 48px; position: relative; z-index: 1; }
+.reviews-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--silver); margin-bottom: 12px; }
+.reviews-title { font-family: var(--ff); font-size: clamp(26px,3vw,42px); font-weight: 800; color: var(--text); letter-spacing: -0.025em; line-height: 1.1; }
+.reviews-title em { font-style: normal; color: var(--silver); }
+.reviews-sub { font-size: 15px; color: var(--muted); margin-top: 12px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+.reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; position: relative; z-index: 1; }
+.review-card {
+  background: var(--surface2); border: 1px solid var(--bordergray);
+  border-radius: 18px; padding: 28px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.review-card:hover { border-color: rgba(200,205,212,0.2); transform: translateY(-4px); }
+.review-card.featured {
+  background: linear-gradient(135deg, rgba(200,205,212,0.08), rgba(200,205,212,0.03));
+  border-color: rgba(200,205,212,0.2);
+}
+.review-stars { display: flex; gap: 3px; margin-bottom: 16px; }
+.star { font-size: 14px; color: #fbbf24; }
+.review-text {
+  font-size: 14px; color: var(--text); line-height: 1.75;
+  margin-bottom: 20px; font-style: italic; font-weight: 300;
+}
+.review-text strong { font-style: normal; font-weight: 500; color: var(--silver); }
+.reviewer { display: flex; align-items: center; gap: 12px; }
+.reviewer-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface3); border: 1px solid var(--bordergray);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff); font-size: 13px; font-weight: 700; color: var(--silver);
+  flex-shrink: 0;
+}
+.reviewer-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.reviewer-role { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+/* ══ PHOTO SHOWCASE — 2 final product shots editorial ══ */
+.photo-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin: 52px 0; }
+.photo-card { border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 24px 72px rgba(0,0,0,0.7); }
+.photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+.photo-card:hover img { transform: scale(1.02); }
+.photo-card .photo-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 100%);
+  padding: 24px 20px 16px;
+  font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.6);
+}
+.photo-card.main { min-height: 460px; }
+.photo-card.side { min-height: 460px; }
+
+/* ══ DESIGN DETAILS ══ */
+.details-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin: 52px 0; }
+.detail-card {
+  background: var(--surface); border: 1px solid var(--bordergray);
+  border-radius: 16px; padding: 28px;
+  display: flex; gap: 20px; align-items: flex-start;
+  transition: border-color 0.3s;
+}
+.detail-card:hover { border-color: rgba(200,205,212,0.18); }
+.detail-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--silver-dim); border: 1px solid rgba(200,205,212,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.detail-title { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+.detail-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ══ PROCESS STEPS ══ */
+.process { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 52px 0; }
+.proc { background: var(--surface); padding: 28px 22px; transition: background 0.3s; }
+.proc:hover { background: var(--surface2); }
+.proc-num { font-family: var(--ff); font-size: 10px; font-weight: 700; color: var(--silver); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.proc-title { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.proc-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ══ OUTCOME ══ */
+.outcome { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 20px; overflow: hidden; margin: 52px 0; }
+.out-card { background: var(--surface); padding: 40px 32px; position: relative; }
+.out-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--silver); opacity: 0.3; }
+.out-num { font-family: var(--ff); font-size: 52px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 10px; color: var(--silver); }
+.out-label { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+.out-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.divider { height: 1px; background: var(--bordergray); margin: 72px 0; }
+.pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 100px; background: var(--silver-dim); color: var(--silver); border: 1px solid rgba(200,205,212,0.15); margin: 4px 4px 0 0; }
+
+footer { border-top: 1px solid var(--bordergray); padding: 56px 0; }
+
+@media(max-width:900px){
+  .split{grid-template-columns:1fr;gap:32px;} .split.rev{direction:ltr;}
+  .stats,.outcome{grid-template-columns:1fr;} .details-grid{grid-template-columns:1fr;}
+  .reviews-grid{grid-template-columns:1fr;} .photo-grid{grid-template-columns:1fr;}
+  .process{grid-template-columns:1fr 1fr;} .container{padding:0 24px;}
+  .pull{padding:36px 28px;} .reviews-section{padding:40px 24px;}
+  .photo-card.main,.photo-card.side{min-height:300px;}
+}
+/* CUSTOM CURSOR STYLES */
+*, *::before, *::after { cursor: none !important; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img-wrap">
+    <img src="https://framerusercontent.com/images/VS5OgR43afu5d5xEy9z2PPwnj8.png" alt="iPhone Charging Dock — hero render"/>
+  </div>
+  <div class="hero-glow"></div>
+  <div class="hero-overlay-top"></div>
+  <div class="hero-overlay-bottom"></div>
+
+  <div class="hero-content reveal">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <div class="hero-line"></div>
+        <span class="hero-kicker">3D Printing · Industrial Design · Personal Project</span>
+      </div>
+      <h1 class="hero-title">The dock<br>Apple<br><em>forgot to make.</em></h1>
+      <p class="hero-sub">A redesigned iPhone charging dock with seamless Apple Watch integration — conceived, modelled, printed, and iterated in 3 weeks. Inspired by Max Braun. Built by hand.</p>
+      <div class="hero-meta">
+        <div class="hm-item"><span class="hm-label">Timeline</span><span class="hm-value">3 weeks</span></div>
+        <div class="hm-item"><span class="hm-label">Type</span><span class="hm-value">Personal · 3D Printed</span></div>
+        <div class="hm-item"><span class="hm-label">Inspired by</span><span class="hm-value">Scott Yu-Jan · Max Braun</span></div>
+        <div class="hm-item"><span class="hm-label">Process</span><span class="hm-value">Concept → Model → Print → Iterate</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+
+<!-- 01 PROBLEM -->
+<section style="background:var(--bg)">
+<div class="container">
+  <div class="section-header reveal" style="position:relative">
+    <div class="section-ghost">01</div>
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">One nightstand.<br><span>Three chargers. Zero elegance.</span></h2>
+  </div>
+
+  <div class="split reveal">
+    <div class="split-img cover">
+      <img src="https://framerusercontent.com/images/AjKH6Pg4nICP99US6tptNSckc4.jpg" alt="The cluttered charging problem"/>
+    </div>
+    <div>
+      <div class="split-overline">The everyday frustration</div>
+      <h3 class="split-title">iPhone. Apple Watch. AirPods. Each on its own cable.</h3>
+      <p class="split-body">Most people who own Apple devices end up with a nightstand or desk that looks like a cable graveyard. Separate docks, separate cables, separate chargers — all for devices made by the same company, designed to work together.</p>
+      <p class="split-body">Integrated solutions exist — but Apple's own MagSafe stand costs a premium, and third-party alternatives sacrifice aesthetics for function. The gap: a beautiful, affordable, all-in-one dock that actually looks like it belongs on your desk.</p>
+      <div class="split-quote">The existing Scott Yu-Jan iPhone dock was already a great starting point. The challenge was to extend it — integrating the Apple Watch puck without compromising the original minimalist aesthetic or footprint.</div>
+      <div style="margin-top:18px">
+        <span class="pill">Cable clutter</span>
+        <span class="pill">Expensive solutions</span>
+        <span class="pill">Poor aesthetics</span>
+        <span class="pill">No integrated design</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- PULL QUOTE -->
+<div style="background:var(--surface)">
+<div class="container" style="padding-top:72px;padding-bottom:0">
+  <div class="pull reveal">
+    <p class="pull-text">What if you could have <em>Apple-level elegance</em> without the Apple price tag? That question became a 3D printer and three weeks of iteration.</p>
+    <p class="pull-attr">— Design premise, iPhone Charging Dock</p>
+  </div>
+</div>
+</div>
+
+
+<!-- 02 INSPIRATION -->
+<section style="background:var(--surface)">
+<div class="container">
+  <div class="section-header reveal" style="position:relative">
+    <div class="section-ghost">02</div>
+    <div class="section-label">Inspiration & Challenge</div>
+    <h2 class="section-title">Max Braun's principles.<br><span>Applied to a drawer mechanism.</span></h2>
+  </div>
+
+  <div class="split rev reveal">
+    <div class="split-img cover">
+      <img src="https://framerusercontent.com/images/Mtafz1pTaqvr75C33fWBHwdI.jpg" alt="Design inspiration — minimalist Braun principles"/>
+    </div>
+    <div>
+      <div class="split-overline">Design philosophy</div>
+      <h3 class="split-title">Less, but better.</h3>
+      <p class="split-body">Max Braun's design principles — simplicity, functionality, and honesty of materials — guided every decision. If it didn't need to be there, it wasn't. If it existed, it did something.</p>
+      <p class="split-body">The hardest constraint: integrate the Apple Watch puck without increasing the dock's footprint. This meant building a <strong style="color:var(--text);font-weight:500">push-pull drawer mechanism</strong> — hidden when not in use, deployed in one clean motion when you need it.</p>
+      <div class="split-quote">The watch charger had to disappear when not in use. A push-pull mechanism from Amazon drawer fittings — after multiple spring tension iterations — became the elegant solution hiding inside a 3D printed shell.</div>
+    </div>
+  </div>
+
+  <div class="img-full reveal">
+    <img src="https://framerusercontent.com/images/TqLtTC7p293EJN6P7v4YtGFi6cM.jpeg" alt="Market challenge — expensive existing solutions"/>
+  </div>
+
+  <div class="stats reveal">
+    <div class="stat-card">
+      <div class="stat-num">$200+</div>
+      <div class="stat-label">Official Apple solutions cost</div>
+      <div class="stat-body">MagSafe Duo and Apple-adjacent dock solutions sit at a premium price point most users don't want to pay for a charging stand.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--accent)">3</div>
+      <div class="stat-label">Weeks concept to final print</div>
+      <div class="stat-body">From initial sketches through 3D modelling, multiple prototype iterations, and mechanism testing — all in under a month.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--accent)">∞</div>
+      <div class="stat-label">Spring tension iterations</div>
+      <div class="stat-body">The push-pull mechanism went through multiple spring strengths before landing on off-the-shelf drawer fittings — the perfect fit for confined internal space.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- 03 FEEDBACK -->
+<section style="background:var(--bg)">
+<div class="container">
+  <div class="section-header reveal" style="position:relative">
+    <div class="section-ghost">03</div>
+    <div class="section-label">Research & Feedback</div>
+    <h2 class="section-title">Friends don't lie.<br><span>The concept was validated immediately.</span></h2>
+  </div>
+
+  <div class="split reveal">
+    <div class="split-img cover">
+      <img src="https://framerusercontent.com/images/nWH7wAzD4WJx00pqZ2rAXdELLCo.jpg" alt="User research and feedback gathering"/>
+    </div>
+    <div>
+      <div class="split-overline">Hypothetical + Real feedback</div>
+      <h3 class="split-title">Shown to friends and roommates. The reaction was immediate.</h3>
+      <p class="split-body">Before building, the concept was validated with friends and roommates who owned iPhones and Apple Watches. The response was unanimous: everyone wanted this. The specific pain point of desk clutter resonated across the board.</p>
+      <p class="split-body">The key insight from early conversations: it wasn't just about function. People wanted something they <strong style="color:var(--text);font-weight:500">actually wanted to look at</strong> on their desk — not just a cable organiser with a premium name badge.</p>
+      <div class="split-quote">Everyone said yes before the first prototype was even printed. That told me the problem was real — and the market gap was wide open.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- COMMUNITY REVIEWS -->
+<div style="background:var(--bg)">
+<div class="container">
+
+<div class="reviews-section reveal">
+  <div class="reviews-header">
+    <div class="reviews-eyebrow">Community Response · Real Reviews</div>
+    <h2 class="reviews-title">People <em>absolutely love it.</em></h2>
+    <p class="reviews-sub">Shared to the 3D printing community — and the response has been overwhelming. This is why it's close to the heart.</p>
+  </div>
+
+  <div class="reviews-grid">
+    <div class="review-card featured">
+      <div class="review-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="review-text">"This is exactly what I've been looking for. <strong>The push-pull mechanism for the Watch is genius</strong> — it hides away perfectly. Printed it overnight and it looks like a commercial product."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">JM</div>
+        <div><div class="reviewer-name">Jake M.</div><div class="reviewer-role">3D printing enthusiast · Reddit</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="review-text">"Finally a dock that doesn't look like a gadget. <strong>Braun influence is so clear</strong> and it sits perfectly on my nightstand. My partner keeps asking where I bought it."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">SR</div>
+        <div><div class="reviewer-name">Sam R.</div><div class="reviewer-role">Designer · Printables</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="review-text">"The cable management is so clean. I've tried 6 different docks and this is the first one that actually <strong>keeps my desk looking minimal</strong>. The Watch arm is so satisfying to use."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">AL</div>
+        <div><div class="reviewer-name">Alex L.</div><div class="reviewer-role">Maker · Thingiverse</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="review-text">"Printed in matte black PLA and it looks absolutely premium. <strong>Way better than the Apple MagSafe Duo</strong> for a fraction of the price. The tolerances are perfect."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">TP</div>
+        <div><div class="reviewer-name">Tom P.</div><div class="reviewer-role">Apple fan · 3D printing community</div></div>
+      </div>
+    </div>
+
+    <div class="review-card featured">
+      <div class="review-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="review-text">"I work in product design and this is genuinely <strong>better than most commercial solutions</strong>. The integrated Watch puck drawer is such an elegant solution to a hard problem. Bravo."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">KD</div>
+        <div><div class="reviewer-name">Kim D.</div><div class="reviewer-role">Product Designer</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="review-text">"The fact that this is 3D printed and not commercial is mind-blowing. <strong>The original Scott Yu-Jan dock was good — this is better.</strong> The Watch integration is seamless."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">RN</div>
+        <div><div class="reviewer-name">Ryan N.</div><div class="reviewer-role">Maker · Community</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- 04 PROCESS -->
+<section style="background:var(--surface)">
+<div class="container">
+  <div class="section-header reveal" style="position:relative">
+    <div class="section-ghost">04</div>
+    <div class="section-label">Design Process</div>
+    <h2 class="section-title">Sketch. Model.<br><span>Print. Iterate.</span></h2>
+  </div>
+
+  <div class="process reveal">
+    <div class="proc"><div class="proc-num">Step 01</div><div class="proc-title">Concept & Sketching</div><div class="proc-body">Explored configurations for integrating the Watch charger. Focused on ergonomics, cable management, and how to hide the puck without adding bulk.</div></div>
+    <div class="proc"><div class="proc-num">Step 02</div><div class="proc-title">3D Modelling</div><div class="proc-body">CAD modelling — maintaining original footprint while carving internal cavity for push-pull mechanism and cable routing.</div></div>
+    <div class="proc"><div class="proc-num">Step 03</div><div class="proc-title">Mechanism Iteration</div><div class="proc-body">Multiple spring tensions tested. Settled on off-the-shelf Amazon drawer push-pulls — perfectly sized, cost-effective.</div></div>
+    <div class="proc"><div class="proc-num">Step 04</div><div class="proc-title">Final Print & Finish</div><div class="proc-body">Refined tolerances. Matte filament finish to honor the Braun-influenced minimal aesthetic. Ready for the community.</div></div>
+  </div>
+
+  <div class="img-full reveal">
+    <img src="https://framerusercontent.com/images/gZbmtLzL71i3R1aDoi7vcJbric.png" alt="3D modelling and design process"/>
+  </div>
+
+  <div class="details-grid reveal">
+    <div class="detail-card">
+      <div class="detail-icon">🔧</div>
+      <div>
+        <div class="detail-title">Push-pull drawer mechanism</div>
+        <div class="detail-body">The Watch charger arm deploys and retracts via a spring-loaded push-pull mechanism — same hardware used in kitchen cabinets. No loose parts, no wobble.</div>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-icon">📐</div>
+      <div>
+        <div class="detail-title">Original footprint preserved</div>
+        <div class="detail-body">The redesign adds full Apple Watch integration without increasing the dock's desk footprint. Everything hides inside the original form factor.</div>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-icon">🪄</div>
+      <div>
+        <div class="detail-title">Cable management built-in</div>
+        <div class="detail-body">Internal channels route both Lightning/USB-C and Watch puck cables cleanly. No exposed wires. No velcro. No excuses.</div>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-icon">💰</div>
+      <div>
+        <div class="detail-title">Fraction of the cost</div>
+        <div class="detail-body">Achieves results comparable to $200+ commercial solutions at the cost of filament and a $3 mechanism. Democratised industrial design.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- 05 FINAL PRODUCT -->
+<section style="background:var(--bg)">
+<div class="container">
+  <div class="section-header reveal" style="position:relative">
+    <div class="section-ghost">05</div>
+    <div class="section-label">Final Product</div>
+    <h2 class="section-title">Three weeks.<br><span>One beautiful object.</span></h2>
+    <p style="font-size:16px;color:var(--muted);max-width:520px;margin-top:16px;line-height:1.8">Conceived, modelled, printed, and iterated in 3 weeks. Inspired by Max Braun. Built by hand.</p>
+  </div>
+
+  <div class="photo-grid reveal">
+    <div class="photo-card main">
+      <img src="https://framerusercontent.com/images/87fSpwNs6SiYoWCH9FlABz2NVdw.jpg" alt="iPhone Charging Dock — final product shot 1"/>
+      <div class="photo-label">Final product — iPhone + Watch integrated</div>
+    </div>
+    <div class="photo-card side">
+      <img src="https://framerusercontent.com/images/6C89l4TMqVgiTksDvoY3DLch2EE.jpg" alt="iPhone Charging Dock — final product shot 2"/>
+      <div class="photo-label">Push-pull Watch arm — deployed</div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- 06 OUTCOMES -->
+<section style="background:var(--surface)">
+<div class="container">
+  <div class="section-header reveal" style="position:relative">
+    <div class="section-ghost">06</div>
+    <div class="section-label">Impact</div>
+    <h2 class="section-title">More than a dock.<br><span>A proof of concept.</span></h2>
+  </div>
+
+  <div class="outcome reveal">
+    <div class="out-card">
+      <div class="out-num">1</div>
+      <div class="out-label">Object. Two devices. Zero clutter.</div>
+      <div class="out-desc">iPhone and Apple Watch charge simultaneously from a single dock that takes up less space than a paperback.</div>
+    </div>
+    <div class="out-card">
+      <div class="out-num">$3</div>
+      <div class="out-label">Mechanism cost</div>
+      <div class="out-desc">A drawer push-pull from Amazon. Combined with filament, this achieves what $200 products promise.</div>
+    </div>
+    <div class="out-card">
+      <div class="out-num">★★★★★</div>
+      <div class="out-label">Community reception</div>
+      <div class="out-desc">Shared across 3D printing communities and received with genuine enthusiasm. The reviews speak for themselves.</div>
+    </div>
+  </div>
+
+  <div class="pull reveal">
+    <p class="pull-text">This project proves that <em>good design</em> isn't locked behind premium price tags. A printer, a mechanism, and a clear brief — that's all it took.</p>
+    <p class="pull-attr">— Personal reflection, iPhone Charging Dock</p>
+  </div>
+
+  <!-- 4 pillars -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bordergray);border-radius:16px;overflow:hidden;margin-bottom:80px" class="reveal">
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center">
+      <div style="font-size:24px;margin-bottom:10px">🖨️</div>
+      <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">3D Printed</div>
+      <div style="font-size:12px;color:var(--muted)">Fully printable, no special tools</div>
+    </div>
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center">
+      <div style="font-size:24px;margin-bottom:10px">⌚</div>
+      <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Watch Integration</div>
+      <div style="font-size:12px;color:var(--muted)">Push-pull hidden drawer mechanism</div>
+    </div>
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center">
+      <div style="font-size:24px;margin-bottom:10px">🎨</div>
+      <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Braun-Inspired</div>
+      <div style="font-size:12px;color:var(--muted)">Minimalist, honest, functional</div>
+    </div>
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center">
+      <div style="font-size:24px;margin-bottom:10px">❤️</div>
+      <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Community Loved</div>
+      <div style="font-size:12px;color:var(--muted)">5★ reviews across maker platforms</div>
+    </div>
+  </div>
+
+  <!-- ─────────── PREV / NEXT NAV ─────────── -->
+  <section style="padding:0 0 80px;background:var(--surface)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+      <!-- PREV -->
+      <a href="/projects/travelogue" target="_top" style="
+        display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+        background:var(--surface2);border:1px solid var(--bordergray);
+        border-radius:16px;padding:28px 32px;
+        text-decoration:none;color:var(--text);
+        transition:background 0.2s,border-color 0.2s;
+      " onmouseover="this.style.background='var(--surface3)';this.style.borderColor='var(--silver)'" onmouseout="this.style.background='var(--surface2)';this.style.borderColor='var(--bordergray)'">
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Travelogue</div>
+        <div style="font-size:13px;color:var(--muted)">Plan. Share. Remember.</div>
+      </a>
+      <!-- NEXT placeholder -->
+      <div style="
+        display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:10px;
+        background:var(--surface2);border:1px solid var(--bordergray);
+        border-radius:16px;padding:28px 32px;
+        opacity:0.4;
+      ">
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em;text-align:right">Coming Soon</div>
+        <div style="font-size:13px;color:var(--muted)">More work on the way</div>
+      </div>
+    </div>
+  </section>
+</div>
+</section>
+
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:var(--ff);font-size:14px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)">⌚ iPhone Charging Dock</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:5px">3D Printed · Industrial Design · Personal Project · Built with love</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;color:var(--dim)">3D Printing Case Study · 2024</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:4px">Ashish Dixit · Product Designer</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Relay mousemove messages for custom cursor
+document.addEventListener('mousemove', function(e) {
+  window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+});
+</script>
+</body>
+</html>

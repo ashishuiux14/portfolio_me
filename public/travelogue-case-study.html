@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travelogue — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0a09;
+  --surface: #131110;
+  --surface2: #1a1714;
+  --surface3: #221e1a;
+  --bordergray: rgba(255,255,255,0.07);
+  --border: rgba(232,114,74,0.12);
+  --border2: rgba(232,114,74,0.22);
+  --text: #f2ede8;
+  --muted: rgba(242,237,232,0.5);
+  --dim: rgba(242,237,232,0.28);
+  --orange: #e8724a;
+  --orange-light: #f5a882;
+  --orange-dim: rgba(232,114,74,0.1);
+  --peach: #f4c4a8;
+  --amber: #d4915a;
+  --ff: 'Syne', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+  --max: 1080px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
+
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; background: var(--bg);
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; position: relative; overflow: hidden;
+}
+.hero-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(232,114,74,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(232,114,74,0.03) 1px,transparent 1px); background-size: 68px 68px; }
+.hero-glow { position: absolute; top: -80px; left: -80px; width: 560px; height: 480px; background: radial-gradient(ellipse, rgba(232,114,74,0.18) 0%, transparent 65%); pointer-events: none; }
+.hero-glow2 { position: absolute; bottom: -60px; right: 0; width: 400px; height: 360px; background: radial-gradient(ellipse, rgba(212,145,90,0.1) 0%, transparent 65%); pointer-events: none; }
+.hero-left { padding: 144px 56px 100px 48px; position: relative; z-index: 1; }
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.hero-line { width: 30px; height: 1px; background: var(--orange-light); opacity: 0.6; }
+.hero-kicker { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange-light); }
+.hero-title { font-family: var(--ff); font-size: clamp(36px,4.2vw,58px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--text); margin-bottom: 24px; }
+.hero-title em { font-style: normal; display: block; color: transparent; -webkit-text-stroke: 1px rgba(242,237,232,0.2); margin-top: 10px; font-size: 0.9em; }
+.hero-sub { font-size: 17px; font-weight: 300; color: var(--muted); max-width: 430px; line-height: 1.7; margin-bottom: 44px; }
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-tag { font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 100px; border: 1px solid rgba(232,114,74,0.25); color: var(--muted); }
+.hero-meta { display: flex; gap: 36px; flex-wrap: wrap; }
+.hm-item { display: flex; flex-direction: column; gap: 4px; }
+.hm-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.hm-value { font-size: 13px; font-weight: 500; color: var(--muted); }
+.hero-right { position: relative; height: 100vh; overflow: hidden; }
+.hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, var(--bg) 0%, transparent 30%), linear-gradient(to top, var(--bg) 0%, transparent 28%); }
+
+/* ── CHAPTER ── */
+.chapter { padding: 100px 0 0; position: relative; }
+.chapter-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.chapter-label::before { content: ''; width: 20px; height: 1px; background: var(--orange); opacity: 0.5; }
+.chapter-ghost { font-family: var(--ff); font-size: 100px; font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(232,114,74,0.05); position: absolute; right: 0; top: 60px; pointer-events: none; user-select: none; }
+.chapter-title { font-family: var(--ff); font-size: clamp(28px,3.5vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; }
+.chapter-title span { color: var(--orange); }
+
+/* ── IMAGES ── */
+.img-full { width: 100%; border-radius: 20px; overflow: hidden; margin: 52px 0; box-shadow: 0 24px 64px rgba(0,0,0,0.6); }
+.img-full img { width: 100%; height: auto; display: block; }
+
+/* ── SPLIT ── */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 72px 0; }
+.split.rev { direction: rtl; }
+.split.rev > * { direction: ltr; }
+.split-img { border-radius: 20px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.6); }
+.split-img img { width: 100%; height: auto; display: block; }
+.split-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+.split-title { font-family: var(--ff); font-size: clamp(22px,2.8vw,34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+.split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
+.split-quote { border-left: 2px solid var(--orange); padding: 14px 20px; background: var(--orange-dim); border-radius: 0 10px 10px 0; font-size: 15px; color: var(--text); line-height: 1.6; }
+
+/* ── PULL QUOTE ── */
+.pull { background: var(--surface); border: 1px solid var(--bordergray); border-radius: 24px; padding: 56px 64px; margin: 72px 0; position: relative; overflow: hidden; }
+.pull::before { content: '"'; font-family: var(--ff); font-size: 200px; font-weight: 800; color: var(--orange); opacity: 0.07; position: absolute; top: -24px; left: 28px; line-height: 1; }
+.pull-text { font-family: var(--ff); font-size: clamp(22px,2.8vw,36px); font-weight: 700; letter-spacing: -0.02em; color: var(--text); line-height: 1.25; position: relative; z-index: 1; max-width: 720px; }
+.pull-text em { font-style: normal; color: var(--orange); }
+.pull-attr { font-size: 13px; color: var(--dim); margin-top: 20px; position: relative; z-index: 1; }
+
+/* ── STATS ── */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 18px; overflow: hidden; margin: 52px 0; }
+.stat-card { background: var(--surface); padding: 36px 28px; }
+.stat-num { font-family: var(--ff); font-size: 48px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 8px; color: var(--orange); }
+.stat-num.peach { color: var(--peach); }
+.stat-num.amber { color: var(--amber); }
+.stat-label { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.stat-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── INSIGHTS ── */
+.insights { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 52px 0; }
+.ins-card { background: var(--surface); border: 1px solid var(--bordergray); border-radius: 16px; padding: 28px; transition: border-color 0.3s; }
+.ins-card:hover { border-color: var(--border2); }
+.ins-icon { font-size: 22px; margin-bottom: 12px; }
+.ins-title { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.ins-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.ins-tag { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px; background: var(--orange-dim); color: var(--orange); border: 1px solid var(--border); }
+
+/* ── P vs S TABLE ── */
+.pvs-wrap { border-radius: 16px; overflow: hidden; border: 1px solid var(--bordergray); margin: 52px 0; }
+.pvs { width: 100%; border-collapse: collapse; }
+.pvs th { background: var(--surface2); padding: 14px 20px; font-family: var(--ff); font-size: 12px; font-weight: 700; text-align: left; color: var(--text); letter-spacing: 0.05em; border-bottom: 1px solid var(--bordergray); }
+.pvs td { padding: 13px 20px; font-size: 13px; color: var(--muted); background: var(--surface); border-bottom: 1px solid var(--bordergray); line-height: 1.6; }
+.pvs tr:last-child td { border-bottom: none; }
+.pvs td:first-child { color: var(--orange); font-weight: 500; }
+.pvs td:last-child { color: var(--text); }
+
+/* ── PROCESS ── */
+.process { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 52px 0; }
+.proc { background: var(--surface); padding: 28px 22px; transition: background 0.3s; }
+.proc:hover { background: var(--surface2); }
+.proc-num { font-family: var(--ff); font-size: 10px; font-weight: 700; color: var(--orange); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.proc-title { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.proc-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── SHOWCASE ── */
+.showcase { background: var(--surface); border: 1px solid var(--bordergray); border-radius: 24px; padding: 64px 48px; margin: 72px 0; position: relative; overflow: hidden; }
+.showcase::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(232,114,74,0.02) 1px,transparent 1px), linear-gradient(90deg,rgba(232,114,74,0.02) 1px,transparent 1px); background-size: 48px 48px; }
+.showcase-header { text-align: center; margin-bottom: 48px; position: relative; z-index: 1; }
+.showcase-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+.showcase-title { font-family: var(--ff); font-size: clamp(24px,3vw,40px); font-weight: 800; color: var(--text); letter-spacing: -0.025em; }
+.showcase-sub { font-size: 14px; color: var(--muted); margin-top: 10px; }
+.ui-grid-v { display: flex; flex-direction: column; gap: 48px; align-items: center; position: relative; z-index: 1; }
+.ui-frame { width: 100%; max-width: 960px; border-radius: 20px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.7); }
+.ui-frame img { width: 100%; height: auto; display: block; }
+
+/* ── OUTCOME ── */
+.outcome { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 20px; overflow: hidden; margin: 52px 0; }
+.out-card { background: var(--surface); padding: 40px 32px; position: relative; }
+.out-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+.out-card.o1::after { background: var(--orange); }
+.out-card.o2::after { background: var(--peach); }
+.out-card.o3::after { background: var(--amber); }
+.out-num { font-family: var(--ff); font-size: 52px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 10px; }
+.out-card.o1 .out-num { color: var(--orange); }
+.out-card.o2 .out-num { color: var(--peach); }
+.out-card.o3 .out-num { color: var(--amber); }
+.out-label { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+.out-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.pills { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+.pill { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 100px; background: var(--orange-dim); color: var(--orange); border: 1px solid var(--border); }
+
+footer { border-top: 1px solid var(--bordergray); padding: 56px 0; }
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;} .hero-right{height:50vw;}
+  .split{grid-template-columns:1fr;gap:32px;} .split.rev{direction:ltr;}
+  .stats,.outcome{grid-template-columns:1fr;} .insights{grid-template-columns:1fr;}
+  .process{grid-template-columns:1fr 1fr;} .ui-grid-5{grid-template-columns:repeat(3,1fr);}
+  .container{padding:0 24px;} .chapter{padding:72px 0 0;} .pull{padding:36px 28px;}
+}
+/* CUSTOM CURSOR STYLES */
+*, *::before, *::after { cursor: none !important; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-left reveal">
+    <div class="hero-eyebrow"><div class="hero-line"></div><span class="hero-kicker">UX Research · UI/UX Design · Mobile</span></div>
+    <h1 class="hero-title">Travelogue <em>Plan. Share. Remember.</em></h1>
+    <p class="hero-sub">A social travel app that unifies collaborative planning, trip storytelling, and real-time itinerary access — all in one place.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Collaborative Planning</span>
+      <span class="hero-tag">Social Storytelling</span>
+      <span class="hero-tag">Offline-First</span>
+      <span class="hero-tag">Gamification</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hm-item"><span class="hm-label">Timeline</span><span class="hm-value">Jan – Mar 2025</span></div>
+      <div class="hm-item"><span class="hm-label">Type</span><span class="hm-value">Personal · School Project</span></div>
+      <div class="hm-item"><span class="hm-label">Platform</span><span class="hm-value">iOS Mobile App</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="hero-img" src="https://framerusercontent.com/images/mJcEjUVtbRx1zNmygVEXyD4YM.png" alt="Travelogue app hero"/>
+    <div class="hero-overlay"></div>
+  </div>
+</section>
+
+
+<!-- 01 PROBLEM -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">01</div>
+    <div class="chapter-label">The Problem</div>
+    <h2 class="chapter-title">Travel planning is<br><span>scattered everywhere.</span></h2>
+  </div>
+
+  <div class="split reveal" style="padding-top:52px">
+    <div class="split-img">
+      <img src="https://framerusercontent.com/images/dXHXKtpZa9pdCLSaOBnzQnl8L3c.png" alt="User frustrated with fragmented travel tools"/>
+    </div>
+    <div>
+      <div class="split-overline">Core frustration</div>
+      <h3 class="split-title">Google Docs. WhatsApp. Spreadsheets. None of it talks to each other.</h3>
+      <p class="split-body">Group travel planning is a mess of copy-pasted links, endless threads, and someone always missing the update. There's no single place where the plan, the people, and the memories live together.</p>
+      <p class="split-body">And once the trip ends — all of it disappears. No dedicated space to look back, reflect, or share the story of where you went.</p>
+      <div class="split-quote">Current apps offer itinerary planning <em>or</em> social storytelling. Travelogue's entire purpose is the space between those two things.</div>
+      <div class="pills" style="margin-top:20px">
+        <span class="pill">Fragmented tools</span><span class="pill">No collaboration</span>
+        <span class="pill">No memory capture</span><span class="pill">No offline access</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats reveal">
+    <div class="stat-card">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Apps to plan one trip</div>
+      <div class="stat-body">The average group traveler uses Google Docs, WhatsApp, Maps, and spreadsheets just to coordinate a single itinerary.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num peach">0</div>
+      <div class="stat-label">Platforms do it all</div>
+      <div class="stat-body">No existing app combines real-time collaborative planning, offline access, memory capture, and social storytelling in one experience.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num amber">11</div>
+      <div class="stat-label">Participants interviewed</div>
+      <div class="stat-body">Ages 18–35, solo and group travelers. Every single one described a fragmented, frustrating planning process.</div>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- 02 RESEARCH -->
+<div style="background:var(--surface)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">02</div>
+    <div class="chapter-label">Research Process</div>
+    <h2 class="chapter-title">Three methods.<br><span>One clear direction.</span></h2>
+  </div>
+
+  <p style="font-size:16px;color:var(--muted);max-width:580px;line-height:1.8;margin-top:20px;padding-bottom:52px" class="reveal">A multi-method approach — interviews, card sorting, and usability testing — that didn't just validate assumptions. It actively reshaped the product.</p>
+
+  <div class="stats reveal">
+    <div class="stat-card">
+      <div class="stat-num">11</div>
+      <div class="stat-label">User Interviews</div>
+      <div class="stat-body">Ages 18–35. Solo and group travelers. Key finding: collaboration mattered more than gamification — which completely reprioritised the feature set.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num peach">6</div>
+      <div class="stat-label">Card Sorting Sessions</div>
+      <div class="stat-body">Open card sorting via Optimal Workshop revealed how users mentally group features — directly shaping the bottom nav and three primary sections.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num amber">6</div>
+      <div class="stat-label">Usability Tests</div>
+      <div class="stat-body">Mid-fi and hi-fi testing uncovered confusing CTAs, invite discoverability issues, and offline gaps — all fixed in iteration.</div>
+    </div>
+  </div>
+
+  <div class="insights reveal">
+    <div class="ins-card">
+      <div class="ins-icon">🤝</div>
+      <div class="ins-title">Collaboration over gamification</div>
+      <div class="ins-body">Users consistently prioritised co-editing plans with friends over earning badges. Gamification dropped from core feature to light secondary layer.</div>
+      <span class="ins-tag">Research pivot</span>
+    </div>
+    <div class="ins-card">
+      <div class="ins-icon">📶</div>
+      <div class="ins-title">Offline access is non-negotiable</div>
+      <div class="ins-body">Travelers going abroad or into remote areas cited offline access as critical. This became a dedicated "Make Available Offline" toggle per trip — not a nice-to-have.</div>
+      <span class="ins-tag">Core feature driven by research</span>
+    </div>
+    <div class="ins-card">
+      <div class="ins-icon">🗂️</div>
+      <div class="ins-title">Card sorting rewrote navigation</div>
+      <div class="ins-body">Users drew clear mental distinctions between "planning before the trip" and "experiences during." This restructured the entire bottom nav into Trip Planning, On-Trip, and Explore.</div>
+      <span class="ins-tag">Navigation redesigned</span>
+    </div>
+    <div class="ins-card">
+      <div class="ins-icon">✏️</div>
+      <div class="ins-title">Onboarding needed honesty</div>
+      <div class="ins-body">Users didn't understand how interest selections personalised their experience. Adding live example tooltips mid-onboarding solved the confusion immediately in testing.</div>
+      <span class="ins-tag">Usability fix</span>
+    </div>
+  </div>
+
+  <div class="pull reveal">
+    <p class="pull-text">People valued <em>collaboration</em> more than gamification. That one finding changed the entire product priority.</p>
+    <p class="pull-attr">— Key insight, user interviews · Travelogue 2025</p>
+  </div>
+</div></div>
+
+
+<!-- 03 PERSONAS -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">03</div>
+    <div class="chapter-label">Personas</div>
+    <h2 class="chapter-title">Who we were<br><span>designing for.</span></h2>
+  </div>
+
+  <div class="img-full reveal">
+    <img src="https://framerusercontent.com/images/sH39uh50H1EbnOSqOFzLOjVeXI.png" alt="Travelogue user personas"/>
+  </div>
+
+  <div class="split reveal" style="padding-top:0">
+    <div>
+      <div class="split-overline">Persona insight</div>
+      <h3 class="split-title">Three types of traveler. One consistent frustration.</h3>
+      <p class="split-body">Whether solo adventurer, group organiser, or casual weekend tripper — every persona hit the same wall. Too many tools, too much friction, and no way to capture what the trip actually felt like once it was over.</p>
+      <p class="split-body">The group organiser was doing the work of a project manager — inside WhatsApp. That's not a user problem. That's a product gap.</p>
+      <div class="split-quote">The "group organiser" persona was spending more time coordinating than actually planning. Travelogue needed to make them feel like a host, not an admin.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--bordergray);border-radius:20px;padding:32px">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--orange);margin-bottom:20px">Research → Design</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="padding:16px;background:var(--surface2);border-radius:12px;border-left:3px solid var(--orange)">
+          <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:4px">Navigation Structure</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Card sorting revealed mental groupings → restructured bottom nav into 3 clear sections</div>
+        </div>
+        <div style="padding:16px;background:var(--surface2);border-radius:12px;border-left:3px solid var(--orange-light)">
+          <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:4px">Offline-First Mode</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Cited as crucial across all interviews → dedicated toggle per trip</div>
+        </div>
+        <div style="padding:16px;background:var(--surface2);border-radius:12px;border-left:3px solid var(--amber)">
+          <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:4px">Visual Hierarchy</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Users prioritised checklists + docs over social → elevated in dashboard</div>
+        </div>
+        <div style="padding:16px;background:var(--surface2);border-radius:12px;border-left:3px solid var(--peach)">
+          <div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:4px">Onboarding Tooltips</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Confusion about interest selections → live examples added mid-flow</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- 04 PROCESS -->
+<div style="background:var(--surface)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">04</div>
+    <div class="chapter-label">Design Process</div>
+    <h2 class="chapter-title">Problem to solution,<br><span>mapped clearly.</span></h2>
+  </div>
+
+  <div class="pvs-wrap reveal">
+    <table class="pvs">
+      <thead><tr><th>Pain Point</th><th>Design Solution</th></tr></thead>
+      <tbody>
+        <tr><td>Fragmented tools</td><td>One unified platform for planning + sharing</td></tr>
+        <tr><td>Poor group collaboration</td><td>Group trip editing, shared checklists & documents</td></tr>
+        <tr><td>No memory capture</td><td>Photo journal + trip reflection space post-trip</td></tr>
+        <tr><td>No offline access</td><td>Full offline mode toggle per trip</td></tr>
+        <tr><td>Confusing onboarding</td><td>Interest tagging with live personalisation tooltips</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="process reveal">
+    <div class="proc"><div class="proc-num">Step 01</div><div class="proc-title">Discovery & Research</div><div class="proc-body">11 interviews, card sorting, competitive analysis. Identified the unified planning gap as the core opportunity.</div></div>
+    <div class="proc"><div class="proc-num">Step 02</div><div class="proc-title">Lo-fi Wireframes</div><div class="proc-body">Mapped core flows — trip creation, invites, itinerary editing, offline toggle, and post-trip journaling.</div></div>
+    <div class="proc"><div class="proc-num">Step 03</div><div class="proc-title">Testing & Iteration</div><div class="proc-body">Mid-fi usability testing revealed CTA confusion and invite discoverability gaps. Iterated on both before hi-fi.</div></div>
+    <div class="proc"><div class="proc-num">Step 04</div><div class="proc-title">Hi-Fi & Handoff</div><div class="proc-body">Warm, adventure-forward visual language. Orange/peach accents, dark surfaces, clean typographic hierarchy.</div></div>
+  </div>
+
+  <div class="img-full reveal">
+    <img src="https://framerusercontent.com/images/Qjdc9m3JHg9M6qeKYQ6snZd0cY.png" alt="Travelogue early concept wireframes"/>
+  </div>
+</div></div>
+
+
+<!-- 05 FINAL UI -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">05</div>
+    <div class="chapter-label">Final Design</div>
+    <h2 class="chapter-title">One app.<br><span>Every part of the journey.</span></h2>
+    <p style="font-size:16px;color:var(--muted);max-width:520px;margin-top:18px;line-height:1.8">Plan together. Travel offline. Capture memories. Share your story. All without switching apps.</p>
+  </div>
+</div>
+
+<div class="showcase reveal">
+  <div class="showcase-header">
+    <div class="showcase-eyebrow">High Fidelity Prototypes · Final UI</div>
+    <h3 class="showcase-title">The Travelogue Experience</h3>
+    <p class="showcase-sub">Collaborative planning · Offline mode · Trip journal · Social sharing</p>
+  </div>
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 40px; position:relative; z-index:1">
+    <div class="ui-grid-v">
+      <div class="ui-frame"><img src="https://framerusercontent.com/images/LuEaIOZoK2uf5Du2wE3OllEvVSU.png" alt="Travelogue - Home & Discovery"/></div>
+      <div class="ui-frame"><img src="https://framerusercontent.com/images/LYidibO3ncad3nSxVDD3hATSvtc.png" alt="Travelogue - Trip Planning & Collaboration"/></div>
+      <div class="ui-frame"><img src="https://framerusercontent.com/images/9DWZ40yUJbHYhXroEgww86hjcc.png" alt="Travelogue - Itinerary & Offline Mode"/></div>
+      <div class="ui-frame"><img src="https://framerusercontent.com/images/DvtvlfwCncLYdB3cQbqJIF3vz1I.png" alt="Travelogue - Memory Capture & Journaling"/></div>
+      <div class="ui-frame"><img src="https://framerusercontent.com/images/hs6HwWO4X3A2wvpqtaKfWXidj74.png" alt="Travelogue - Profile & Social Sharing"/></div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- 06 OUTCOMES -->
+<div style="background:var(--surface)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">06</div>
+    <div class="chapter-label">Impact & Outcomes</div>
+    <h2 class="chapter-title">From chaos<br><span>to one place.</span></h2>
+  </div>
+
+  <div class="outcome reveal">
+    <div class="out-card o1">
+      <div class="out-num">1</div>
+      <div class="out-label">App instead of 5+</div>
+      <div class="out-desc">Replace the patchwork of Google Docs, WhatsApp, spreadsheets, and notes with a single unified travel experience.</div>
+    </div>
+    <div class="out-card o2">
+      <div class="out-num">11</div>
+      <div class="out-label">Interviews → 4 pivots</div>
+      <div class="out-desc">Research didn't just validate — it changed priorities. Gamification dropped. Collaboration rose. Offline became non-negotiable.</div>
+    </div>
+    <div class="out-card o3">
+      <div class="out-num">∞</div>
+      <div class="out-label">Memories, not lost</div>
+      <div class="out-desc">The trip journal and post-trip reflection space solve a problem no competitor addresses — what happens to the story after you come home.</div>
+    </div>
+  </div>
+
+  <div class="pull reveal">
+    <p class="pull-text">The best travel experiences don't end when you get home. <em>Travelogue</em> makes sure the story doesn't either.</p>
+    <p class="pull-attr">— Design vision, Travelogue 2025</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bordergray);border-radius:16px;overflow:hidden;margin-bottom:80px" class="reveal">
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">🗺️</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Trip Planning</div><div style="font-size:12px;color:var(--muted)">Solo or group, from scratch</div></div>
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">👥</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Collaboration</div><div style="font-size:12px;color:var(--muted)">Co-edit itineraries in real time</div></div>
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">📶</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Offline Mode</div><div style="font-size:12px;color:var(--muted)">Access anywhere, no signal needed</div></div>
+    <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">📖</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Trip Journal</div><div style="font-size:12px;color:var(--muted)">Capture memories post-trip</div></div>
+  </div>
+
+  <!-- ─────────── PREV / NEXT NAV ─────────── -->
+  <section style="padding:0 0 80px;background:var(--surface)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+      <!-- PREV -->
+      <a href="/projects/3d-hub" target="_top" style="
+        display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+        background:var(--surface2);border:1px solid var(--bordergray);
+        border-radius:16px;padding:28px 32px;
+        text-decoration:none;color:var(--text);
+        transition:background 0.2s,border-color 0.2s;
+      " onmouseover="this.style.background='var(--surface3)';this.style.borderColor='var(--orange)'" onmouseout="this.style.background='var(--surface2)';this.style.borderColor='var(--bordergray)'">
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">3D Hub Social</div>
+        <div style="font-size:13px;color:var(--muted)">Built for makers</div>
+      </a>
+      <!-- NEXT -->
+      <a href="/projects/iphone-dock" target="_top" style="
+        display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+        background:var(--surface2);border:1px solid var(--bordergray);
+        border-radius:16px;padding:28px 32px;
+        text-decoration:none;color:var(--text);
+        transition:background 0.2s,border-color 0.2s;
+      " onmouseover="this.style.background='var(--surface3)';this.style.borderColor='var(--orange)'" onmouseout="this.style.background='var(--surface2)';this.style.borderColor='var(--bordergray)'">
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">iPhone Dock</div>
+        <div style="font-size:13px;color:var(--muted)">Industrial Design</div>
+      </a>
+    </div>
+  </section>
+</div></div>
+
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:var(--ff);font-size:14px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)">✈️ Travelogue</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:5px">Social travel app · Plan, collaborate, and remember — together</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;color:var(--dim)">UX / Mobile Design Case Study · 2025</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:4px">Ashish Dixit · Product Designer</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Relay mousemove messages for custom cursor
+document.addEventListener('mousemove', function(e) {
+  window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+});
+</script>
+</body>
+</html>

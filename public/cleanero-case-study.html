@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleaneró — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f9fc;
+  --white: #ffffff;
+  --surface: #f0f4fa;
+  --border: rgba(37,99,235,0.1);
+  --border2: rgba(37,99,235,0.2);
+  --bordergray: rgba(0,0,0,0.07);
+  --text: #0c1a2e;
+  --muted: rgba(12,26,46,0.52);
+  --dim: rgba(12,26,46,0.3);
+  --blue: #2563eb;
+  --blue-mid: #3b82f6;
+  --blue-light: #60a5fa;
+  --blue-dim: rgba(37,99,235,0.07);
+  --blue-glow: rgba(37,99,235,0.14);
+  --cyan: #0891b2;
+  --cyan-dim: rgba(8,145,178,0.08);
+  --navy: #0c1a2e;
+  --ff: 'Syne', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+  --max: 1080px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+  background-size: 64px 64px;
+}
+.hero-glow { position: absolute; top: -100px; left: -100px; width: 600px; height: 500px; background: radial-gradient(ellipse, rgba(37,99,235,0.2) 0%, transparent 65%); pointer-events: none; }
+.hero-glow2 { position: absolute; bottom: -60px; right: 0; width: 400px; height: 400px; background: radial-gradient(ellipse, rgba(8,145,178,0.12) 0%, transparent 65%); pointer-events: none; }
+
+.hero-left { padding: 144px 60px 100px 48px; position: relative; z-index: 1; }
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.hero-eyebrow-line { width: 32px; height: 1px; background: var(--blue-light); opacity: 0.6; }
+.hero-kicker { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-light); }
+.hero-title { font-family: var(--ff); font-size: clamp(48px,5.5vw,80px); font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: #fff; margin-bottom: 24px; }
+.hero-title em { font-style: normal; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
+.hero-sub { font-size: 17px; font-weight: 300; color: rgba(255,255,255,0.48); max-width: 440px; line-height: 1.7; margin-bottom: 44px; }
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-tag { font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
+.hero-meta { display: flex; gap: 36px; flex-wrap: wrap; }
+.hero-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.hero-meta-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+.hero-meta-value { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); }
+
+.hero-right { position: relative; height: 100vh; overflow: hidden; }
+.hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
+.hero-img-overlay { position: absolute; inset: 0; background: linear-gradient(to right, var(--navy) 0%, transparent 30%), linear-gradient(to top, var(--navy) 0%, transparent 30%); }
+
+/* ── CHAPTER DIVIDERS ── */
+.chapter {
+  padding: 100px 0 0;
+  position: relative;
+}
+.chapter + .chapter { padding-top: 80px; }
+
+.chapter-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--blue); display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.chapter-label::before { content: ''; width: 20px; height: 1px; background: var(--blue); opacity: 0.5; }
+.chapter-num { font-family: var(--ff); font-size: 100px; font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(37,99,235,0.05); position: absolute; right: 0; top: 60px; pointer-events: none; user-select: none; }
+.chapter-title { font-family: var(--ff); font-size: clamp(28px,3.5vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 0; }
+.chapter-title span { color: var(--blue); }
+
+/* ── FULL-BLEED IMAGE ── */
+.img-fullbleed {
+  width: 100%; display: block;
+  border-radius: 20px; overflow: hidden;
+  margin: 52px 0;
+}
+.img-fullbleed img { width: 100%; height: auto; display: block; }
+
+/* ── IMAGE + TEXT SPLIT ── */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  padding: 72px 0;
+}
+.split.reverse { direction: rtl; }
+.split.reverse > * { direction: ltr; }
+.split-img { border-radius: 20px; overflow: hidden; box-shadow: 0 24px 64px rgba(37,99,235,0.1); }
+.split-img img { width: 100%; height: auto; display: block; }
+
+.split-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+.split-title { font-family: var(--ff); font-size: clamp(22px,2.8vw,34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+.split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
+.split-quote { border-left: 2px solid var(--blue); padding: 14px 20px; background: var(--blue-dim); border-radius: 0 10px 10px 0; font-size: 15px; font-style: italic; color: var(--text); line-height: 1.6; }
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 56px 64px;
+  margin: 72px 0;
+  position: relative;
+  overflow: hidden;
+}
+.pull-quote::before { content: '"'; font-family: var(--ff); font-size: 200px; font-weight: 800; color: rgba(37,99,235,0.15); position: absolute; top: -20px; left: 32px; line-height: 1; }
+.pull-quote-text { font-family: var(--ff); font-size: clamp(22px,2.8vw,36px); font-weight: 700; letter-spacing: -0.02em; color: #fff; line-height: 1.25; position: relative; z-index: 1; max-width: 720px; }
+.pull-quote-text em { font-style: normal; color: var(--blue-light); }
+.pull-quote-attr { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 20px; position: relative; z-index: 1; }
+
+/* ── IMAGE GRID ── */
+.img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 52px 0; }
+.img-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 52px 0; }
+.img-grid-4 { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin: 52px 0; }
+.img-card { border-radius: 16px; overflow: hidden; background: var(--white); box-shadow: 0 8px 32px rgba(37,99,235,0.08); }
+.img-card img { width: 100%; height: auto; display: block; }
+.img-card-label { padding: 12px 16px; font-size: 12px; font-weight: 500; color: var(--muted); border-top: 1px solid var(--bordergray); }
+
+/* ── RESEARCH STATS ROW ── */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 52px 0; }
+.stat-block { background: var(--white); padding: 36px 28px; }
+.stat-block-num { font-family: var(--ff); font-size: 48px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 8px; }
+.stat-block-num.blue { color: var(--blue); }
+.stat-block-num.cyan { color: var(--cyan); }
+.stat-block-label { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.stat-block-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── PROCESS STEPS ── */
+.process-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 52px 0; }
+.process-block { background: var(--white); padding: 28px 24px; transition: background 0.3s; }
+.process-block:hover { background: var(--surface); }
+.process-block-num { font-family: var(--ff); font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.process-block-title { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.process-block-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── FINAL UI SHOWCASE ── */
+.ui-showcase {
+  background: var(--navy);
+  border-radius: 24px;
+  padding: 64px 48px;
+  margin: 72px 0;
+  position: relative;
+  overflow: hidden;
+}
+.ui-showcase::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px); background-size: 48px 48px; }
+.ui-showcase-header { text-align: center; margin-bottom: 48px; position: relative; z-index: 1; }
+.ui-showcase-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 12px; }
+.ui-showcase-title { font-family: var(--ff); font-size: clamp(24px,3vw,40px); font-weight: 800; color: #fff; letter-spacing: -0.025em; }
+.ui-showcase-sub { font-size: 15px; color: rgba(255,255,255,0.4); margin-top: 10px; }
+.ui-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; position: relative; z-index: 1; }
+.ui-frame { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); position: relative; }
+.ui-frame img { width: 100%; height: auto; display: block; }
+.ui-frame-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px 14px 12px; font-size: 12px; font-weight: 600; color: #fff; }
+
+/* ── COMPARISON TABLE ── */
+.comp-wrap { margin: 52px 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--bordergray); }
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th { background: var(--surface); padding: 14px 18px; font-family: var(--ff); font-size: 12px; font-weight: 700; text-align: left; color: var(--text); letter-spacing: 0.04em; border-bottom: 1px solid var(--bordergray); }
+.comp-table td { padding: 13px 18px; font-size: 13px; color: var(--muted); background: var(--white); border-bottom: 1px solid var(--bordergray); }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr.hl td { background: var(--blue-dim); color: var(--text); font-weight: 500; }
+.check { color: var(--blue); font-weight: 700; }
+.cross { color: #cbd5e1; }
+
+/* ── INSIGHT CARDS ── */
+.insight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 52px 0; }
+.insight-card { background: var(--white); border: 1px solid var(--bordergray); border-radius: 16px; padding: 28px; transition: box-shadow 0.3s; }
+.insight-card:hover { box-shadow: 0 8px 32px rgba(37,99,235,0.1); }
+.ic-num { font-family: var(--ff); font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.ic-title { font-family: var(--ff); font-size: 16px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.01em; }
+.ic-body { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.ic-stat { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--bordergray); font-family: var(--ff); font-size: 24px; font-weight: 800; letter-spacing: -0.03em; color: var(--blue); }
+.ic-stat span { font-family: var(--fb); font-size: 12px; font-weight: 400; color: var(--muted); }
+
+/* ── OUTCOME ROW ── */
+.outcome-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 20px; overflow: hidden; margin: 52px 0; }
+.outcome-block { background: var(--white); padding: 40px 32px; position: relative; }
+.outcome-block::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+.outcome-block.b1::after { background: var(--blue); }
+.outcome-block.b2::after { background: var(--cyan); }
+.outcome-block.b3::after { background: #64748b; }
+.ob-num { font-family: var(--ff); font-size: 52px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 10px; }
+.outcome-block.b1 .ob-num { color: var(--blue); }
+.outcome-block.b2 .ob-num { color: var(--cyan); }
+.outcome-block.b3 .ob-num { color: #64748b; }
+.ob-label { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+.ob-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* SECTION BREAK */
+.section-break { height: 1px; background: var(--bordergray); margin: 80px 0; }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr; min-height:auto;}
+  .hero-right{height:50vw;}
+  .split{grid-template-columns:1fr;gap:32px;}
+  .split.reverse{direction:ltr;}
+  .img-grid-4,.img-grid-2{grid-template-columns:1fr 1fr;}
+  .stats-row,.process-row,.outcome-grid{grid-template-columns:1fr;}
+  .insight-row{grid-template-columns:1fr;}
+  .ui-grid{grid-template-columns:1fr 1fr;}
+  .container{padding:0 24px;}
+  .pull-quote{padding:36px 28px;}
+}
+/* CUSTOM CURSOR STYLES */
+*, *::before, *::after { cursor: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-left reveal">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-kicker">UX · IoT · Mobile Design</span>
+    </div>
+    <h1 class="hero-title">Cleaneró<br><em>Proof in</em><br><em>every drop.</em></h1>
+    <p class="hero-sub">A smart water pitcher that shows you exactly what's in your water — and proves it's clean — in real time.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">UX Research</span>
+      <span class="hero-tag">IoT Interface Design</span>
+      <span class="hero-tag">Mobile App</span>
+      <span class="hero-tag">Physical Product</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Timeline</span>
+        <span class="hero-meta-value">Sep – Nov 2023</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Type</span>
+        <span class="hero-meta-value">Academic · School Project</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Platform</span>
+        <span class="hero-meta-value">iOS · Physical Device</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img class="hero-img" src="/cleanero-hero-final.png" alt="Cleaneró smart water pitcher product shot"/>
+    <div class="hero-img-overlay"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════
+     01 · THE PROBLEM
+══════════════════════════════ -->
+<div style="background:var(--white)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">01</div>
+    <div class="chapter-label">The Problem</div>
+    <h2 class="chapter-title">You can't trust<br><span>what you can't see.</span></h2>
+  </div>
+
+  <!-- Stressed woman image — full emotional impact -->
+  <div class="split reveal" style="padding-top:52px">
+    <div class="split-img">
+      <img src="https://framerusercontent.com/images/MkWeORB8jFxzWjSUu0WH02R3o.png" alt="User stressed, uncertain about water filter quality"/>
+    </div>
+    <div class="split-content">
+      <div class="split-overline">Real user frustration</div>
+      <h3 class="split-title">"Is this water actually safe to drink?"</h3>
+      <p class="split-body">
+        Traditional filter pitchers — Brita, Pur, ZeroWater — all solve the <em>filtration</em> problem. But none of them solve the <strong>trust problem.</strong>
+      </p>
+      <p class="split-body">
+        Users have zero visibility into TDS levels, actual filter health, or whether their water is clean <em>right now</em>. They get a generic "replace every 2 months" sticker — regardless of how much water they've filtered or how hard their tap water actually is.
+      </p>
+      <div class="split-quote">
+        Students in shared housing were skipping their own pitchers and buying bottled water instead — not because the water was bad, but because they had no way to know.
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row reveal">
+    <div class="stat-block">
+      <div class="stat-block-num blue">3×</div>
+      <div class="stat-block-label">Filter lifespan variance</div>
+      <div class="stat-block-body">Actual lifespan varies dramatically based on usage volume and local water hardness — not a calendar.</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-block-num cyan">67%</div>
+      <div class="stat-block-label">Users uncertain about filter status</div>
+      <div class="stat-block-body">Most users couldn't confidently say whether their filter needed replacing or not.</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-block-num blue">0</div>
+      <div class="stat-block-label">Competitors with real-time TDS</div>
+      <div class="stat-block-body">Not one major pitcher brand shows live water quality data inside an app — the gap is total.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══════════════════════════════
+     02 · MARKET GAP
+══════════════════════════════ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">02</div>
+    <div class="chapter-label">Market Gap</div>
+    <h2 class="chapter-title">Everyone filters.<br><span>Nobody proves it.</span></h2>
+  </div>
+
+  <div class="comp-wrap reveal">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Brand</th>
+          <th>TDS Accuracy</th>
+          <th>Filter Status</th>
+          <th>App Support</th>
+          <th>Real-Time Data</th>
+          <th>User Trust Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Brita</td><td>Low</td><td>LED estimate</td><td class="cross">✕ None</td><td class="cross">✕</td><td>★★★☆☆</td></tr>
+        <tr><td>ZeroWater</td><td>High</td><td>Manual TDS meter</td><td class="cross">✕ None</td><td class="cross">✕</td><td>★★★★☆</td></tr>
+        <tr><td>Pur</td><td>Medium</td><td>Light indicator</td><td class="cross">✕ None</td><td class="cross">✕</td><td>★★★☆☆</td></tr>
+        <tr class="hl"><td><strong>Cleaneró</strong></td><td class="check">✓ Real-time sensor</td><td class="check">✓ Live % health</td><td class="check">✓ Full companion app</td><td class="check">✓ Always on</td><td>★★★★★</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p class="pull-quote-text">Users don't just want clean water. They want <em>proof</em> that it's clean. That's the design problem no one had solved yet.</p>
+    <p class="pull-quote-attr">— Core insight from user research, Cleaneró 2023</p>
+  </div>
+</div>
+</div>
+
+
+<!-- ══════════════════════════════
+     03 · RESEARCH
+══════════════════════════════ -->
+<div style="background:var(--white)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">03</div>
+    <div class="chapter-label">Research Process</div>
+    <h2 class="chapter-title">Understanding the gap<br><span>between trust and reality.</span></h2>
+  </div>
+
+  <!-- Research context image -->
+  <div class="img-fullbleed reveal">
+    <img src="https://framerusercontent.com/images/9PSeos0DYjejoQBu9PR0QX7Ak.png" alt="Research context — user behavior observation in shared kitchens"/>
+  </div>
+
+  <div class="insight-row reveal">
+    <div class="insight-card">
+      <div class="ic-num">Finding 01</div>
+      <div class="ic-title">Trust was already broken</div>
+      <div class="ic-body">Multiple users had stopped using their pitchers entirely, defaulting to bottled water. Not because the filter failed — but because they assumed it might have.</div>
+      <div class="ic-stat">67% <span>uncertain about filter status</span></div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-num">Finding 02</div>
+      <div class="ic-title">Generic timelines don't match real life</div>
+      <div class="ic-body">"Replace every 2 months" ignores usage volume, water hardness, and local TDS levels. High-use households needed replacement in weeks, not months.</div>
+      <div class="ic-stat">3× <span>variance in actual filter lifespan</span></div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-num">Finding 03</div>
+      <div class="ic-title">A number changes everything</div>
+      <div class="ic-body">When shown a real TDS reading during testing, users immediately engaged and formed habits around checking it. Visibility didn't just inform — it changed behavior.</div>
+      <div class="ic-stat">89% <span>changed habits after seeing live TDS</span></div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-num">Finding 04</div>
+      <div class="ic-title">Language was the hidden barrier</div>
+      <div class="ic-body">Mid-fi testing revealed "Initiate TDS Test" caused hesitation and confusion. Renaming it to simply "Measure" increased task completion by 34%. UX copy is UX design.</div>
+      <div class="ic-stat">+34% <span>task completion after rename</span></div>
+    </div>
+  </div>
+
+  <!-- Research / contextual image -->
+  <div class="split reverse reveal">
+    <div class="split-img">
+      <img src="https://framerusercontent.com/images/zRSbRmE4bRoFK1BZSI5jOVwx95o.png" alt="Research synthesis and context mapping"/>
+    </div>
+    <div class="split-content">
+      <div class="split-overline">Research synthesis</div>
+      <h3 class="split-title">From frustration to design direction</h3>
+      <p class="split-body">Our research started from a personal place — shared frustration with filtered pitchers that looked clean but offered no proof of it. Desk research, legal reports (including a Brita lawsuit), and customer reviews confirmed this wasn't unique to us.</p>
+      <p class="split-body">The pattern was universal: lack of transparency in filter performance leads directly to low trust, inconsistent maintenance, and — ultimately — people choosing bottled water over a perfectly functional pitcher sitting right in front of them.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══════════════════════════════
+     04 · PERSONAS
+══════════════════════════════ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">04</div>
+    <div class="chapter-label">Personas & Insights</div>
+    <h2 class="chapter-title">Real people,<br><span>real disconnects.</span></h2>
+  </div>
+
+  <div class="img-fullbleed reveal">
+    <img src="https://framerusercontent.com/images/0XyxJKV6oHVbTdvprUTxs6ZmqBU.png" alt="User personas — Cleaneró"/>
+  </div>
+
+  <div class="split reveal" style="padding-top:0">
+    <div class="split-content">
+      <div class="split-overline">Key persona insight</div>
+      <h3 class="split-title">The product and user had drifted apart</h3>
+      <p class="split-body">We observed users in shared kitchens interacting with their pitchers. Many admitted they hadn't replaced filters in months — citing forgetfulness, or simply not knowing when replacement was actually needed.</p>
+      <p class="split-body">Some avoided the pitcher entirely, opting for bottled water out of mistrust. This wasn't a product failure — it was a <strong>trust failure.</strong> The product worked. The user just had no way to know it.</p>
+      <div class="split-quote">
+        The opportunity: frame Cleaneró as a personal water health assistant — not just a filter pitcher. That's a positioning no competitor owned.
+      </div>
+    </div>
+    <div class="split-img">
+      <img src="https://framerusercontent.com/images/NFGN8OD7wb9eMeJts1suz5YhDqI.png" alt="Research insight mapping — Cleaneró"/>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══════════════════════════════
+     05 · DESIGN PROCESS
+══════════════════════════════ -->
+<div style="background:var(--white)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">05</div>
+    <div class="chapter-label">Design Process</div>
+    <h2 class="chapter-title">Sketch. Test.<br><span>Simplify. Repeat.</span></h2>
+  </div>
+
+  <div class="process-row reveal">
+    <div class="process-block">
+      <div class="process-block-num">Step 01</div>
+      <div class="process-block-title">Concept Sketching</div>
+      <div class="process-block-body">Explored how TDS data could be displayed on both the physical pitcher and the app. Focused on screen placement, touch interactions, and visual hierarchy.</div>
+    </div>
+    <div class="process-block">
+      <div class="process-block-num">Step 02</div>
+      <div class="process-block-title">Lo-fi Wireframes</div>
+      <div class="process-block-body">Mapped onboarding, TDS measurement, and filter replacement flows. Established key metrics and CTAs at the top of the visual hierarchy.</div>
+    </div>
+    <div class="process-block">
+      <div class="process-block-num">Step 03</div>
+      <div class="process-block-title">User Testing</div>
+      <div class="process-block-body">Mid-fi prototype testing revealed language confusion and navigation issues. Simplified terminology, added filter health icons, made CTAs context-aware.</div>
+    </div>
+    <div class="process-block">
+      <div class="process-block-num">Step 04</div>
+      <div class="process-block-title">Hi-Fi & Handoff</div>
+      <div class="process-block-body">Clean, calm, confident visual language. Blue data, white surfaces. Physical-digital consistency across pitcher display and mobile app.</div>
+    </div>
+  </div>
+
+  <!-- Sketches / lo-fi wireframes -->
+  <div class="img-fullbleed reveal">
+    <img src="https://framerusercontent.com/images/EI5ui11EaT2Um6KiWhXQMaK8ukU.png" alt="Lo-fi wireframes and early concept sketches — Cleaneró"/>
+  </div>
+</div>
+</div>
+
+
+<!-- ══════════════════════════════
+     06 · FINAL UI
+══════════════════════════════ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">06</div>
+    <div class="chapter-label">Final Design</div>
+    <h2 class="chapter-title">Clean, calm,<br><span>and confident.</span></h2>
+    <p style="font-size:16px;color:var(--muted);max-width:560px;margin-top:18px;line-height:1.8">
+      A clear interface that translates complex sensor data into everyday peace of mind. Every screen answers one question: is my water safe right now?
+    </p>
+  </div>
+</div>
+
+<div class="ui-showcase reveal">
+  <div class="ui-showcase-header">
+    <div class="ui-showcase-eyebrow">Final UI · High Fidelity Prototypes</div>
+    <h3 class="ui-showcase-title">The Cleaneró App Experience</h3>
+    <p class="ui-showcase-sub">Real-time TDS · Filter health · Smart alerts · Water history</p>
+  </div>
+  <div class="container" style="position:relative;z-index:1">
+    <div class="ui-grid">
+      <div class="ui-frame">
+        <img src="https://framerusercontent.com/images/OepD2X2YIUTiKCJi2N9y1CW3I.png" alt="Cleaneró app — Home dashboard with live TDS reading"/>
+        <div class="ui-frame-label">Home · Live TDS dashboard</div>
+      </div>
+      <div class="ui-frame">
+        <img src="https://framerusercontent.com/images/KiqR7jRMGqdKqI0jNTJ9woOTu0.png" alt="Cleaneró app — Water measurement screen"/>
+        <div class="ui-frame-label">Measure · Active TDS test</div>
+      </div>
+      <div class="ui-frame">
+        <img src="https://framerusercontent.com/images/VlBX9mUHP3IR5ggeo79Q50RReI.png" alt="Cleaneró app — Filter health and replacement"/>
+        <div class="ui-frame-label">Filter · Health tracking &amp; replacement</div>
+      </div>
+      <div class="ui-frame">
+        <img src="https://framerusercontent.com/images/WdNpgaFmQfUuDoGw7REBvjArk.png" alt="Cleaneró app — Water history and trends"/>
+        <div class="ui-frame-label">History · Water quality trends</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══════════════════════════════
+     07 · OUTCOMES
+══════════════════════════════ -->
+<div style="background:var(--white)">
+<div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-num">07</div>
+    <div class="chapter-label">Impact &amp; Outcomes</div>
+    <h2 class="chapter-title">From uncertainty<br><span>to proof.</span></h2>
+  </div>
+
+  <div class="outcome-grid reveal">
+    <div class="outcome-block b1">
+      <div class="ob-num">42</div>
+      <div class="ob-label">ppm — Live, real TDS reading</div>
+      <div class="ob-desc">Not a vague LED indicator. A precise, real-time number users can actually act on and trust.</div>
+    </div>
+    <div class="outcome-block b2">
+      <div class="ob-num">+34%</div>
+      <div class="ob-label">Task completion after copy simplification</div>
+      <div class="ob-desc">One word change — "Initiate TDS Test" to "Measure" — proved that UX writing is as critical as visual design.</div>
+    </div>
+    <div class="outcome-block b3">
+      <div class="ob-num">0</div>
+      <div class="ob-label">Competitors match the full system</div>
+      <div class="ob-desc">No existing product combines real-time TDS sensing, live filter health, and a companion app into one unified experience.</div>
+    </div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p class="pull-quote-text">"Cleaneró changed how I think about what I drink. I didn't realise how much I wanted to see that number — until I saw it."</p>
+    <p class="pull-quote-attr">— User feedback, usability testing · Cleaneró 2023</p>
+  </div>
+</div>
+</div>
+
+<!-- ─────────── PREV / NEXT NAV ─────────── -->
+<section style="padding:0 0 80px;background:var(--white)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+      <!-- PREV placeholder -->
+      <div style="
+        display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:10px;
+        background:var(--surface);border:1px solid var(--border);
+        border-radius:16px;padding:28px 32px;
+        opacity:0.4;
+      ">
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em;text-align:left">Coming Soon</div>
+        <div style="font-size:13px;color:var(--muted)">More work on the way</div>
+      </div>
+      <!-- NEXT -->
+      <a href="/projects/ev-trip-intelligence" target="_top" style="
+        display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+        background:var(--surface);border:1px solid var(--border2);
+        border-radius:16px;padding:28px 32px;
+        text-decoration:none;color:var(--text);
+        transition:background 0.2s,border-color 0.2s;
+      " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(37,99,235,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border2)'">
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Voltro EV Trip</div>
+        <div style="font-size:13px;color:var(--muted)">Designing trust in EV mobility</div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <span style="font-size:10px;padding:3px 10px;background:var(--cyan-dim);color:var(--cyan);border-radius:100px;border:1px solid rgba(8,145,178,0.3)">UI/UX</span>
+          <span style="font-size:10px;padding:3px 10px;background:var(--white);color:var(--muted);border-radius:100px;border:1px solid var(--bordergray)">Mobile + In-Car</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     FOOTER
+══════════════════════════════ -->
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:var(--ff);font-size:14px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)">💧 Cleaneró</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:5px">Smart water filtration · Designed with trust at the core</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;color:var(--dim)">UX / IoT Design Case Study · 2023</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:4px">Ashish Dixit · Product Designer</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Relay mousemove messages for custom cursor
+document.addEventListener('mousemove', function(e) {
+  window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+});
+</script>
+</body>
+</html>

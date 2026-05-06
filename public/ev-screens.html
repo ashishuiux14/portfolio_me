@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>EV Trip Intelligence — App Screens</title>
+<link href='https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap' rel='stylesheet'>
+<style>
+:root {
+  --bg: #0d0d0d;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --surface3: #242424;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0efe8;
+  --muted: rgba(240,239,232,0.5);
+  --dim: rgba(240,239,232,0.25);
+  --green: #22c55e;
+  --green-soft: #16a34a;
+  --green-dim: rgba(34,197,94,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.1);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --ff: 'Syne', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fb);
+  min-height: 100vh;
+}
+
+/* ── PAGE LAYOUT ── */
+.page-header {
+  text-align: center;
+  padding: 80px 40px 60px;
+}
+.page-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 20px;
+}
+.page-eyebrow::before, .page-eyebrow::after {
+  content: ''; display: block; width: 24px; height: 1px; background: var(--green); opacity: 0.5;
+}
+.page-title {
+  font-family: var(--ff);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800; line-height: 1; letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+.page-title em { font-style: normal; color: var(--green); }
+.page-sub { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+/* ── SCREENS GRID ── */
+.screens-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px 100px;
+}
+@media (max-width: 1200px) { .screens-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .screens-grid { grid-template-columns: repeat(2, 1fr); padding: 0 24px 80px; } }
+@media (max-width: 540px)  { .screens-grid { grid-template-columns: 1fr; } }
+
+.screen-wrapper {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.screen-wrapper.visible { opacity: 1; transform: translateY(0); }
+
+/* ── iPHONE FRAME ── */
+.iphone {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 390/844;
+  background: #0a0a0a;
+  border-radius: 44px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.8),
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 40px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+/* Side buttons */
+.iphone::before {
+  content: '';
+  position: absolute;
+  left: -3px; top: 100px;
+  width: 3px; height: 36px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px 0 0 2px;
+  box-shadow: 0 44px 0 rgba(255,255,255,0.12), 0 88px 0 rgba(255,255,255,0.12);
+}
+.iphone::after {
+  content: '';
+  position: absolute;
+  right: -3px; top: 130px;
+  width: 3px; height: 56px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Dynamic island */
+.dynamic-island {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 90px; height: 28px;
+  background: #000; border-radius: 20px;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.di-camera {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+.di-camera::after {
+  content: ''; position: absolute;
+  top: 2px; left: 2px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+/* Status bar */
+.status-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 52px; z-index: 99;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 22px 8px;
+  font-size: 11px; font-weight: 600; color: var(--text);
+  font-family: var(--fb);
+}
+.status-time { font-weight: 700; font-size: 13px; }
+.status-icons { display: flex; align-items: center; gap: 5px; }
+.sig-bar {
+  display: flex; align-items: flex-end; gap: 1.5px;
+}
+.sig-bar span {
+  background: var(--text); border-radius: 1px;
+  width: 3px;
+}
+.sig-bar span:nth-child(1) { height: 4px; }
+.sig-bar span:nth-child(2) { height: 6px; }
+.sig-bar span:nth-child(3) { height: 9px; }
+.sig-bar span:nth-child(4) { height: 12px; }
+.batt-icon {
+  width: 22px; height: 11px;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 2px; position: relative;
+  display: flex; align-items: center; padding: 1px;
+}
+.batt-icon::after {
+  content: ''; position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
+  width: 2px; height: 5px; background: rgba(255,255,255,0.4); border-radius: 0 1px 1px 0;
+}
+.batt-fill { height: 100%; border-radius: 1px; background: var(--green); width: 75%; }
+
+/* Screen content */
+.screen-content {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  font-family: var(--fb);
+}
+
+/* Screen label */
+.screen-label {
+  text-align: center;
+}
+.screen-num {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 6px;
+}
+.screen-name {
+  font-family: var(--ff); font-size: 15px; font-weight: 700;
+  letter-spacing: -0.01em; color: var(--text);
+}
+.screen-desc { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+/* ────────────────────────────
+   SCREEN 1: HOME DASHBOARD
+──────────────────────────── */
+.s1-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, #0d1f0f 0%, #0a0a0a 40%, #0a0a0a 100%);
+}
+.s1-glow {
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.s1-scroll { position: absolute; top: 52px; left: 0; right: 0; bottom: 0; overflow: hidden; padding: 8px 18px 20px; }
+
+.s1-greeting { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+.s1-name { font-family: var(--ff); font-size: 20px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+
+.s1-hero-card {
+  background: linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(34,197,94,0.05) 100%);
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 20px; padding: 16px; margin-bottom: 12px;
+}
+.s1-hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.s1-battery-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+.s1-battery-num { font-family: var(--ff); font-size: 38px; font-weight: 800; color: var(--green); line-height: 1; letter-spacing: -0.03em; }
+.s1-battery-pct { font-size: 16px; font-weight: 400; }
+.s1-range-pill {
+  background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 100px; padding: 6px 12px; text-align: center;
+}
+.s1-range-num { font-family: var(--ff); font-size: 18px; font-weight: 700; color: var(--green); }
+.s1-range-lbl { font-size: 9px; color: var(--green); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.06em; }
+.s1-bar-row { display: flex; align-items: center; gap: 6px; }
+.s1-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+.s1-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--green), #86efac); width: 76%; }
+.s1-bar-pct { font-size: 10px; color: var(--muted); }
+
+.s1-quick-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.s1-quick-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 12px;
+}
+.s1-qc-icon { font-size: 16px; margin-bottom: 6px; }
+.s1-qc-val { font-family: var(--ff); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+.s1-qc-lbl { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+.s1-trip-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 12px; margin-bottom: 12px;
+}
+.s1-trip-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.s1-trip-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.s1-trip-badge { font-size: 10px; background: var(--green-dim); color: var(--green); padding: 2px 8px; border-radius: 100px; border: 1px solid rgba(34,197,94,0.3); }
+.s1-trip-dest { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.s1-trip-meta { font-size: 11px; color: var(--muted); }
+
+.s1-start-btn {
+  width: 100%; padding: 12px;
+  background: var(--green); color: #000;
+  border: none; border-radius: 14px;
+  font-family: var(--ff); font-size: 13px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.02em;
+}
+
+.s1-nav { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); padding: 8px 0 16px; display: flex; justify-content: space-around; }
+.s1-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.s1-nav-icon { font-size: 18px; }
+.s1-nav-label { font-size: 9px; color: var(--muted); }
+.s1-nav-item.active .s1-nav-icon { filter: none; }
+.s1-nav-item.active .s1-nav-label { color: var(--green); }
+.s1-nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
+
+/* ────────────────────────────
+   SCREEN 2: NEARBY CHARGERS MAP
+──────────────────────────── */
+.s2-map {
+  position: absolute; inset: 0;
+  background: #0e1a12;
+  overflow: hidden;
+}
+/* Fake map grid */
+.s2-map-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(34,197,94,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,197,94,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+/* Road lines */
+.s2-road { position: absolute; background: rgba(255,255,255,0.06); }
+.s2-road.h1 { top: 35%; left: 0; right: 0; height: 8px; border-radius: 2px; }
+.s2-road.h2 { top: 60%; left: 0; right: 0; height: 5px; }
+.s2-road.v1 { left: 30%; top: 0; bottom: 0; width: 8px; }
+.s2-road.v2 { left: 65%; top: 0; bottom: 0; width: 5px; }
+/* Map pins */
+.map-pin {
+  position: absolute; transform: translate(-50%, -100%);
+  display: flex; flex-direction: column; align-items: center;
+}
+.pin-body {
+  padding: 5px 8px; border-radius: 8px;
+  font-family: var(--ff); font-size: 10px; font-weight: 700;
+  white-space: nowrap; position: relative;
+}
+.pin-body::after {
+  content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+  border: 3px solid transparent; border-top-color: inherit;
+  width: 0; height: 0; border-width: 5px 4px 0 4px;
+}
+.pin-best { background: var(--green); color: #000; }
+.pin-best::after { border-top-color: var(--green); }
+.pin-ok { background: var(--amber); color: #000; }
+.pin-ok::after { border-top-color: var(--amber); }
+.pin-far { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
+.pin-far::after { border-top-color: var(--surface2); }
+/* User location */
+.user-loc {
+  position: absolute; top: 48%; left: 42%;
+  width: 14px; height: 14px;
+  background: var(--blue); border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 6px rgba(96,165,250,0.2);
+}
+
+.s2-panel {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border2); border-radius: 20px 20px 0 0;
+  padding: 16px 16px 82px;
+}
+.s2-panel-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 100px; margin: 0 auto 14px; }
+.s2-panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.s2-panel-title { font-family: var(--ff); font-size: 15px; font-weight: 700; }
+.s2-filter { font-size: 10px; color: var(--green); font-weight: 600; }
+.s2-charger-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.s2-charger-item:last-child { border-bottom: none; }
+.s2-ci-icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.s2-ci-body { flex: 1; min-width: 0; }
+.s2-ci-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s2-ci-meta { font-size: 10px; color: var(--muted); }
+.s2-ci-right { text-align: right; }
+.s2-ci-rel { font-family: var(--ff); font-size: 14px; font-weight: 700; }
+.s2-ci-dist { font-size: 10px; color: var(--muted); }
+
+/* ────────────────────────────
+   SCREEN 3: TRIP PLANNER
+──────────────────────────── */
+.s3-bg { position: absolute; inset: 0; background: #080808; }
+.s3-content { position: absolute; top: 52px; left: 0; right: 0; bottom: 0; padding: 10px 18px 20px; overflow: hidden; }
+.s3-header { font-family: var(--ff); font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+.s3-from-to {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 16px; padding: 14px; margin-bottom: 14px;
+}
+.s3-loc-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+.s3-loc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.s3-loc-dot.from { background: var(--green); }
+.s3-loc-dot.to { background: var(--blue); }
+.s3-loc-text { flex: 1; }
+.s3-loc-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.s3-loc-val { font-size: 13px; font-weight: 500; }
+.s3-loc-divider { display: flex; align-items: center; gap: 6px; padding: 0 0 0 4px; }
+.s3-loc-div-line { width: 1px; height: 16px; background: var(--border2); margin-left: 4px; }
+.s3-loc-swap { width: 20px; height: 20px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+.s3-conf-banner {
+  background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(34,197,94,0.05));
+  border: 1px solid rgba(34,197,94,0.25); border-radius: 16px;
+  padding: 14px; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.s3-conf-num { font-family: var(--ff); font-size: 40px; font-weight: 800; color: var(--green); line-height: 1; }
+.s3-conf-sub { font-size: 10px; color: var(--green); opacity: 0.8; margin-top: 2px; }
+.s3-conf-detail { text-align: right; }
+.s3-conf-det-val { font-family: var(--ff); font-size: 14px; font-weight: 700; color: var(--text); }
+.s3-conf-det-lbl { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+.s3-stops-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+.s3-stop-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.s3-stop-icon { width: 28px; height: 28px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+.s3-stop-body { flex: 1; }
+.s3-stop-name { font-size: 11px; font-weight: 500; }
+.s3-stop-meta { font-size: 10px; color: var(--muted); }
+.s3-stop-badge { font-size: 10px; padding: 2px 6px; border-radius: 100px; font-weight: 500; }
+.s3-stop-badge.hi { background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+.s3-stop-badge.mid { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+
+.s3-go-btn {
+  position: absolute; bottom: 82px; left: 18px; right: 18px;
+  padding: 13px; background: var(--green); color: #000;
+  border: none; border-radius: 14px;
+  font-family: var(--ff); font-size: 14px; font-weight: 800; cursor: pointer;
+}
+
+/* ────────────────────────────
+   SCREEN 4: EN ROUTE / DRIVING
+──────────────────────────── */
+.s4-bg { position: absolute; inset: 0; background: #050808; }
+.s4-content { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 52px 0 82px; }
+/* Minimal map bg */
+.s4-map-area {
+  flex: 1; position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #0a1410 0%, #080a08 100%);
+}
+.s4-map-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+/* Route line */
+.s4-route-line { position: absolute; inset: 0; }
+.s4-road-h { position: absolute; top: 45%; left: 0; right: 0; height: 10px; background: rgba(255,255,255,0.05); }
+.s4-route-path {
+  position: absolute; top: calc(45% - 1px); left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--green), rgba(34,197,94,0.3));
+  box-shadow: 0 0 8px rgba(34,197,94,0.4);
+}
+/* Car dot */
+.s4-car {
+  position: absolute; top: 45%; left: 35%; transform: translate(-50%, -50%);
+  width: 16px; height: 16px; background: var(--green); border-radius: 50%;
+  border: 2px solid #fff; box-shadow: 0 0 12px rgba(34,197,94,0.6);
+  z-index: 2;
+}
+.s4-next-pin {
+  position: absolute; top: 45%; left: 70%; transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.s4-pin-body {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 4px 8px;
+  font-size: 9px; font-weight: 600; white-space: nowrap;
+}
+
+.s4-bottom-panel {
+  background: rgba(8,8,8,0.97); border-top: 1px solid var(--border2);
+  padding: 14px 18px 0;
+}
+.s4-big-num { font-family: var(--ff); font-size: 52px; font-weight: 800; color: var(--green); line-height: 1; letter-spacing: -0.04em; }
+.s4-big-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.s4-stats-row { display: flex; gap: 0; }
+.s4-stat { flex: 1; }
+.s4-stat + .s4-stat { border-left: 1px solid var(--border); padding-left: 12px; margin-left: 12px; }
+.s4-stat-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+.s4-stat-val { font-family: var(--ff); font-size: 15px; font-weight: 700; }
+.s4-stat-val.green { color: var(--green); }
+.s4-conf-bar { margin-top: 10px; }
+.s4-conf-bar-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.s4-conf-bar-track { height: 4px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.s4-conf-bar-fill { height: 100%; width: 94%; background: var(--green); border-radius: 100px; }
+
+/* ────────────────────────────
+   SCREEN 5: ARRIVED!
+──────────────────────────── */
+.s5-bg { position: absolute; inset: 0; background: #050f07; }
+.s5-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(34,197,94,0.25) 0%, transparent 65%); pointer-events: none; }
+.s5-content { position: absolute; top: 52px; left: 0; right: 0; bottom: 0; padding: 20px 18px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+.s5-check {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--green); color: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin-bottom: 14px;
+  box-shadow: 0 0 40px rgba(34,197,94,0.4);
+}
+.s5-arrived-title { font-family: var(--ff); font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 4px; }
+.s5-arrived-sub { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 20px; }
+.s5-battery-hero {
+  background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(34,197,94,0.05));
+  border: 1px solid rgba(34,197,94,0.3); border-radius: 20px;
+  padding: 18px; width: 100%; margin-bottom: 12px; text-align: center;
+}
+.s5-batt-big { font-family: var(--ff); font-size: 56px; font-weight: 800; color: var(--green); line-height: 1; letter-spacing: -0.04em; }
+.s5-batt-lbl { font-size: 11px; color: var(--green); opacity: 0.8; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+.s5-batt-bar { margin-top: 10px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 100px; overflow: hidden; }
+.s5-batt-bar-fill { height: 100%; width: 18%; background: var(--green); border-radius: 100px; }
+.s5-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 14px; }
+.s5-stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 8px; text-align: center; }
+.s5-sc-val { font-family: var(--ff); font-size: 16px; font-weight: 700; }
+.s5-sc-lbl { font-size: 9px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+.s5-share-btn {
+  width: 100%; padding: 12px; background: var(--green); color: #000;
+  border: none; border-radius: 14px;
+  font-family: var(--ff); font-size: 13px; font-weight: 800; cursor: pointer;
+}
+
+/* ────────────────────────────
+   SCREEN 6: TRIP INSIGHTS
+──────────────────────────── */
+.s6-bg { position: absolute; inset: 0; background: #080808; }
+.s6-content { position: absolute; top: 52px; left: 0; right: 0; bottom: 0; padding: 10px 18px; overflow: hidden; }
+.s6-header { font-family: var(--ff); font-size: 20px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+.s6-eco-card {
+  background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(34,197,94,0.05));
+  border: 1px solid rgba(34,197,94,0.25); border-radius: 18px;
+  padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+}
+.s6-eco-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.s6-eco-num { font-family: var(--ff); font-size: 42px; font-weight: 800; color: var(--green); line-height: 1; letter-spacing: -0.04em; }
+.s6-eco-grade { font-size: 12px; color: var(--green); font-weight: 600; }
+/* Radial gauge (CSS-drawn) */
+.s6-gauge { width: 60px; height: 60px; position: relative; }
+.s6-gauge-ring {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: conic-gradient(var(--green) 0deg 331deg, rgba(255,255,255,0.08) 331deg);
+  display: flex; align-items: center; justify-content: center;
+}
+.s6-gauge-inner { width: 42px; height: 42px; background: var(--surface); border-radius: 50%; }
+
+.s6-metrics { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.s6-metric-row {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.s6-m-label { font-size: 11px; color: var(--muted); }
+.s6-m-right { display: flex; align-items: center; gap: 8px; }
+.s6-m-val { font-family: var(--ff); font-size: 14px; font-weight: 700; }
+.s6-m-badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 100px; }
+.s6-m-badge.pos { background: var(--green-dim); color: var(--green); }
+.s6-m-badge.neg { background: var(--red-dim); color: var(--red); }
+
+.s6-savings-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.s6-save-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+.s6-save-val { font-family: var(--ff); font-size: 20px; font-weight: 800; }
+.s6-save-val.green { color: var(--green); }
+.s6-save-val.blue { color: var(--blue); }
+.s6-save-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+/* ────────────────────────────
+   SCREEN 7: CHARGING STATION
+──────────────────────────── */
+.s7-bg { position: absolute; inset: 0; background: #080808; }
+.s7-content { position: absolute; top: 52px; left: 0; right: 0; bottom: 0; padding: 10px 18px; overflow: hidden; }
+.s7-back { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); margin-bottom: 12px; cursor: pointer; }
+.s7-station-hero {
+  background: var(--surface); border: 1px solid var(--border2); border-radius: 18px;
+  padding: 14px; margin-bottom: 12px;
+}
+.s7-sh-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.s7-station-name { font-family: var(--ff); font-size: 16px; font-weight: 700; }
+.s7-station-addr { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.s7-rel-badge {
+  background: var(--green-dim); border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 10px; padding: 6px 10px; text-align: center;
+}
+.s7-rel-num { font-family: var(--ff); font-size: 18px; font-weight: 800; color: var(--green); }
+.s7-rel-lbl { font-size: 9px; color: var(--green); opacity: 0.7; }
+.s7-sh-stats { display: flex; gap: 16px; }
+.s7-sh-stat { font-size: 10px; color: var(--muted); }
+.s7-sh-stat strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 1px; }
+
+.s7-ports-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+.s7-port-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+.s7-port {
+  aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  font-size: 9px; font-weight: 600;
+}
+.s7-port.avail { background: var(--green-dim); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+.s7-port.busy { background: var(--amber-dim); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); }
+.s7-port.offline { background: var(--red-dim); border: 1px solid rgba(239,68,68,0.3); color: var(--red); }
+.s7-port-icon { font-size: 14px; }
+
+.s7-queue {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.s7-q-label { font-size: 11px; color: var(--muted); }
+.s7-q-val { font-family: var(--ff); font-size: 16px; font-weight: 700; }
+
+.s7-nav-btn {
+  width: 100%; padding: 13px; background: var(--green); color: #000;
+  border: none; border-radius: 14px;
+  font-family: var(--ff); font-size: 13px; font-weight: 800; cursor: pointer;
+}
+
+/* ────────────────────────────
+   SCREEN 8: LIVE ALERTS
+──────────────────────────── */
+.s8-bg { position: absolute; inset: 0; background: #080808; }
+.s8-content { position: absolute; top: 52px; left: 0; right: 0; bottom: 0; padding: 10px 18px; overflow: hidden; }
+.s8-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.s8-title { font-family: var(--ff); font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+.s8-badge { background: var(--red-dim); color: var(--red); border: 1px solid rgba(239,68,68,0.3); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 100px; }
+
+.s8-alert-card {
+  border-radius: 14px; padding: 13px; margin-bottom: 10px;
+  border-left: 3px solid;
+}
+.s8-alert-card.amber { background: rgba(245,158,11,0.08); border-left-color: var(--amber); border: 1px solid rgba(245,158,11,0.2); border-left: 3px solid var(--amber); }
+.s8-alert-card.green { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-left: 3px solid var(--green); }
+.s8-alert-card.blue { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.2); border-left: 3px solid var(--blue); }
+.s8-alert-head { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.s8-alert-icon { font-size: 14px; }
+.s8-alert-title { font-size: 12px; font-weight: 600; }
+.s8-alert-body { font-size: 11px; color: var(--muted); line-height: 1.55; margin-bottom: 8px; }
+.s8-alert-cta { font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.s8-alert-cta.amber-cta { color: var(--amber); }
+.s8-alert-cta.green-cta { color: var(--green); }
+
+.s8-conf-pill {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center;
+  margin-top: 4px;
+}
+.s8-cp-label { font-size: 11px; color: var(--muted); }
+.s8-cp-val { font-family: var(--ff); font-size: 20px; font-weight: 800; color: var(--green); }
+.s8-cp-sub { font-size: 10px; color: var(--muted); }
+
+/* ── COMMON NAV BAR ── */
+.nav-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(8,8,8,0.97); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  padding: 8px 0 18px;
+  display: flex; justify-content: space-around;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+.nav-icon { font-size: 20px; }
+.nav-label { font-size: 9px; color: var(--muted); }
+.nav-item.active .nav-label { color: var(--green); }
+.nav-active-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
+
+</style>
+</head>
+<body>
+
+
+<div class="page-header">
+  <div class="page-eyebrow">App UI Screens</div>
+  <h1 class="page-title">EV Trip <em>Intelligence</em></h1>
+  <p class="page-sub">8 production-ready screens. Dark. Clean. Confident.</p>
+</div>
+
+<div class="screens-grid">
+
+  <!-- ── SCREEN 1: HOME ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <span style="font-size:10px;font-weight:600">5G</span>
+          <div class="batt-icon"><div class="batt-fill"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s1-bg"></div>
+        <div class="s1-glow"></div>
+        <div class="s1-scroll">
+          <div class="s1-greeting">Good morning,</div>
+          <div class="s1-name">Arjun 👋</div>
+          <div class="s1-hero-card">
+            <div class="s1-hero-top">
+              <div>
+                <div class="s1-battery-label">Battery</div>
+                <div class="s1-battery-num">76<span class="s1-battery-pct">%</span></div>
+              </div>
+              <div class="s1-range-pill">
+                <div class="s1-range-num">246</div>
+                <div class="s1-range-lbl">mi safe</div>
+              </div>
+            </div>
+            <div class="s1-bar-row">
+              <div class="s1-bar-track"><div class="s1-bar-fill"></div></div>
+              <span class="s1-bar-pct">76%</span>
+            </div>
+          </div>
+          <div class="s1-quick-row">
+            <div class="s1-quick-card">
+              <div class="s1-qc-icon">⚡</div>
+              <div class="s1-qc-val" style="color:var(--green)">98%</div>
+              <div class="s1-qc-lbl">Confidence</div>
+            </div>
+            <div class="s1-quick-card">
+              <div class="s1-qc-icon">🔌</div>
+              <div class="s1-qc-val">3</div>
+              <div class="s1-qc-lbl">Nearby chargers</div>
+            </div>
+          </div>
+          <div class="s1-trip-card">
+            <div class="s1-trip-head">
+              <span class="s1-trip-title">Saved trip</span>
+              <span class="s1-trip-badge">Ready</span>
+            </div>
+            <div class="s1-trip-dest">→ San Francisco</div>
+            <div class="s1-trip-meta">842 mi · 4 stops · 12h 45m</div>
+          </div>
+          <button class="s1-start-btn">Start Trip →</button>
+        </div>
+        <div class="s1-nav">
+          <div class="s1-nav-item active"><span class="s1-nav-icon">🏠</span><div class="s1-nav-dot"></div></div>
+          <div class="s1-nav-item"><span class="s1-nav-icon">🗺️</span><span class="s1-nav-label">Map</span></div>
+          <div class="s1-nav-item"><span class="s1-nav-icon">⚡</span><span class="s1-nav-label">Charge</span></div>
+          <div class="s1-nav-item"><span class="s1-nav-icon">📊</span><span class="s1-nav-label">Insights</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 01</div>
+      <div class="screen-name">Home Dashboard</div>
+      <div class="screen-desc">Battery, range, confidence at a glance</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 2: NEARBY CHARGERS ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s2-map">
+          <div class="s2-map-grid"></div>
+          <div class="s2-road h1"></div>
+          <div class="s2-road h2"></div>
+          <div class="s2-road v1"></div>
+          <div class="s2-road v2"></div>
+          <!-- Pins -->
+          <div class="map-pin" style="top:33%;left:30%">
+            <div class="pin-body pin-best">⚡ 96% · 0.2mi</div>
+          </div>
+          <div class="map-pin" style="top:58%;left:65%">
+            <div class="pin-body pin-ok">⚡ 91% · 1.1mi</div>
+          </div>
+          <div class="map-pin" style="top:25%;left:70%">
+            <div class="pin-body pin-far">⚡ 78%</div>
+          </div>
+          <div class="user-loc"></div>
+        </div>
+        <div class="s2-panel">
+          <div class="s2-panel-handle"></div>
+          <div class="s2-panel-head">
+            <span class="s2-panel-title">Nearby Chargers</span>
+            <span class="s2-filter">Filter ↑</span>
+          </div>
+          <div class="s2-charger-item">
+            <div class="s2-ci-icon" style="background:var(--green-dim)">⚡</div>
+            <div class="s2-ci-body">
+              <div class="s2-ci-name">Electrify America</div>
+              <div class="s2-ci-meta">0.2 mi · 350 kW · 6 avail</div>
+            </div>
+            <div class="s2-ci-right">
+              <div class="s2-ci-rel" style="color:var(--green)">96%</div>
+              <div class="s2-ci-dist">30 min</div>
+            </div>
+          </div>
+          <div class="s2-charger-item">
+            <div class="s2-ci-icon" style="background:var(--amber-dim)">⚡</div>
+            <div class="s2-ci-body">
+              <div class="s2-ci-name">EVgo Station</div>
+              <div class="s2-ci-meta">1.1 mi · 150 kW · 2 avail</div>
+            </div>
+            <div class="s2-ci-right">
+              <div class="s2-ci-rel" style="color:var(--amber)">91%</div>
+              <div class="s2-ci-dist">55 min</div>
+            </div>
+          </div>
+          <div class="s2-charger-item">
+            <div class="s2-ci-icon" style="background:var(--surface2);border:1px solid var(--border)">⚡</div>
+            <div class="s2-ci-body">
+              <div class="s2-ci-name">ChargePoint++</div>
+              <div class="s2-ci-meta">1.8 mi · 50 kW · 3 avail</div>
+            </div>
+            <div class="s2-ci-right">
+              <div class="s2-ci-rel" style="color:var(--muted)">78%</div>
+              <div class="s2-ci-dist">50 min</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></div>
+          <div class="nav-item active"><span class="nav-icon">🗺️</span><div class="nav-active-dot"></div></div>
+          <div class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Charge</span></div>
+          <div class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Insights</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 02</div>
+      <div class="screen-name">Nearby Chargers</div>
+      <div class="screen-desc">Map + reliability-ranked list</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 3: TRIP PLANNER ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s3-bg"></div>
+        <div class="s3-content">
+          <div class="s3-header">Plan Your Trip</div>
+          <div class="s3-from-to">
+            <div class="s3-loc-row">
+              <div class="s3-loc-dot from"></div>
+              <div class="s3-loc-text">
+                <div class="s3-loc-label">From</div>
+                <div class="s3-loc-val">Seattle, WA</div>
+              </div>
+            </div>
+            <div class="s3-loc-divider">
+              <div class="s3-loc-div-line"></div>
+              <div class="s3-loc-swap">⇅</div>
+            </div>
+            <div class="s3-loc-row">
+              <div class="s3-loc-dot to"></div>
+              <div class="s3-loc-text">
+                <div class="s3-loc-label">To</div>
+                <div class="s3-loc-val">San Francisco, CA</div>
+              </div>
+            </div>
+          </div>
+          <div class="s3-conf-banner">
+            <div>
+              <div class="s3-conf-num">98%</div>
+              <div class="s3-conf-sub">Confidence</div>
+            </div>
+            <div class="s3-conf-detail">
+              <div class="s3-conf-det-val">18% battery</div>
+              <div class="s3-conf-det-lbl">at arrival</div>
+              <div class="s3-conf-det-val" style="margin-top:6px">12h 45m</div>
+              <div class="s3-conf-det-lbl">total time</div>
+            </div>
+          </div>
+          <div class="s3-stops-label">Smart Stops · 4 total</div>
+          <div class="s3-stop-row">
+            <div class="s3-stop-icon">⚡</div>
+            <div class="s3-stop-body">
+              <div class="s3-stop-name">Electrify America · Medford</div>
+              <div class="s3-stop-meta">+30 min · +68% charge</div>
+            </div>
+            <span class="s3-stop-badge hi">96%</span>
+          </div>
+          <div class="s3-stop-row">
+            <div class="s3-stop-icon">⚡</div>
+            <div class="s3-stop-body">
+              <div class="s3-stop-name">Tesla SC · Redding</div>
+              <div class="s3-stop-meta">+25 min · +55% charge</div>
+            </div>
+            <span class="s3-stop-badge hi">94%</span>
+          </div>
+          <div class="s3-stop-row">
+            <div class="s3-stop-icon">⚡</div>
+            <div class="s3-stop-body">
+              <div class="s3-stop-name">EVgo · Sacramento</div>
+              <div class="s3-stop-meta">+20 min · +45% charge</div>
+            </div>
+            <span class="s3-stop-badge mid">88%</span>
+          </div>
+        </div>
+        <button class="s3-go-btn">Start Trip →</button>
+        <div class="nav-bar">
+          <div class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></div>
+          <div class="nav-item active"><span class="nav-icon">🧭</span><div class="nav-active-dot"></div></div>
+          <div class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Charge</span></div>
+          <div class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Insights</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 03</div>
+      <div class="screen-name">Trip Planner</div>
+      <div class="screen-desc">Route, confidence score, smart stops</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 4: EN ROUTE ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">11:24</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill" style="width:55%"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s4-bg"></div>
+        <div class="s4-content">
+          <div class="s4-map-area">
+            <div class="s4-map-grid"></div>
+            <div class="s4-road-h"></div>
+            <div class="s4-route-path"></div>
+            <div class="s4-car"></div>
+            <div class="s4-next-pin">
+              <div class="s4-pin-body">⚡ Next · 85mi</div>
+            </div>
+            <!-- ETA overlay -->
+            <div style="position:absolute;top:12px;left:12px;background:rgba(8,8,8,0.8);border:1px solid var(--border2);border-radius:10px;padding:8px 12px;">
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">ETA</div>
+              <div style="font-family:var(--ff);font-size:16px;font-weight:800;">12:50 PM</div>
+            </div>
+          </div>
+          <div class="s4-bottom-panel">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <div class="s4-big-num">186</div>
+                <div class="s4-big-lbl">mi · Safe Range</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px">Confidence</div>
+                <div style="font-family:var(--ff);font-size:28px;font-weight:800;color:var(--green)">94%</div>
+              </div>
+            </div>
+            <div class="s4-conf-bar">
+              <div class="s4-conf-bar-label"><span>Safe zone</span><span>Risk</span></div>
+              <div class="s4-conf-bar-track"><div class="s4-conf-bar-fill"></div></div>
+            </div>
+            <div class="s4-stats-row" style="margin-top:10px">
+              <div class="s4-stat">
+                <div class="s4-stat-lbl">Next stop</div>
+                <div class="s4-stat-val" style="font-size:13px">Medford EA</div>
+              </div>
+              <div class="s4-stat">
+                <div class="s4-stat-lbl">Distance</div>
+                <div class="s4-stat-val" style="font-size:13px">85 mi</div>
+              </div>
+              <div class="s4-stat">
+                <div class="s4-stat-lbl">Efficiency</div>
+                <div class="s4-stat-val green" style="font-size:13px">4.1 mi/k</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-bar" style="padding-top:6px">
+          <div style="width:100%;text-align:center;font-size:10px;color:var(--muted)">Driving Mode · Tap to expand</div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 04</div>
+      <div class="screen-name">En Route</div>
+      <div class="screen-desc">Glanceable driving view, live range</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 5: ARRIVED ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill" style="width:18%;background:var(--green)"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s5-bg"></div>
+        <div class="s5-glow"></div>
+        <div class="s5-content">
+          <div class="s5-check">✓</div>
+          <div class="s5-arrived-title">You've Arrived!</div>
+          <div class="s5-arrived-sub">San Francisco, CA · 842 mi complete</div>
+          <div class="s5-battery-hero">
+            <div class="s5-batt-big">18%</div>
+            <div class="s5-batt-lbl">Battery Remaining</div>
+            <div class="s5-batt-bar"><div class="s5-batt-bar-fill"></div></div>
+            <div style="font-size:10px;color:var(--green);opacity:0.7;margin-top:6px">Exactly as predicted ✓</div>
+          </div>
+          <div class="s5-stats-grid">
+            <div class="s5-stat-card">
+              <div class="s5-sc-val">12h 52m</div>
+              <div class="s5-sc-lbl">Total time</div>
+            </div>
+            <div class="s5-stat-card">
+              <div class="s5-sc-val" style="color:var(--green)">232</div>
+              <div class="s5-sc-lbl">kWh used</div>
+            </div>
+            <div class="s5-stat-card">
+              <div class="s5-sc-val" style="color:var(--green)">4</div>
+              <div class="s5-sc-lbl">Stops made</div>
+            </div>
+          </div>
+          <button class="s5-share-btn">View Full Insights →</button>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></div>
+          <div class="nav-item"><span class="nav-icon">🗺️</span><span class="nav-label">Map</span></div>
+          <div class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Charge</span></div>
+          <div class="nav-item active"><span class="nav-icon">📊</span><div class="nav-active-dot"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 05</div>
+      <div class="screen-name">Arrived!</div>
+      <div class="screen-desc">18% battery remaining, as predicted</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 6: INSIGHTS ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s6-bg"></div>
+        <div class="s6-content">
+          <div class="s6-header">Trip Insights</div>
+          <div class="s6-eco-card">
+            <div>
+              <div class="s6-eco-label">Eco Score</div>
+              <div class="s6-eco-num">92</div>
+              <div class="s6-eco-grade">Great Drive!</div>
+            </div>
+            <div class="s6-gauge">
+              <div class="s6-gauge-ring"><div class="s6-gauge-inner"></div></div>
+            </div>
+          </div>
+          <div class="s6-metrics">
+            <div class="s6-metric-row">
+              <span class="s6-m-label">Efficiency</span>
+              <div class="s6-m-right">
+                <span class="s6-m-val">4.1 mi/kWh</span>
+                <span class="s6-m-badge pos">+12%</span>
+              </div>
+            </div>
+            <div class="s6-metric-row">
+              <span class="s6-m-label">Smooth Driving</span>
+              <div class="s6-m-right">
+                <span class="s6-m-val">87%</span>
+                <span class="s6-m-badge pos">+18%</span>
+              </div>
+            </div>
+            <div class="s6-metric-row">
+              <span class="s6-m-label">Climate Impact</span>
+              <div class="s6-m-right">
+                <span class="s6-m-val">Low</span>
+                <span class="s6-m-badge pos">Ideal</span>
+              </div>
+            </div>
+            <div class="s6-metric-row">
+              <span class="s6-m-label">Regen Braking</span>
+              <div class="s6-m-right">
+                <span class="s6-m-val">38 mi</span>
+                <span class="s6-m-badge pos">recovered</span>
+              </div>
+            </div>
+          </div>
+          <div class="s6-savings-row">
+            <div class="s6-save-card">
+              <div class="s6-save-val green">\$18.6</div>
+              <div class="s6-save-lbl">Saved vs expected</div>
+            </div>
+            <div class="s6-save-card">
+              <div class="s6-save-val blue">24.7 kg</div>
+              <div class="s6-save-lbl">CO₂ vs gas car</div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></div>
+          <div class="nav-item"><span class="nav-icon">🗺️</span><span class="nav-label">Map</span></div>
+          <div class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Charge</span></div>
+          <div class="nav-item active"><span class="nav-icon">📊</span><div class="nav-active-dot"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 06</div>
+      <div class="screen-name">Trip Insights</div>
+      <div class="screen-desc">Eco score, efficiency, savings</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 7: CHARGING STATION ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill" style="width:30%"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s7-bg"></div>
+        <div class="s7-content">
+          <div class="s7-back">← Back to Map</div>
+          <div class="s7-station-hero">
+            <div class="s7-sh-top">
+              <div>
+                <div class="s7-station-name">Electrify America</div>
+                <div class="s7-station-addr">4821 I-5 North, Medford OR</div>
+              </div>
+              <div class="s7-rel-badge">
+                <div class="s7-rel-num">96%</div>
+                <div class="s7-rel-lbl">Reliable</div>
+              </div>
+            </div>
+            <div class="s7-sh-stats">
+              <div class="s7-sh-stat"><strong>350 kW</strong>Max speed</div>
+              <div class="s7-sh-stat"><strong>6 / 8</strong>Available</div>
+              <div class="s7-sh-stat"><strong>~30 min</strong>Estimated</div>
+            </div>
+          </div>
+          <div class="s7-ports-label">Port Availability · 8 total</div>
+          <div class="s7-port-grid">
+            <div class="s7-port avail"><span class="s7-port-icon">⚡</span>A1</div>
+            <div class="s7-port avail"><span class="s7-port-icon">⚡</span>A2</div>
+            <div class="s7-port busy"><span class="s7-port-icon">🔌</span>A3</div>
+            <div class="s7-port avail"><span class="s7-port-icon">⚡</span>A4</div>
+            <div class="s7-port busy"><span class="s7-port-icon">🔌</span>B1</div>
+            <div class="s7-port avail"><span class="s7-port-icon">⚡</span>B2</div>
+            <div class="s7-port avail"><span class="s7-port-icon">⚡</span>B3</div>
+            <div class="s7-port offline"><span class="s7-port-icon">✕</span>B4</div>
+          </div>
+          <div class="s7-queue">
+            <div>
+              <div class="s7-q-label">Queue wait</div>
+              <div class="s7-q-val">None · Start immediately</div>
+            </div>
+            <span style="font-size:20px">✓</span>
+          </div>
+          <button class="s7-nav-btn">Navigate Here →</button>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></div>
+          <div class="nav-item active"><span class="nav-icon">⚡</span><div class="nav-active-dot"></div></div>
+          <div class="nav-item"><span class="nav-icon">🗺️</span><span class="nav-label">Map</span></div>
+          <div class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Insights</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 07</div>
+      <div class="screen-name">Station Detail</div>
+      <div class="screen-desc">Port availability, reliability, queue</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 8: LIVE ALERTS ── -->
+  <div class="screen-wrapper">
+    <div class="iphone">
+      <div class="dynamic-island"><div class="di-camera"></div></div>
+      <div class="status-bar">
+        <span class="status-time">11:32</span>
+        <div class="status-icons">
+          <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
+          <div class="batt-icon"><div class="batt-fill" style="width:50%"></div></div>
+        </div>
+      </div>
+      <div class="screen-content">
+        <div class="s8-bg"></div>
+        <div class="s8-content">
+          <div class="s8-header">
+            <span class="s8-title">Live Updates</span>
+            <span class="s8-badge">2 new</span>
+          </div>
+          <div class="s8-alert-card amber">
+            <div class="s8-alert-head">
+              <span class="s8-alert-icon">⚠️</span>
+              <span class="s8-alert-title">Traffic · I-5 North slowdown</span>
+            </div>
+            <p class="s8-alert-body">18-minute delay detected ahead. Re-routing you to Station B (EVgo, Redding) for a faster charge. ETA updated to 12:58 PM.</p>
+            <div class="s8-alert-cta amber-cta">Switch to Station B →</div>
+          </div>
+          <div class="s8-alert-card green">
+            <div class="s8-alert-head">
+              <span class="s8-alert-icon">✅</span>
+              <span class="s8-alert-title">Charger confirmed available</span>
+            </div>
+            <p class="s8-alert-body">Electrify America, Medford: 4 of 8 ports free. No queue. You'll arrive with ~28% battery — perfect charge window.</p>
+            <div class="s8-alert-cta green-cta">View stop details →</div>
+          </div>
+          <div class="s8-alert-card blue">
+            <div class="s8-alert-head">
+              <span class="s8-alert-icon">💡</span>
+              <span class="s8-alert-title">Driving tip</span>
+            </div>
+            <p class="s8-alert-body">Reduce speed to 62 mph for the next 40 miles to gain +14 miles of safe range on the mountain section.</p>
+          </div>
+          <div class="s8-conf-pill">
+            <div>
+              <div class="s8-cp-label">Trip confidence</div>
+              <div class="s8-cp-sub">Still on track</div>
+            </div>
+            <div class="s8-cp-val">94%</div>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></div>
+          <div class="nav-item"><span class="nav-icon">🗺️</span><span class="nav-label">Map</span></div>
+          <div class="nav-item active"><span class="nav-icon">🔔</span><div class="nav-active-dot"></div></div>
+          <div class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Insights</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">
+      <div class="screen-num">Screen 08</div>
+      <div class="screen-name">Live Alerts</div>
+      <div class="screen-desc">Calm, actionable real-time updates</div>
+    </div>
+  </div>
+
+</div><!-- /screens-grid -->
+
+
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), e.target.dataset.delay || 0);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.screen-wrapper').forEach((el, i) => {
+  el.dataset.delay = i * 80;
+  observer.observe(el);
+});
+</script>
+<style>*, *::before, *::after { cursor: none !important; }</style>
+<script>
+  document.addEventListener('mousemove', function(e) {
+    window.top.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+  });
+</script>
+</body></html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Hub — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Comfortaa:wght@300;400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e8ede8;
+  --surface: #eef3ee;
+  --white: #f2f7f2;
+  --card: #e4e9e4;
+  --border: rgba(0,0,0,0.06);
+  --text: #1a2e1a;
+  --muted: rgba(26,46,26,0.52);
+  --dim: rgba(26,46,26,0.3);
+  --mint: #3d9970;
+  --mint-mid: #52ad86;
+  --mint-light: #a8d5c0;
+  --mint-dim: rgba(61,153,112,0.1);
+  --mint-glow: rgba(61,153,112,0.2);
+  --teal: #2a7a5e;
+  --neu-light: rgba(255,255,255,0.75);
+  --neu-dark: rgba(0,0,0,0.12);
+  --ff: 'Syne', sans-serif;
+  --fc: 'Comfortaa', cursive;
+  --fb: 'DM Sans', sans-serif;
+  --max: 1080px;
+  --r: 20px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
+
+/* NEUMORPHIC MIXIN */
+.neu { background: var(--bg); box-shadow: 6px 6px 14px var(--neu-dark), -6px -6px 14px var(--neu-light); border-radius: var(--r); }
+.neu-inset { background: var(--bg); box-shadow: inset 4px 4px 10px var(--neu-dark), inset -4px -4px 10px var(--neu-light); border-radius: var(--r); }
+.neu-card { background: var(--bg); box-shadow: 8px 8px 20px var(--neu-dark), -8px -8px 20px var(--neu-light); border-radius: var(--r); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* ── HERO ── */
+.hero {
+  background: #1a2e1a;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-noise {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(61,153,112,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(61,153,112,0.04) 1px,transparent 1px);
+  background-size: 56px 56px;
+}
+.hero-glow { position: absolute; top: -80px; right: 0; width: 500px; height: 500px; background: radial-gradient(ellipse, rgba(61,153,112,0.18) 0%, transparent 65%); pointer-events: none; }
+
+.hero-left { padding: 144px 56px 100px 48px; position: relative; z-index: 1; }
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.hero-line { width: 28px; height: 1px; background: var(--mint-light); opacity: 0.6; }
+.hero-kicker { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mint-light); font-family: var(--fb); }
+.hero-title { font-family: var(--ff); font-size: clamp(52px,5.5vw,84px); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; color: #fff; margin-bottom: 24px; }
+.hero-title em { font-style: normal; color: var(--mint-light); }
+.hero-sub { font-family: var(--fc); font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.45); max-width: 420px; line-height: 1.75; margin-bottom: 40px; }
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-tag { font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 100px; border: 1px solid rgba(61,153,112,0.35); color: rgba(255,255,255,0.45); font-family: var(--fb); }
+.hero-meta { display: flex; gap: 36px; flex-wrap: wrap; }
+.hm-item { display: flex; flex-direction: column; gap: 4px; }
+.hm-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.22); }
+.hm-value { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5); }
+
+.hero-right { position: relative; height: 100vh; overflow: hidden; }
+.hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.65; }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, #1a2e1a 0%, transparent 25%), linear-gradient(to top, #1a2e1a 0%, transparent 25%); }
+
+/* ── SECTION WRAPPER ── */
+.section { padding: 96px 0; }
+.section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mint); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-family: var(--fb); }
+.section-label::before { content: ''; width: 20px; height: 1px; background: var(--mint); opacity: 0.6; }
+.section-title { font-family: var(--ff); font-size: clamp(28px,3.5vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 0; }
+.section-title span { color: var(--mint); }
+.section-header { margin-bottom: 60px; position: relative; }
+.section-ghost { font-family: var(--ff); font-size: 100px; font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(61,153,112,0.06); position: absolute; right: 0; top: -28px; pointer-events: none; user-select: none; }
+
+/* ── SPLIT ── */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; padding: 60px 0; }
+.split.rev { direction: rtl; }
+.split.rev > * { direction: ltr; }
+.split-img { border-radius: 24px; overflow: hidden; box-shadow: 12px 12px 32px rgba(0,0,0,0.18), -6px -6px 20px rgba(255,255,255,0.25); }
+.split-img img { width: 100%; height: auto; display: block; }
+.split-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mint); margin-bottom: 14px; font-family: var(--fb); }
+.split-title { font-family: var(--ff); font-size: clamp(22px,2.6vw,32px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+.split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; font-family: var(--fc); font-weight: 300; }
+.split-callout { padding: 16px 20px; border-radius: 14px; background: var(--bg); box-shadow: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light); font-size: 14px; color: var(--text); line-height: 1.6; font-family: var(--fc); }
+.split-callout strong { color: var(--mint); font-weight: 600; }
+
+/* ── FULL IMAGE ── */
+.img-full { width: 100%; border-radius: 24px; overflow: hidden; margin: 52px 0; box-shadow: 12px 12px 32px rgba(0,0,0,0.14), -6px -6px 20px rgba(255,255,255,0.3); }
+.img-full img { width: 100%; height: auto; display: block; }
+
+/* ── PULL QUOTE ── */
+.pull { background: #1a2e1a; border-radius: 24px; padding: 52px 60px; margin: 64px 0; position: relative; overflow: hidden; }
+.pull::before { content: '"'; font-family: var(--ff); font-size: 180px; font-weight: 800; color: rgba(61,153,112,0.15); position: absolute; top: -24px; left: 28px; line-height: 1; }
+.pull-text { font-family: var(--ff); font-size: clamp(20px,2.6vw,32px); font-weight: 700; letter-spacing: -0.02em; color: #fff; line-height: 1.25; position: relative; z-index: 1; max-width: 680px; }
+.pull-text em { font-style: normal; color: var(--mint-light); }
+.pull-attr { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 18px; position: relative; z-index: 1; }
+
+/* ── 3-STAT ROW ── */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin: 52px 0; }
+.stat-card { padding: 32px 28px; border-radius: 20px; background: var(--bg); box-shadow: 8px 8px 20px var(--neu-dark), -8px -8px 20px var(--neu-light); }
+.stat-num { font-family: var(--ff); font-size: 44px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 8px; }
+.stat-num.mint { color: var(--mint); }
+.stat-num.teal { color: var(--teal); }
+.stat-label { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.stat-body { font-size: 13px; color: var(--muted); line-height: 1.6; font-family: var(--fc); font-weight: 300; }
+
+/* ── KEY INSIGHTS ── */
+.insights { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 52px 0; }
+.ins-card { padding: 28px; border-radius: 18px; background: var(--bg); box-shadow: 6px 6px 16px var(--neu-dark), -6px -6px 16px var(--neu-light); transition: box-shadow 0.3s; }
+.ins-card:hover { box-shadow: 10px 10px 24px var(--neu-dark), -10px -10px 24px var(--neu-light); }
+.ins-icon { font-size: 24px; margin-bottom: 12px; }
+.ins-title { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.ins-body { font-size: 13px; color: var(--muted); line-height: 1.65; font-family: var(--fc); font-weight: 300; }
+.ins-tag { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px; background: var(--mint-dim); color: var(--mint); font-family: var(--fb); }
+
+/* ── PROCESS STEPS ── */
+.process { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin: 52px 0; }
+.proc-step { padding: 24px 20px; border-radius: 18px; background: var(--bg); box-shadow: 6px 6px 14px var(--neu-dark), -6px -6px 14px var(--neu-light); }
+.proc-num { font-family: var(--ff); font-size: 10px; font-weight: 700; color: var(--mint); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.proc-title { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.proc-body { font-size: 12px; color: var(--muted); line-height: 1.6; font-family: var(--fc); font-weight: 300; }
+
+/* ── UI SHOWCASE ── */
+.showcase { background: #1a2e1a; border-radius: 28px; padding: 64px 48px; margin: 64px 0; position: relative; overflow: hidden; }
+.showcase::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(61,153,112,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(61,153,112,0.03) 1px,transparent 1px); background-size: 44px 44px; }
+.showcase-header { text-align: center; margin-bottom: 48px; position: relative; z-index: 1; }
+.showcase-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mint-light); margin-bottom: 12px; font-family: var(--fb); }
+.showcase-title { font-family: var(--ff); font-size: clamp(24px,3vw,40px); font-weight: 800; color: #fff; letter-spacing: -0.025em; }
+.showcase-sub { font-size: 14px; color: rgba(255,255,255,0.35); margin-top: 10px; font-family: var(--fc); font-weight: 300; }
+.ui-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; position: relative; z-index: 1; }
+.ui-frame { border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.ui-frame img { width: 100%; height: auto; display: block; }
+.ui-label { padding: 12px 16px; background: rgba(255,255,255,0.06); font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.55); font-family: var(--fb); }
+
+/* ── FEATURE PILLS ROW ── */
+.pills { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+.pill { font-size: 12px; font-weight: 500; padding: 7px 16px; border-radius: 100px; background: var(--bg); box-shadow: 4px 4px 10px var(--neu-dark), -4px -4px 10px var(--neu-light); color: var(--mint); font-family: var(--fb); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: rgba(0,0,0,0.07); margin: 64px 0; }
+
+/* FOOTER */
+footer { background: #1a2e1a; padding: 52px 0; }
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;}
+  .hero-right{height:50vw;}
+  .split{grid-template-columns:1fr;gap:32px;}
+  .split.rev{direction:ltr;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .insights{grid-template-columns:1fr;}
+  .process{grid-template-columns:1fr 1fr;}
+  .ui-grid{grid-template-columns:1fr 1fr;}
+  .container{padding:0 24px;}
+  .section{padding:72px 0;}
+  .pull{padding:36px 28px;}
+}
+/* CUSTOM CURSOR STYLES */
+*, *::before, *::after { cursor: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-left reveal">
+    <div class="hero-eyebrow">
+      <div class="hero-line"></div>
+      <span class="hero-kicker">UI / UX Design — Case Study</span>
+    </div>
+    <h1 class="hero-title">3D Hub<br><em>Built for</em><br><em>makers.</em></h1>
+    <p class="hero-sub">A dedicated social platform for 3D printing enthusiasts — built with soft neumorphism UI that mirrors the tactile, hands-on world of making.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Neumorphism UI</span>
+      <span class="hero-tag">Mobile App</span>
+      <span class="hero-tag">Social Platform</span>
+      <span class="hero-tag">Community Design</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hm-item"><span class="hm-label">Timeline</span><span class="hm-value">Sep – Nov 2024</span></div>
+      <div class="hm-item"><span class="hm-label">Type</span><span class="hm-value">Academic · School Project</span></div>
+      <div class="hm-item"><span class="hm-label">Style</span><span class="hm-value">Neumorphism · Comfortaa · Mint</span></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img class="hero-img" src="https://framerusercontent.com/images/pknKPDuXy134mk0X4qwWOjPMk.png" alt="3D Hub app hero screen"/>
+    <div class="hero-overlay"></div>
+  </div>
+</section>
+
+
+<!-- ══ THE PROBLEM ══ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="section reveal">
+    <div class="section-header" style="position:relative">
+      <div class="section-ghost">01</div>
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">The 3D community<br><span>had no home.</span></h2>
+    </div>
+
+    <div class="split">
+      <div class="split-img">
+        <img src="https://framerusercontent.com/images/sMnMNIAnZFc0mPLNiIklz7IyMc.png" alt="Fragmented 3D printing community problem"/>
+      </div>
+      <div>
+        <div class="split-overline">Core friction</div>
+        <h3 class="split-title">Scattered across Reddit, Discord, and generic forums</h3>
+        <p class="split-body">The 3D printing community is massive — and completely fragmented. Creators share to Instagram, ask questions on Reddit, browse Thingiverse, and discuss on Discord. None of these were built for them.</p>
+        <p class="split-body">Makers struggled to get discovered, beginners couldn't find focused tutorials, and experienced creators had no way to build a dedicated following around their work.</p>
+        <div class="split-callout">
+          <strong>The gap:</strong> No platform existed that combined sharing, discovery, and community discussion — all tailored specifically to the 3D printing world.
+        </div>
+        <div class="pills">
+          <span class="pill">No focused discovery</span>
+          <span class="pill">Poor recognition</span>
+          <span class="pill">Generic platforms</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ THE SOLUTION ══ -->
+<div style="background:var(--bg)">
+<div class="container">
+    <div class="pull reveal">
+      <p class="pull-text">Think <em>Instagram</em>, but built for <em>makers</em>. A visual, community-first space to share, explore, and discuss everything 3D printing.</p>
+      <p class="pull-attr">— Design vision, 3D Hub</p>
+    </div>
+
+    <div class="split rev reveal">
+      <div class="split-img">
+        <img src="https://framerusercontent.com/images/H2ILeuZpSa5UE82Tt0meNP4JG7Y.png" alt="3D Hub solution — social platform for makers"/>
+      </div>
+      <div>
+        <div class="split-overline">The Solution</div>
+        <h3 class="split-title">A dedicated world for 3D printing creators</h3>
+        <p class="split-body">3D Hub brings together everything scattered across the internet — into one focused, visually rich mobile platform. Share your prints, discover techniques, follow creators you admire, and actually get seen.</p>
+        <p class="split-body">Targeted filters for filament types, print techniques, and material reviews mean users find exactly what they need — not a wall of unrelated content.</p>
+        <div class="split-callout">
+          <strong>Spotlight section:</strong> Featured creators get dedicated exposure — rewarding quality work and driving community motivation regardless of existing follower count.
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+<!-- ══ RESEARCH ══ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="section reveal">
+    <div class="section-header" style="position:relative">
+      <div class="section-ghost">02</div>
+      <div class="section-label">Research</div>
+      <h2 class="section-title">5 interviews.<br><span>4 key fixes.</span></h2>
+    </div>
+
+    <div class="img-full reveal">
+      <img src="https://framerusercontent.com/images/djz3Z7wkBjRqHG48rZYIPeD8.png" alt="3D Hub user research process"/>
+    </div>
+
+    <div class="insights reveal">
+      <div class="ins-card">
+        <div class="ins-icon">➕</div>
+        <div class="ins-title">Simplify the upload flow</div>
+        <div class="ins-body">Users got confused by separate "upload" and "share" buttons — they expected one action. Consolidated into a single "+" CTA that handles both.</div>
+        <span class="ins-tag">Upload simplified</span>
+      </div>
+      <div class="ins-card">
+        <div class="ins-icon">🗂️</div>
+        <div class="ins-title">Explore tab felt overwhelming</div>
+        <div class="ins-body">Too much in one place. Added segmented sub-tabs — Trending, Discussions, and Spotlight — so users can switch contexts without cognitive overload.</div>
+        <span class="ins-tag">Navigation clarity</span>
+      </div>
+      <div class="ins-card">
+        <div class="ins-icon">🔔</div>
+        <div class="ins-title">Visual feedback in notifications</div>
+        <div class="ins-body">Users couldn't quickly recognise which post triggered a notification. Adding mini image previews in the notifications tab fixed this instantly.</div>
+        <span class="ins-tag">Visual feedback wins</span>
+      </div>
+      <div class="ins-card">
+        <div class="ins-icon">🔍</div>
+        <div class="ins-title">Search must be persistent</div>
+        <div class="ins-body">Users expected the search bar to follow them across every community view — not disappear when switching tabs. Made it globally persistent.</div>
+        <span class="ins-tag">Global search</span>
+      </div>
+    </div>
+
+    <!-- Personas -->
+    <div class="img-full reveal">
+      <img src="https://framerusercontent.com/images/Gl8KVcmrgzOfIKdtxJ0xwTPL2Cs.png" alt="3D Hub user personas — beginner, intermediate, enthusiast"/>
+    </div>
+
+    <div class="stats reveal">
+      <div class="stat-card">
+        <div class="stat-num mint">5</div>
+        <div class="stat-label">User interviews</div>
+        <div class="stat-body">Semi-structured interviews across hobbyists, prosumers, and educators in the 3D printing space.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num teal">3</div>
+        <div class="stat-label">Persona types</div>
+        <div class="stat-body">Beginner, intermediate, and enthusiast — each with distinct sharing behaviors and feature needs.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num mint">4</div>
+        <div class="stat-label">Core UX fixes</div>
+        <div class="stat-body">Upload, navigation, notifications, and search — all identified through think-aloud testing and refined in iteration.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ DESIGN PROCESS ══ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="section reveal">
+    <div class="section-header" style="position:relative">
+      <div class="section-ghost">03</div>
+      <div class="section-label">Design Process</div>
+      <h2 class="section-title">Soft surfaces.<br><span>Tactile soul.</span></h2>
+    </div>
+
+    <p style="font-size:16px;color:var(--muted);max-width:560px;line-height:1.8;margin-bottom:44px;font-family:var(--fc);font-weight:300" class="reveal">
+      The neumorphism style wasn't a trend choice — it was a deliberate reflection of the physical, tactile world of 3D printing. Raised buttons feel like something you can press. Inset fields feel like a surface you're carving into. The UI mirrors the craft.
+    </p>
+
+    <div class="process reveal">
+      <div class="proc-step">
+        <div class="proc-num">Step 01</div>
+        <div class="proc-title">Competitive Analysis</div>
+        <div class="proc-body">Studied Reddit, Instagram, Thingiverse, and Printables to map what worked and what the community consistently complained about.</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">Step 02</div>
+        <div class="proc-title">Lo-fi Wireframes</div>
+        <div class="proc-body">Explored key flows — model sharing, feed browsing, discussion threads, and notifications — grounded in interview insights.</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">Step 03</div>
+        <div class="proc-title">Visual Language</div>
+        <div class="proc-body">Soft neumorphism + Comfortaa typeface + mint palette. Tactile, fresh, and community-warm — nothing cold or corporate.</div>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">Step 04</div>
+        <div class="proc-title">Test & Iterate</div>
+        <div class="proc-body">Think-aloud sessions revealed navigation and upload issues. Each problem had a direct fix — no guesswork in the solution.</div>
+      </div>
+    </div>
+
+    <!-- Wireframes / design process image -->
+    <div class="img-full reveal">
+      <img src="https://framerusercontent.com/images/Imw5ZMbmRZa3L367HMYkj35V7E.png" alt="3D Hub wireframes and design process"/>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ FINAL UI ══ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="section reveal">
+    <div class="section-header" style="position:relative">
+      <div class="section-ghost">04</div>
+      <div class="section-label">Final UI</div>
+      <h2 class="section-title">The neumorphic<br><span>maker experience.</span></h2>
+    </div>
+  </div>
+</div>
+
+<div class="showcase reveal">
+  <div class="showcase-header">
+    <div class="showcase-eyebrow">High Fidelity Prototypes · Neumorphism UI</div>
+    <h3 class="showcase-title">3D Hub — Final Screens</h3>
+    <p class="showcase-sub">Soft neumorphism · Comfortaa · Mint palette · Community-first</p>
+  </div>
+  <div style="max-width: 1400px; margin: 0 auto; padding: 0 40px; position:relative; z-index:1">
+    <div class="ui-grid">
+      <div class="ui-frame">
+        <img src="https://framerusercontent.com/images/xa9q9YBk5q1bQY9bPZILcHGmbnY.png" alt="3D Hub final UI screens — feed and discovery"/>
+      </div>
+      <div class="ui-frame">
+        <img src="https://framerusercontent.com/images/gmAm9lmNNDm01iESLAzE2FupsRw.png" alt="3D Hub final UI screens — profile and model sharing"/>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 32px; font-size: 13px; color: rgba(255,255,255,0.4); font-family: var(--fb); letter-spacing: 0.05em; text-transform: uppercase;">
+      Feed · Discovery · Trending · Profile · Model sharing · Spotlight
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ TAKEAWAY ══ -->
+<div style="background:var(--bg)">
+<div class="container">
+  <div class="section reveal">
+    <div class="pull" style="margin-top:0">
+      <p class="pull-text">The best UI doesn't just look good — it <em>feels right</em> for the context. Neumorphism worked here because 3D printing is tactile. The interface should feel like something you built with your hands.</p>
+      <p class="pull-attr">— Design reflection, 3D Hub 2024</p>
+    </div>
+
+    <!-- ─────────── PREV / NEXT NAV ─────────── -->
+    <section style="padding:0 0 80px;background:var(--bg)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+        <!-- PREV -->
+        <a href="/projects/ev-trip-intelligence" target="_top" style="
+          display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+          background:var(--surface);border:1px solid var(--border);
+          border-radius:16px;padding:28px 32px;
+          text-decoration:none;color:var(--text);
+          transition:background 0.2s,border-color 0.2s;
+        " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(61,153,112,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border)'">
+          <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
+          <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Voltro EV Trip</div>
+          <div style="font-size:13px;color:var(--muted)">Designing trust in EV mobility</div>
+        </a>
+        <!-- NEXT -->
+        <a href="/projects/travelogue" target="_top" style="
+          display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+          background:var(--surface);border:1px solid var(--border);
+          border-radius:16px;padding:28px 32px;
+          text-decoration:none;color:var(--text);
+          transition:background 0.2s,border-color 0.2s;
+        " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(61,153,112,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border)'">
+          <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
+          <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Travelogue</div>
+          <div style="font-size:13px;color:var(--muted)">Plan. Share. Remember.</div>
+        </a>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat-card reveal">
+        <div class="stat-num mint">1</div>
+        <div class="stat-label">Unified "+" action</div>
+        <div class="stat-body">Replaced two confusing CTAs with a single, clear action that handles upload and share in one tap.</div>
+      </div>
+      <div class="stat-card reveal d1">
+        <div class="stat-num teal">3</div>
+        <div class="stat-label">Sub-tabs added to Explore</div>
+        <div class="stat-body">Trending, Discussions, and Spotlight — turning an overwhelming screen into a navigable, purposeful space.</div>
+      </div>
+      <div class="stat-card reveal d2">
+        <div class="stat-num mint">∞</div>
+        <div class="stat-label">Makers, finally home</div>
+        <div class="stat-body">A platform that celebrates the craft — not just the content. Built for the community it serves.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:var(--ff);font-size:14px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:rgba(255,255,255,0.4)">⬡ 3D Hub</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:5px;font-family:var(--fc)">Social platform for 3D printing enthusiasts · Neumorphism UI</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;color:rgba(255,255,255,0.25);font-family:var(--fb)">UI / UX Case Study · 2024</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.18);margin-top:4px;font-family:var(--fc)">Ashish Dixit · Product Designer</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Relay mousemove messages for custom cursor
+document.addEventListener('mousemove', function(e) {
+  window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+});
+</script>
+</body>
+</html>
