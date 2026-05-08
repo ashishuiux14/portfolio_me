@@ -163,7 +163,7 @@ nav {
   width: 64px;
   height: 40px;
   min-width: 64px;
-  border: 1px solid var(--red);
+  border: .5px solid var(--red);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1074,14 +1074,11 @@ footer {
 
   body {
     cursor: auto !important;
+    font-size: 15px;
   }
 
   body * {
     cursor: auto !important;
-  }
-
-  body {
-    font-size: 15px;
   }
 
   footer {

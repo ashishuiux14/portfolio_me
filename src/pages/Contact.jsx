@@ -19,7 +19,7 @@ const Contact = () => {
   return (
     <>
       <div className="page-header">
-        <div className="page-eyebrow">// 04 — Let's Talk</div>
+        <div className="page-eyebrow">{"// 04 — Let's Talk"}</div>
         <h1 className="page-h1">GET IN<br/><span className="outline">TOUCH</span><span className="red">.</span></h1>
       </div>
 
@@ -61,8 +61,8 @@ const Contact = () => {
           </div>
 
           <div className="contact-cta-row">
-            <button className="btn btn-ghost btn-copy" onClick={() => window.copyEmail && window.copyEmail()}>
-              Copy Email
+            <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
+              {'Copy Email '}
               <span className="copy-confirm">Copied!</span>
             </button>
             <a href="https://drive.google.com/file/d/1j09Exkfpj39EFfeW4WUMBc1JWhgPBrNa/view" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>

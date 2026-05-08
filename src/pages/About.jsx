@@ -5,7 +5,7 @@ const About = () => {
     <>
       <div className="page-header about-header">
         <div className="header-content">
-          <div className="page-eyebrow">// 03 — About</div>
+          <div className="page-eyebrow">{'// 03 — About'}</div>
           <h1 className="page-h1">THE<br /><span className="outline">PERSON</span><br />BEHIND<span className="red">.</span></h1>
         </div>
         <div className="header-visual">

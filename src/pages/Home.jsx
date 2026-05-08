@@ -13,7 +13,7 @@ const Home = () => {
         <BrainHero />
         <div className="hero-inner">
           <div className="hero-text">
-            <div className="hero-eyebrow">// Hello ! I am Ashish Dixit</div>
+            <div className="hero-eyebrow">{'// Hello ! I am Ashish Dixit'}</div>
 
             <div className="hero-location">📍 Chicago, IL</div>
             <h1 className="hero-h1">UIUX<br /><span className="outline">DESIGNER</span><span className="red">.</span></h1>
@@ -21,8 +21,8 @@ const Home = () => {
             <p className="hero-body">Designer with a background in spatial design, crafting intuitive and meaningful user experiences across digital platforms through a user-centered design approach.</p>
             <div className="hero-cta">
               <a href="https://drive.google.com/file/d/1j09Exkfpj39EFfeW4WUMBc1JWhgPBrNa/view" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
-              <button className="btn btn-ghost btn-copy" onClick={() => window.copyEmail && window.copyEmail()}>
-                Copy Email
+              <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
+                {'Copy Email '}
                 <span className="copy-confirm" id="copy-confirm">Copied!</span>
               </button>
             </div>
@@ -38,7 +38,7 @@ const Home = () => {
             <div className="section-tag">Selected Work</div>
             <h2 className="section-h2">PROJECTS<span>.</span></h2>
           </div>
-          <span className="section-count">// 04 CASE STUDIES</span>
+          <span className="section-count">{'// 04 CASE STUDIES'}</span>
         </div>
         <div className="projects-grid">
           <Link to="/projects/cleanero" className="proj-card">
@@ -143,13 +143,13 @@ const Home = () => {
       <div className="divider"></div>
 
       <section className="contact-cta-section">
-        <div className="section-tag" style={{ justifyContent: 'center' }}>// Got questions?</div>
+        <div className="section-tag" style={{ justifyContent: 'center' }}>{'// Got questions?'}</div>
         <h2 className="contact-h2">ALWAYS<br /><span className="outline">EXCITED</span><br />TO COLLABORATE<span style={{ color: 'var(--red)' }}>.</span></h2>
         <p className="contact-sub">I'm always excited to collaborate on innovative and exciting projects!</p>
         <div className="contact-btns">
           <Link to="/contact" className="btn btn-red">Contact Me</Link>
-          <button className="btn btn-ghost btn-copy" onClick={() => window.copyEmail && window.copyEmail()}>
-            Copy Email
+          <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
+            {'Copy Email '}
             <span className="copy-confirm">Copied!</span>
           </button>
         </div>
