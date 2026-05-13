@@ -36,11 +36,18 @@
 .brain-hero-wrap {
   position: absolute;
   inset: 0;
-  z-index: 1;           /* behind hero text (z-index: 2) */
+  z-index: 5;           /* above hero text (z-index: 2) on mobile, we will toggle this */
   pointer-events: none; /* let clicks through to buttons */
   overflow: hidden;
   font-family: 'Courier New', monospace;
 }
+
+@media (max-width: 900px) {
+  .brain-hero-wrap {
+    z-index: 10; /* Keep brain above everything on mobile */
+  }
+}
+
 
 /* Canvas fills the wrapper */
 .brain-hero-wrap canvas {
@@ -67,9 +74,9 @@
 /* ── HUD Tool Label — Floating ── */
 .brain-hud-label {
   position: absolute;
-  top: 45%;
-  right: 6%;
-  transform: translateY(-50%);
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%); /* Fix: Use left:50% and -50% for true centering */
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -78,15 +85,25 @@
   padding: 12px 18px;
   backdrop-filter: blur(8px);
   z-index: 100;
-  min-width: 160px;
+  width: 440px;
+  max-width: 90vw;
   box-shadow: 20px 20px 40px rgba(0,0,0,0.4);
   animation: hudFadeIn 0.4s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 @keyframes hudFadeIn {
-  from { opacity: 0; transform: translateY(-45%) scale(0.98); }
-  to   { opacity: 1; transform: translateY(-50%) scale(1); }
+  from { opacity: 0; transform: translate(-50%, 10px) scale(0.98); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
+
+
+@media (max-width: 900px) {
+  .brain-hud-label {
+    bottom: 5%;
+    width: 280px;
+  }
+}
+
 
 @keyframes fadeIn3d {
   from {
@@ -100,29 +117,30 @@
 }
 
 .brain-hud-status {
-  font-size: 6px;
-  letter-spacing: 3px;
-  color: rgba(255, 85, 0, 0.5);
-  margin-bottom: 2px;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 6px;
   text-transform: uppercase;
 }
 
 .brain-tool-name {
   font-family: 'Courier New', monospace;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  line-height: 1.2;
+  line-height: 1.1;
+  margin-bottom: 2px;
 }
 
 .brain-tool-sub {
   font-family: 'Courier New', monospace;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.45);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 /* Progress Timeline Line */
@@ -1012,6 +1030,11 @@
   .hero-inner {
     flex-direction: column;
     align-items: flex-start;
+    z-index: 1; /* Keep text behind brain on mobile */
+  }
+
+  .brain-hero-wrap {
+    z-index: 10 !important; /* Ensure brain is on top */
   }
 
   #hero-3d {
