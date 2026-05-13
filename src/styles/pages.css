@@ -95,14 +95,7 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@media (max-width: 900px) {
-  .brain-hud-label {
-    bottom: 5%;
-    right: 50%;
-    transform: translateX(50%); /* Corrected centering with right:50% */
-    width: 280px;
-  }
-}
+
 
 
 
@@ -1029,15 +1022,46 @@
 }
 
 @media (max-width: 600px) {
-  .hero-inner {
+  .hero {
+    min-height: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    z-index: 1; /* Keep text behind brain on mobile */
+    align-items: center;
+    text-align: left;
   }
 
   .brain-hero-wrap {
-    z-index: 10 !important; /* Ensure brain is on top */
+    position: relative;
+    height: 280px;
+    width: 100%;
+    z-index: 10 !important;
+    margin-bottom: 30px; /* Gap between brain and text */
   }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 0 24px;
+    margin-bottom: 40px; /* Gap between text and tool card */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .brain-hud-label {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    left: auto;
+    transform: none;
+    margin: 0 auto; 
+    width: 280px;
+  }
+}
+
 
   #hero-3d {
     width: 120px;
