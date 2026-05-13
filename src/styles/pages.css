@@ -1020,7 +1020,7 @@
 /* ── BATMAN SECTION (ABOUT BOTTOM) ── */
 .batman-section {
   padding: calc(var(--gu)*5) calc(var(--gu)*3);
-  background: var(--bg);
+  background: transparent;
   border-top: 1px solid var(--border);
 }
 
@@ -1059,12 +1059,12 @@
 }
 
 .batman-egg {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 10px;
-  opacity: 0.25;
-  text-transform: none !important;
-  letter-spacing: 0.05em !important;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  opacity: 0.6;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1000px) {
