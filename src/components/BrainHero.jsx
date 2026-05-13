@@ -184,8 +184,16 @@ export default function BrainHero() {
   const currentTool = TOOLS[activeIdx]
 
   return (
-    <div className="brain-hero-wrap" ref={containerRef}>
-      <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
+    <>
+      <div className="brain-hero-wrap" ref={containerRef}>
+        <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
+        {!loaded && (
+          <div className="brain-loader">
+            <div className="brain-loader-label">{'SYNCING BRAIN MODEL'}</div>
+            <div className="brain-loader-bar"><div className="brain-loader-fill" style={{ width: `${progress}%` }} /></div>
+          </div>
+        )}
+      </div>
       {loaded && currentTool && (
         <div className="brain-hud-label" style={{ borderLeftColor: new THREE.Color(currentTool.color).getStyle() }}>
           <div className="brain-hud-status">{'// ACTIVE NEURAL CLUSTER'}</div>
@@ -194,12 +202,6 @@ export default function BrainHero() {
           <div className="brain-hud-timer"><div className="brain-hud-progress" style={{ backgroundColor: new THREE.Color(currentTool.color).getStyle() }} key={activeIdx} /></div>
         </div>
       )}
-      {!loaded && (
-        <div className="brain-loader">
-          <div className="brain-loader-label">{'SYNCING BRAIN MODEL'}</div>
-          <div className="brain-loader-bar"><div className="brain-loader-fill" style={{ width: `${progress}%` }} /></div>
-        </div>
-      )}
-    </div>
+    </>
   )
 }

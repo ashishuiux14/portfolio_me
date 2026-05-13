@@ -74,7 +74,7 @@
 /* ── HUD Tool Label — Floating ── */
 .brain-hud-label {
   position: absolute;
-  bottom: 22%;           /* Move up slightly to be just below the brain */
+  bottom: 4%;            /* Below the brain model, near the bottom of the hero */
   right: 12%;            /* Align with the brain's shifted position on desktop */
   display: flex;
   flex-direction: column;
@@ -83,8 +83,8 @@
   border-left: 3px solid #ff5500;
   padding: 12px 18px;
   backdrop-filter: blur(8px);
-  z-index: 100;
-  width: 320px;          /* Back to original width for better balance */
+  z-index: 6;
+  width: 320px;
   max-width: 90vw;
   box-shadow: 20px 20px 40px rgba(0,0,0,0.4);
   animation: hudFadeIn 0.4s cubic-bezier(0.2, 0, 0.2, 1);
@@ -1057,7 +1057,7 @@
     right: auto;
     left: auto;
     transform: none;
-    margin: 0 auto; 
+    margin: 16px auto 0;
     width: 280px;
   }
 }
