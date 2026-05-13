@@ -1019,38 +1019,63 @@
 
 /* ── BATMAN SECTION (ABOUT BOTTOM) ── */
 .batman-section {
-  padding: calc(var(--gu)*4) calc(var(--gu)*3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background: var(--surface);
+  padding: calc(var(--gu)*5) calc(var(--gu)*3);
+  background: var(--bg);
   border-top: 1px solid var(--border);
+}
+
+.batman-content {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: calc(var(--gu)*4);
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.batman-h3 {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  line-height: 0.95;
+  color: var(--white);
+  margin-top: 16px;
+  margin-bottom: 28px;
+  letter-spacing: 0.02em;
+}
+
+.batman-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--grey1);
+  max-width: 440px;
 }
 
 .batman-img {
   width: 100%;
-  max-width: 900px;
   height: auto;
   border: 1px solid var(--border2);
-  margin-bottom: 32px;
   filter: saturate(1.2) contrast(1.1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
-.batman-quote {
+.batman-egg {
   font-family: var(--serif);
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
   font-style: italic;
-  color: var(--white);
-  max-width: 800px;
-  line-height: 1.4;
-  margin-bottom: 12px;
+  font-size: 10px;
+  opacity: 0.25;
+  text-transform: none !important;
+  letter-spacing: 0.05em !important;
 }
 
-.batman-author {
-  font-family: var(--display);
-  font-size: 1.2rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--red);
+@media (max-width: 1000px) {
+  .batman-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .batman-text {
+    order: 2;
+  }
+  .batman-visual {
+    order: 1;
+  }
 }

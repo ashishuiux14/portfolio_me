@@ -113,13 +113,20 @@ const About = () => {
       </div>
 
       <div className="batman-section">
-        <div className="container">
-          <img src="/about-batman.jpg" alt="Technical Lab" className="batman-img" />
-          <p className="batman-quote">"Why do we fall ? So we can learn to pick ourselves up"</p>
-          <p className="batman-author">— Batman</p>
+        <div className="batman-content">
+          <div className="batman-text">
+            <div className="section-tag">Current Focus</div>
+            <h3 className="batman-h3">Aiming to be an<br /><span className="red">AI Generalist.</span></h3>
+            <p className="batman-desc">
+              (who tries to solve the problems faced in human experiences with the best of AI)
+            </p>
+          </div>
+          <div className="batman-visual">
+            <img src="/about-batman.jpg" alt="Technical Lab" className="batman-img" />
+          </div>
         </div>
       </div>
-      <Footer />
+      <Footer showEasterEgg={true} />
     </>
   );
 };
