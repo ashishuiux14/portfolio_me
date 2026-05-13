@@ -74,9 +74,8 @@
 /* ── HUD Tool Label — Floating ── */
 .brain-hud-label {
   position: absolute;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%); /* Fix: Use left:50% and -50% for true centering */
+  bottom: 22%;           /* Move up slightly to be just below the brain */
+  right: 12%;            /* Align with the brain's shifted position on desktop */
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -85,24 +84,27 @@
   padding: 12px 18px;
   backdrop-filter: blur(8px);
   z-index: 100;
-  width: 440px;
+  width: 320px;          /* Back to original width for better balance */
   max-width: 90vw;
   box-shadow: 20px 20px 40px rgba(0,0,0,0.4);
   animation: hudFadeIn 0.4s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 @keyframes hudFadeIn {
-  from { opacity: 0; transform: translate(-50%, 10px) scale(0.98); }
-  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 
 @media (max-width: 900px) {
   .brain-hud-label {
     bottom: 5%;
+    right: 50%;
+    transform: translateX(50%); /* Corrected centering with right:50% */
     width: 280px;
   }
 }
+
+
 
 
 @keyframes fadeIn3d {

@@ -146,12 +146,14 @@ export default function BrainHero() {
     r.renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio, 2))
     r.scene = new THREE.Scene()
     r.camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 5000)
-    r.camera.position.set(0, 0, 300)
+    r.camera.position.set(0, 0, 320)
 
     r.spinGroup = new THREE.Group()
     r.brainGroup = new THREE.Group()
     r.spinGroup.add(r.brainGroup)
-    r.spinGroup.position.x = 0
+    
+    // Desktop: Shift right, Mobile: Center
+    r.spinGroup.position.x = window.innerWidth > 900 ? 90 : 0
     r.scene.add(r.spinGroup)
 
     new GLTFLoader().load('/brain_human.glb', (gltf) => {
@@ -162,7 +164,7 @@ export default function BrainHero() {
       r.bbox.getCenter(r.bcenter)
       r.bbox.getSize(r.bsize)
       scene.position.sub(r.bcenter)
-      const scale = 220 / Math.max(r.bsize.x, r.bsize.y, r.bsize.z)
+      const scale = 175 / Math.max(r.bsize.x, r.bsize.y, r.bsize.z)
       r.brainGroup.scale.setScalar(scale)
       r.brainGroup.add(scene)
       const wireMat = new THREE.LineBasicMaterial({ color: 0xe82828, transparent: true, opacity: 0.35 })
