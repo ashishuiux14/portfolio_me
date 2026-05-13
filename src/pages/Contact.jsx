@@ -65,7 +65,7 @@ const Contact = () => {
               {'Copy Email '}
               <span className="copy-confirm">Copied!</span>
             </button>
-            <a href="https://drive.google.com/file/d/1j09Exkfpj39EFfeW4WUMBc1JWhgPBrNa/view" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
+            <a href="/Ashish_UX_UI_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
           </div>
         </div>
 

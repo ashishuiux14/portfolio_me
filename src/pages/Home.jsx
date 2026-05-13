@@ -20,7 +20,7 @@ const Home = () => {
             <p className="hero-role">Product Designer</p>
             <p className="hero-body">Designer with a background in spatial design, crafting intuitive and meaningful user experiences across digital platforms through a user-centered design approach.</p>
             <div className="hero-cta">
-              <a href="https://drive.google.com/file/d/1j09Exkfpj39EFfeW4WUMBc1JWhgPBrNa/view" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
+              <a href="/Ashish_UX_UI_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
               <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
                 {'Copy Email '}
                 <span className="copy-confirm" id="copy-confirm">Copied!</span>
