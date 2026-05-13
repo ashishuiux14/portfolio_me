@@ -544,13 +544,9 @@ nav.collapsed .nav-status {
   display: inline-flex;
 }
 
-.btn-copy {
-  /* position: relative; */ /* Removed to ensure tooltip relates to wrapper if needed, but keeping it doesn't hurt if we move span out */
-}
-
 .copy-confirm {
   position: absolute;
-  top: -38px; /* Slightly higher to clear the wrapper */
+  top: -38px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 9px;
