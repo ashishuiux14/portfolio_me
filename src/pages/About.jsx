@@ -79,62 +79,44 @@ const About = () => {
       <div className="divider"></div>
 
       <div className="timeline">
-        <div className="section-tag">Experience</div>
-        <h2 className="tl-h2">WHERE I'VE<br />BEEN.</h2>
+        <div className="section-tag">Education</div>
+        <h2 className="tl-h2">WHERE I'VE<br />LEARNED.</h2>
         <div className="tl-items">
           <div className="tl-item">
-            <div className="tl-year">2023 — NOW</div>
+            <div className="tl-year">2023 — 2025</div>
             <div className="tl-line"></div>
             <div>
-              <div className="tl-role">Senior Product Designer</div>
-              <div className="tl-org">Freelance · Chicago, IL</div>
-              <div className="tl-desc">End-to-end product design across consumer and B2B products. Research, flows, visual design, and dev handoff.</div>
+              <div className="tl-role">MS in HCI</div>
+              <div className="tl-org">DePaul University, Chicago</div>
+              <div className="tl-desc">Focusing on human-computer interaction, user research, and advanced prototyping.</div>
             </div>
           </div>
           <div className="tl-item">
-            <div className="tl-year">2021 — 2023</div>
+            <div className="tl-year">2011 — 2016</div>
             <div className="tl-line"></div>
             <div>
-              <div className="tl-role">UX Designer</div>
-              <div className="tl-org">Agency · Remote</div>
-              <div className="tl-desc">Designed mobile and web products for clients across healthcare and e-commerce verticals.</div>
+              <div className="tl-role">Bachelors of Architecture</div>
+              <div className="tl-org">University of Pune</div>
+              <div className="tl-desc">Foundation in design theory, spatial planning, and technical visualization.</div>
             </div>
           </div>
           <div className="tl-item">
-            <div className="tl-year">2019 — 2021</div>
+            <div className="tl-year">1993</div>
             <div className="tl-line"></div>
             <div>
-              <div className="tl-role">Architectural Designer</div>
-              <div className="tl-org">Architecture Studio</div>
-              <div className="tl-desc">Spatial design, technical drawings, and 3D visualization. Foundation in precision and visual communication.</div>
-            </div>
-          </div>
-          <div className="tl-item">
-            <div className="tl-year">2017 — 2019</div>
-            <div className="tl-line"></div>
-            <div>
-              <div className="tl-role">Master of Architecture</div>
-              <div className="tl-org">University · Chicago, IL</div>
-              <div className="tl-desc">Spatial design, computational modeling, and design theory.</div>
+              <div className="tl-role">First Step on Earth</div>
+              <div className="tl-org">The Beginning</div>
+              <div className="tl-desc">Initialization of the human design system.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="tools">
-        <div className="section-tag">Tools & Software</div>
-        <div className="tools-row">
-          <span className="tool-chip">Figma</span>
-          <span className="tool-chip">Blender</span>
-          <span className="tool-chip">AutoCAD</span>
-          <span className="tool-chip">Revit</span>
-          <span className="tool-chip">Photoshop</span>
-          <span className="tool-chip">Illustrator</span>
-          <span className="tool-chip">After Effects</span>
-          <span className="tool-chip">Principle</span>
-          <span className="tool-chip">Framer</span>
-          <span className="tool-chip">Notion</span>
-          <span className="tool-chip">Miro</span>
+      <div className="batman-section">
+        <div className="container">
+          <img src="/about-batman.jpg" alt="Technical Lab" className="batman-img" />
+          <p className="batman-quote">"Why do we fall ? So we can learn to pick ourselves up"</p>
+          <p className="batman-author">— Batman</p>
         </div>
       </div>
       <Footer />
