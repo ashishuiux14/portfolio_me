@@ -539,13 +539,18 @@ nav.collapsed .nav-status {
 }
 
 /* Copy email confirm tooltip */
-.btn-copy {
+.btn-copy-wrapper {
   position: relative;
+  display: inline-flex;
+}
+
+.btn-copy {
+  /* position: relative; */ /* Removed to ensure tooltip relates to wrapper if needed, but keeping it doesn't hurt if we move span out */
 }
 
 .copy-confirm {
   position: absolute;
-  top: -32px;
+  top: -38px; /* Slightly higher to clear the wrapper */
   left: 50%;
   transform: translateX(-50%);
   font-size: 9px;

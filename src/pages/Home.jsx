@@ -21,10 +21,12 @@ const Home = () => {
             <p className="hero-body">Designer with a background in spatial design, crafting intuitive and meaningful user experiences across digital platforms through a user-centered design approach.</p>
             <div className="hero-cta">
               <a href="/Ashish_UX_UI_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
-              <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
-                {'Copy Email '}
+              <div className="btn-copy-wrapper">
+                <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
+                  {'Copy Email'}
+                </button>
                 <span className="copy-confirm" id="copy-confirm">Copied!</span>
-              </button>
+              </div>
             </div>
           </div>
         </div>
@@ -148,10 +150,12 @@ const Home = () => {
         <p className="contact-sub">I'm always excited to collaborate on innovative and exciting projects!</p>
         <div className="contact-btns">
           <Link to="/contact" className="btn btn-red">Contact Me</Link>
-          <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
-            {'Copy Email '}
+          <div className="btn-copy-wrapper">
+            <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
+              {'Copy Email'}
+            </button>
             <span className="copy-confirm">Copied!</span>
-          </button>
+          </div>
         </div>
       </section>
       <Footer />

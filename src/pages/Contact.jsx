@@ -61,10 +61,12 @@ const Contact = () => {
           </div>
 
           <div className="contact-cta-row">
-            <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
-              {'Copy Email '}
+            <div className="btn-copy-wrapper">
+              <button className="btn btn-ghost btn-copy" onClick={() => globalThis.copyEmail?.()}>
+                {'Copy Email'}
+              </button>
               <span className="copy-confirm">Copied!</span>
-            </button>
+            </div>
             <a href="/Ashish_UX_UI_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn-red">Download Resume</a>
           </div>
         </div>
