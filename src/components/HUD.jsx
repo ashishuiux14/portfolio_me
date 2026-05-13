@@ -5,36 +5,34 @@ const HUD = () => {
 
   // Determine drawing number based on path
   const dwgNum = (() => {
-    switch (location.pathname) {
-      case '/': return 'AD-001';
-      case '/projects': return 'AD-002';
-      case '/projects/cleanero': return '002.1';
-      case '/projects/ev-trip-intelligence': return '002.2';
-      case '/projects/3d-hub': return '002.3';
-      case '/projects/travelogue': return '002.4';
-      case '/projects/atelier': return '002.5';
-      case '/3d-printing': return 'AD-003';
-      case '/about': return 'AD-004';
-      case '/contact': return 'AD-005';
-      default: return 'AD-005';
-    }
+    const p = location.pathname;
+    if (p === '/') return 'AD-001';
+    if (p === '/projects') return 'AD-002';
+    if (p.startsWith('/projects/cleanero')) return '002.1';
+    if (p.startsWith('/projects/ev-trip')) return '002.2';
+    if (p.startsWith('/projects/3d-hub')) return '002.3';
+    if (p.startsWith('/projects/travelogue')) return '002.4';
+    if (p.startsWith('/projects/atelier')) return '002.5';
+    if (p.startsWith('/3d-printing')) return 'AD-003';
+    if (p.startsWith('/about')) return 'AD-004';
+    if (p.startsWith('/contact')) return 'AD-005';
+    return 'AD-005';
   })();
 
   // Determine title based on path
   const pageTitle = (() => {
-    switch (location.pathname) {
-      case '/': return 'ashishdixit.work';
-      case '/projects': return '// Projects';
-      case '/projects/cleanero': return '// Cleaneró';
-      case '/projects/ev-trip-intelligence': return '// EV Trip Intelligence';
-      case '/projects/3d-hub': return '// 3D Hub';
-      case '/projects/travelogue': return '// Travelogue';
-      case '/projects/atelier': return '// Atelier';
-      case '/3d-printing': return '// 3D Printing';
-      case '/about': return '// About';
-      case '/contact': return '// Contact';
-      default: return '// Page';
-    }
+    const p = location.pathname;
+    if (p === '/') return 'ashishdixit.work';
+    if (p === '/projects') return '// Projects';
+    if (p.startsWith('/projects/cleanero')) return '// Cleaneró';
+    if (p.startsWith('/projects/ev-trip')) return '// EV Trip Intelligence';
+    if (p.startsWith('/projects/3d-hub')) return '// 3D Hub';
+    if (p.startsWith('/projects/travelogue')) return '// Travelogue';
+    if (p.startsWith('/projects/atelier')) return '// Atelier';
+    if (p.startsWith('/3d-printing')) return '// 3D Printing';
+    if (p.startsWith('/about')) return '// About';
+    if (p.startsWith('/contact')) return '// Contact';
+    return '// Page';
   })();
 
   return (
