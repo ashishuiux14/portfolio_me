@@ -8,6 +8,11 @@ const HUD = () => {
     switch (location.pathname) {
       case '/': return 'AD-001';
       case '/projects': return 'AD-002';
+      case '/projects/cleanero': return '002.1';
+      case '/projects/ev-trip-intelligence': return '002.2';
+      case '/projects/3d-hub': return '002.3';
+      case '/projects/travelogue': return '002.4';
+      case '/projects/atelier': return '002.5';
       case '/3d-printing': return 'AD-003';
       case '/about': return 'AD-004';
       case '/contact': return 'AD-005';
@@ -20,6 +25,11 @@ const HUD = () => {
     switch (location.pathname) {
       case '/': return 'ashishdixit.work';
       case '/projects': return '// Projects';
+      case '/projects/cleanero': return '// Cleaneró';
+      case '/projects/ev-trip-intelligence': return '// EV Trip Intelligence';
+      case '/projects/3d-hub': return '// 3D Hub';
+      case '/projects/travelogue': return '// Travelogue';
+      case '/projects/atelier': return '// Atelier';
       case '/3d-printing': return '// 3D Printing';
       case '/about': return '// About';
       case '/contact': return '// Contact';
