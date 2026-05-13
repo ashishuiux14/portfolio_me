@@ -2,6 +2,7 @@ import { useState } from 'react';
 import CleaneroThumb from '../components/CleaneroThumb';
 import HubThumb from '../components/HubThumb';
 import TravelogueThumb from '../components/TravelogueThumb';
+import AtelierThumb from '../components/AtelierThumb';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 
@@ -39,7 +40,7 @@ const Projects = () => {
                 <CleaneroThumb />
               </div>
               <div className="proj-info">
-                <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile + Web</span></div>
+                <div className="proj-meta"><span>DWG 002.1</span><span>·</span><span>UI/UX</span><span>·</span><span>Mobile + Web</span></div>
                 <div className="proj-title">CLEANERÓ</div>
                 <div className="proj-date">September 23 — November 23</div>
                 <div className="proj-sub">End-to-end cleaning service platform — research, user flows, visual design and handoff.</div>
@@ -54,7 +55,7 @@ const Projects = () => {
                 <img src="/ev-thumb.svg" alt="EV Trip Intelligence" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
               <div className="proj-info">
-                <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>
+                <div className="proj-meta"><span>DWG 002.2</span><span>·</span><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>
                 <div className="proj-title">EV TRIP INTELLIGENCE</div>
                 <div className="proj-date">2024</div>
                 <div className="proj-sub">Designing trust in EV mobility through predictive intelligence.</div>
@@ -69,7 +70,7 @@ const Projects = () => {
                 <HubThumb />
               </div>
               <div className="proj-info">
-                <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile App</span></div>
+                <div className="proj-meta"><span>DWG 002.3</span><span>·</span><span>UI/UX</span><span>·</span><span>Mobile App</span></div>
                 <div className="proj-title">3D HUB</div>
                 <div className="proj-date">September 24 — November 24</div>
                 <div className="proj-sub">A dedicated social platform for 3D printing enthusiasts — built with soft neumorphism UI.</div>
@@ -83,10 +84,25 @@ const Projects = () => {
                 <TravelogueThumb />
               </div>
               <div className="proj-info">
-                <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile App</span></div>
+                <div className="proj-meta"><span>DWG 002.4</span><span>·</span><span>UI/UX</span><span>·</span><span>Mobile App</span></div>
                 <div className="proj-title">TRAVELOGUE</div>
                 <div className="proj-date">January 25 — March 25</div>
                 <div className="proj-sub">A social travel app for collaborative planning, storytelling, and itinerary access.</div>
+              </div>
+              <span className="proj-arrow">View Case Study →</span>
+            </Link>
+          )}
+
+          {isVisible('uiux') && (
+            <Link to="/projects/atelier" className="proj-card" data-cat="uiux">
+              <div className="proj-thumb" style={{ overflow: 'hidden', padding: 0 }}>
+                <AtelierThumb />
+              </div>
+              <div className="proj-info">
+                <div className="proj-meta"><span>DWG 002.5</span><span>·</span><span>UI/UX</span><span>·</span><span>Web App</span></div>
+                <div className="proj-title">ATELIER</div>
+                <div className="proj-date">2026</div>
+                <div className="proj-sub">A second brain for the solo principal architect — juggling projects, WhatsApp groups, and client meetings.</div>
               </div>
               <span className="proj-arrow">View Case Study →</span>
             </Link>

@@ -20,6 +20,7 @@ import ProjectCleanero from './pages/ProjectCleanero';
 import Project3DHub from './pages/Project3DHub';
 import ProjectTravelogue from './pages/ProjectTravelogue';
 import ProjectIphoneDock from './pages/ProjectIphoneDock';
+import ProjectAtelier from './pages/ProjectAtelier';
 
 function App() {
   useEffect(() => {
@@ -50,6 +51,7 @@ function App() {
           <Route path="/projects/cleanero" element={<ProjectCleanero />} />
           <Route path="/projects/3d-hub" element={<Project3DHub />} />
           <Route path="/projects/travelogue" element={<ProjectTravelogue />} />
+          <Route path="/projects/atelier" element={<ProjectAtelier />} />
           <Route path="/projects/iphone-dock" element={<ProjectIphoneDock />} />
           <Route path="/projects/ev-trip-intelligence" element={<ProjectEV />} />
           <Route path="/projects/ev-trip-screens" element={<ProjectEVScreens />} />

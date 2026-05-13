@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0908;
+  --surface: #131110;
+  --surface2: #1a1815;
+  --surface3: #231f1b;
+  --bordergray: rgba(255,255,255,0.07);
+  --border: rgba(200,85,61,0.15);
+  --border2: rgba(200,85,61,0.28);
+  --text: #f0ebe4;
+  --muted: rgba(240,235,228,0.5);
+  --dim: rgba(240,235,228,0.28);
+  --terracotta: #c8553d;
+  --terracotta-mid: #d4704e;
+  --terracotta-light: #e89070;
+  --terracotta-dim: rgba(200,85,61,0.1);
+  --sand: #c4a882;
+  --sand-dim: rgba(196,168,130,0.1);
+  --ivory: #e8d8c0;
+  --sage: #7a8a6b;
+  --ff: 'Syne', sans-serif;
+  --fs: 'Instrument Serif', serif;
+  --fm: 'JetBrains Mono', monospace;
+  --fb: 'Manrope', sans-serif;
+  --max: 1080px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; line-height: 1.7; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ══ HERO ══ */
+.hero {
+  min-height: 100vh;
+  background: var(--bg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(200,85,61,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(200,85,61,0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.hero-glow { position: absolute; top: -100px; left: -100px; width: 600px; height: 500px; background: radial-gradient(ellipse, rgba(200,85,61,0.16) 0%, transparent 65%); pointer-events: none; }
+.hero-glow2 { position: absolute; bottom: -60px; right: 0; width: 400px; height: 360px; background: radial-gradient(ellipse, rgba(196,168,130,0.09) 0%, transparent 65%); pointer-events: none; }
+
+.hero-left { padding: 100px 60px 100px 48px; position: relative; z-index: 1; }
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.hero-line { width: 28px; height: 1px; background: var(--terracotta-light); opacity: 0.6; }
+.hero-kicker { font-family: var(--fm); font-size: 10px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta-light); }
+.hero-title { font-family: var(--fs); font-size: clamp(52px,5.5vw,84px); font-weight: 400; line-height: 0.95; letter-spacing: -0.025em; color: var(--text); margin-bottom: 28px; }
+.hero-title em { font-style: italic; opacity: 0.55; }
+.hero-sub { font-family: var(--fb); font-size: 17px; font-weight: 300; color: var(--muted); max-width: 430px; line-height: 1.75; margin-bottom: 48px; }
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-tag { font-family: var(--fm); font-size: 10px; padding: 4px 12px; border-radius: 100px; border: 1px solid rgba(200,85,61,0.25); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.hero-meta { display: flex; gap: 36px; flex-wrap: wrap; }
+.hm-item { display: flex; flex-direction: column; gap: 4px; }
+.hm-label { font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.hm-value { font-family: var(--fm); font-size: 12px; font-weight: 500; color: var(--muted); }
+
+/* Hero right — miniature canvas preview */
+.hero-right {
+  height: 100vh; position: relative; overflow: hidden;
+  background: #0d0b09;
+  background-image: linear-gradient(rgba(200,85,61,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(200,85,61,0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.hero-fade { position: absolute; inset: 0; background: linear-gradient(to right, var(--bg) 0%, transparent 20%), linear-gradient(to top, var(--bg) 0%, transparent 15%), linear-gradient(to bottom, var(--bg) 0%, transparent 15%); z-index: 2; }
+.hero-cards-wrap { position: absolute; inset: 40px; z-index: 1; }
+
+/* Floating project cards on hero */
+.hc {
+  position: absolute;
+  background: #141210;
+  border: 1px solid rgba(200,85,61,0.25);
+  padding: 16px;
+  width: 200px;
+  font-family: var(--fm);
+  font-size: 9px;
+  color: var(--text);
+}
+.hc-id { opacity: 0.4; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.hc-title { font-family: var(--fs); font-size: 20px; line-height: 1.1; margin-bottom: 6px; }
+.hc-loc { opacity: 0.45; margin-bottom: 8px; }
+.hc-strip { display: flex; height: 3px; gap: 1px; margin-bottom: 8px; }
+.hc-strip .s { flex: 1; background: rgba(255,255,255,0.1); }
+.hc-strip .s.done { background: rgba(240,235,228,0.6); }
+.hc-strip .s.now { background: var(--terracotta); }
+.hc-badge { display: inline-block; padding: 2px 7px; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.hc-badge.warn { background: var(--terracotta); color: var(--text); }
+.hc-badge.ok { background: var(--sage); color: var(--text); }
+.hc-badge.ink { background: rgba(240,235,228,0.15); color: var(--text); }
+
+/* ══ CHAPTER SECTIONS ══ */
+.chapter { padding: 96px 0; position: relative; }
+.chapter-label {
+  font-family: var(--fm); font-size: 10px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--terracotta); display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.chapter-label::before { content: ''; width: 20px; height: 1px; background: var(--terracotta); opacity: 0.5; }
+.chapter-ghost {
+  font-family: var(--fs); font-size: 100px; font-weight: 400; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1px rgba(200,85,61,0.05);
+  position: absolute; right: 0; top: 56px; pointer-events: none; user-select: none;
+}
+.chapter-title { font-family: var(--fs); font-size: clamp(32px,4vw,52px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; max-width: 760px; }
+.chapter-title em { font-style: italic; opacity: 0.55; color: var(--terracotta-light); }
+.chapter-header { margin-bottom: 56px; }
+
+/* ══ PROSE ══ */
+.prose p { font-size: 17px; line-height: 1.8; color: var(--muted); margin-bottom: 22px; }
+.prose p strong { color: var(--text); font-weight: 500; }
+.prose p em { font-style: italic; color: var(--terracotta-light); }
+
+/* ══ PULL QUOTE ══ */
+.pull {
+  background: var(--surface); border: 1px solid var(--bordergray);
+  border-radius: 20px; padding: 52px 60px; margin: 64px 0;
+  position: relative; overflow: hidden;
+}
+.pull::before {
+  content: '"'; font-family: var(--fs); font-size: 220px; font-weight: 400;
+  color: var(--terracotta); opacity: 0.07;
+  position: absolute; top: -30px; left: 24px; line-height: 1;
+}
+.pull-text { font-family: var(--fs); font-size: clamp(22px,2.8vw,36px); font-style: italic; color: var(--text); line-height: 1.25; position: relative; z-index: 1; max-width: 760px; }
+.pull-attr { font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-top: 20px; position: relative; z-index: 1; }
+
+/* ══ SPLIT ══ */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; padding: 52px 0; }
+.split.rev { direction: rtl; }
+.split.rev > * { direction: ltr; }
+.split-overline { font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 14px; }
+.split-title { font-family: var(--fs); font-size: clamp(24px,2.8vw,36px); line-height: 1.1; margin-bottom: 16px; }
+.split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+.split-callout { border-left: 2px solid var(--terracotta); padding: 14px 20px; background: var(--terracotta-dim); border-radius: 0 10px 10px 0; font-size: 15px; font-style: italic; color: var(--text); line-height: 1.6; font-family: var(--fs); }
+
+/* ══ COMPARISON TABLE ══ */
+.comp-wrap { border-radius: 16px; overflow: hidden; border: 1px solid var(--bordergray); margin: 48px 0; }
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th { background: var(--surface2); padding: 14px 20px; font-family: var(--fm); font-size: 10px; font-weight: 500; text-align: left; color: var(--text); letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--bordergray); }
+.comp-table td { padding: 14px 20px; font-size: 13px; color: var(--muted); background: var(--surface); border-bottom: 1px solid var(--bordergray); line-height: 1.5; }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr.hl td { background: var(--terracotta-dim); color: var(--text); }
+.comp-table td:first-child { font-family: var(--fs); font-size: 17px; color: var(--text); }
+.comp-table tr.hl td:first-child { color: var(--terracotta-light); }
+
+/* ══ TWO COL PAIN vs NEED ══ */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 48px 0; }
+.two-col-cell { background: var(--surface); padding: 32px 28px; }
+.two-col-head { font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.two-col-list { list-style: none; }
+.two-col-list li { padding: 10px 0; border-bottom: 1px solid var(--bordergray); font-size: 15px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
+.two-col-list li::before { content: '→'; color: var(--terracotta); opacity: 0.5; flex-shrink: 0; font-family: var(--fm); font-size: 12px; margin-top: 2px; }
+.two-col-list li:last-child { border-bottom: none; }
+
+/* ══ PROCESS STEPS ══ */
+.steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 48px 0; }
+.step { background: var(--surface); padding: 28px 22px; transition: background 0.3s; }
+.step:hover { background: var(--surface2); }
+.step-num { font-family: var(--fs); font-size: 44px; line-height: 1; opacity: 0.2; margin-bottom: 12px; }
+.step-title { font-family: var(--fs); font-size: 20px; margin-bottom: 8px; }
+.step-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ══ STATS ══ */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 48px 0; }
+.stat-card { background: var(--surface); padding: 36px 28px; }
+.stat-num { font-family: var(--fs); font-size: 52px; font-weight: 400; line-height: 1; letter-spacing: -0.02em; margin-bottom: 10px; color: var(--terracotta); }
+.stat-num.sand { color: var(--sand); }
+.stat-num.ivory { color: var(--ivory); opacity: 0.7; }
+.stat-label { font-family: var(--ff); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.stat-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ══ PRICING ══ */
+.pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 48px 0; }
+.tier { background: var(--surface); padding: 36px 30px; }
+.tier-name { font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 16px; }
+.tier-price { font-family: var(--fs); font-size: 52px; line-height: 1; letter-spacing: -0.02em; margin-bottom: 6px; }
+.tier-price small { font-size: 16px; opacity: 0.5; font-style: italic; }
+.tier-desc { font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+.tier-list { list-style: none; }
+.tier-list li { padding: 8px 0; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--bordergray); display: flex; gap: 8px; }
+.tier-list li::before { content: '→'; color: var(--terracotta); opacity: 0.5; font-family: var(--fm); font-size: 11px; }
+.tier-list li:last-child { border-bottom: none; }
+
+/* ══ REFLECTION CARDS ══ */
+.reflections { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 16px; overflow: hidden; margin: 48px 0; }
+.ref-card { background: var(--surface); padding: 28px 24px; }
+.ref-num { font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em; color: var(--terracotta); opacity: 0.7; margin-bottom: 12px; }
+.ref-title { font-family: var(--fs); font-size: 20px; line-height: 1.15; margin-bottom: 10px; }
+.ref-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ══ LAPTOP MOCKUP SHOWCASE ══ */
+.showcase-section {
+  background: var(--surface);
+  border-top: 1px solid var(--bordergray);
+  border-bottom: 1px solid var(--bordergray);
+  padding: 96px 0;
+}
+.showcase-header { text-align: center; margin-bottom: 72px; }
+.showcase-eyebrow { font-family: var(--fm); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 14px; }
+.showcase-title { font-family: var(--fs); font-size: clamp(32px,4vw,52px); line-height: 1.05; letter-spacing: -0.02em; }
+.showcase-title em { font-style: italic; opacity: 0.55; }
+.showcase-sub { font-size: 16px; color: var(--muted); margin-top: 12px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+/* Screen blocks — alternating layout */
+.screen-block { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 120px; }
+.screen-block:last-child { margin-bottom: 0; }
+.screen-block.rev { direction: rtl; }
+.screen-block.rev > * { direction: ltr; }
+.screen-info {}
+.screen-num { font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 12px; }
+.screen-title { font-family: var(--fs); font-size: clamp(26px,3vw,40px); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 16px; }
+.screen-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
+.screen-features { list-style: none; margin-top: 16px; }
+.screen-features li { font-family: var(--fm); font-size: 12px; padding: 7px 0; border-bottom: 1px dotted rgba(255,255,255,0.07); display: flex; gap: 10px; color: var(--muted); }
+.screen-features li::before { content: '→'; color: var(--terracotta); opacity: 0.5; }
+.screen-features li:last-child { border-bottom: none; }
+
+/* ── LAPTOP FRAME ── */
+.laptop-wrap { position: relative; }
+.laptop {
+  position: relative;
+  background: #1a1612;
+  border-radius: 10px 10px 0 0;
+  padding: 12px 12px 0;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-bottom: none;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.5);
+}
+.laptop::before {
+  content: '';
+  position: absolute; top: 5px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.laptop-screen {
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.5);
+}
+.laptop-screen iframe {
+  width: 100%; height: 100%;
+  border: none;
+  transform-origin: top left;
+  pointer-events: none;
+}
+.laptop-base {
+  background: #221e1a;
+  height: 16px;
+  border-radius: 0 0 4px 4px;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-top: none;
+  position: relative;
+}
+.laptop-base::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 8px;
+  background: #1a1612;
+  border-radius: 0 0 6px 6px;
+}
+.laptop-stand {
+  width: 40%; height: 12px;
+  background: #1e1a16;
+  margin: 0 auto;
+  border-radius: 0 0 8px 8px;
+  border: 1.5px solid rgba(255,255,255,0.07);
+  border-top: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+/* Laptop screen internal mini UI */
+.mini-ui {
+  width: 100%; height: 100%;
+  background: #fafaf7;
+  color: #0a0a0a;
+  font-family: 'Manrope', sans-serif;
+  font-size: 7px;
+  overflow: hidden;
+  position: relative;
+}
+.mini-topbar {
+  background: #fafaf7;
+  border-bottom: 1px solid #0a0a0a;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.mini-logo { font-family: 'Instrument Serif', serif; font-size: 9px; }
+.mini-logo span { color: #c8553d; }
+.mini-nav { display: flex; gap: 8px; opacity: 0.45; }
+.mini-nav .active { opacity: 1; border-bottom: 0.5px solid #0a0a0a; }
+
+/* Canvas view */
+.mini-body { display: grid; grid-template-columns: 1fr 80px; height: calc(100% - 22px); }
+.mini-main { padding: 8px; overflow: hidden;
+  background-image: linear-gradient(rgba(10,10,10,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,10,10,0.04) 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+.mini-hero-label { font-family: 'JetBrains Mono', monospace; font-size: 5px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.5; margin-bottom: 3px; }
+.mini-hero-title { font-family: 'Instrument Serif', serif; font-size: 10px; line-height: 1.2; max-width: 200px; margin-bottom: 6px; }
+.mini-hero-title em { font-style: italic; opacity: 0.6; }
+.mini-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 6px; }
+.mc {
+  background: #fafaf7; border: 0.5px solid #0a0a0a; padding: 5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.mc-id { font-size: 5px; opacity: 0.45; text-transform: uppercase; margin-bottom: 2px; }
+.mc-title { font-family: 'Instrument Serif', serif; font-size: 8px; line-height: 1.1; margin-bottom: 2px; }
+.mc-loc { font-size: 5px; opacity: 0.4; margin-bottom: 3px; }
+.mc-strip { display: flex; height: 2px; gap: 0.5px; margin: 2px 0; }
+.mc-strip .s { flex: 1; background: #e8e8e2; }
+.mc-strip .s.done { background: #0a0a0a; }
+.mc-strip .s.now { background: #c8553d; }
+.mc-strip .s.ok { background: #5a7a3a; }
+.mc-badge { display: inline-block; background: #c8553d; color: #fafaf7; padding: 1px 4px; font-size: 5px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+.mc-badge.ok { background: #5a7a3a; }
+.mc-badge.ink { background: #0a0a0a; }
+.mc-row { display: flex; justify-content: space-between; font-size: 5px; opacity: 0.5; }
+
+/* Right panel mini */
+.mini-panel { border-left: 0.5px solid #0a0a0a; padding: 6px; font-family: 'JetBrains Mono', monospace; }
+.mini-panel-label { font-size: 5px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; border-bottom: 0.5px solid #e8e8e2; padding-bottom: 3px; margin-bottom: 5px; }
+.mini-alert { background: #f5f0e8; border-left: 1.5px solid #c8553d; padding: 3px 4px; margin-bottom: 3px; font-size: 5px; line-height: 1.4; }
+.mini-meeting { padding: 3px 0; border-bottom: 0.5px dotted #e8e8e2; margin-bottom: 3px; font-size: 5px; }
+.mini-meeting-time { color: #c8553d; text-transform: uppercase; letter-spacing: 0.06em; }
+.mini-meeting-title { margin-top: 1px; font-size: 5.5px; }
+
+/* Library mini UI */
+.mini-lib-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; padding: 6px; }
+.lib-card { background: #fafaf7; border: 0.5px solid #0a0a0a; padding: 4px; }
+.lib-card .t { font-family: 'Instrument Serif', serif; font-size: 8px; line-height: 1; margin-bottom: 2px; }
+.lib-card .loc { font-family: 'JetBrains Mono', monospace; font-size: 5px; opacity: 0.4; text-transform: uppercase; margin-bottom: 2px; }
+.lib-strip { display: flex; height: 1.5px; gap: 0.5px; }
+.lib-strip .s { flex: 1; background: #e8e8e2; }
+.lib-strip .s.done { background: #0a0a0a; }
+.lib-strip .s.now { background: #c8553d; }
+.lib-strip .s.ok { background: #5a7a3a; }
+
+/* Project detail mini UI */
+.mini-pinned {
+  padding: 8px; height: 100%;
+  background-image: linear-gradient(rgba(10,10,10,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,10,10,0.04) 1px, transparent 1px);
+  background-size: 10px 10px; position: relative;
+}
+.pin {
+  position: absolute; background: #fafaf7; border: 0.5px solid #0a0a0a; padding: 5px;
+  font-family: 'JetBrains Mono', monospace; font-size: 5.5px;
+}
+.pin-img { height: 24px; margin-bottom: 4px; }
+.pin-cap { font-family: 'Instrument Serif', serif; font-size: 8px; line-height: 1.1; }
+.pin-note { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 7px; line-height: 1.3; padding: 5px; background: #f5e8c8; }
+
+/* Vendor/Timeline mini */
+.mini-timeline { padding: 6px; }
+.tl-row { display: flex; align-items: center; gap: 4px; padding: 3px 0; border-bottom: 0.5px solid #e8e8e2; font-family: 'JetBrains Mono', monospace; font-size: 5px; }
+.tl-label { width: 60px; opacity: 0.6; flex-shrink: 0; }
+.tl-bar-bg { flex: 1; height: 4px; background: #e8e8e2; border-radius: 2px; overflow: hidden; }
+.tl-bar-fill { height: 100%; border-radius: 2px; background: #0a0a0a; }
+.tl-bar-fill.now { background: #c8553d; }
+.tl-bar-fill.ok { background: #5a7a3a; }
+.tl-status { width: 28px; text-align: right; opacity: 0.5; flex-shrink: 0; }
+
+/* ══ OUTCOME ══ */
+.outcome { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--bordergray); border-radius: 20px; overflow: hidden; margin: 48px 0; }
+.out-card { background: var(--surface); padding: 40px 32px; position: relative; }
+.out-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--terracotta); opacity: 0.4; }
+.out-num { font-family: var(--fs); font-size: 52px; line-height: 1; letter-spacing: -0.02em; margin-bottom: 10px; color: var(--terracotta); }
+.out-num.sand { color: var(--sand); }
+.out-num.ivory { color: var(--ivory); }
+.out-label { font-family: var(--ff); font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+.out-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.divider { height: 1px; background: var(--bordergray); margin: 64px 0; }
+.pill { display: inline-block; font-family: var(--fm); font-size: 10px; font-weight: 400; padding: 5px 12px; border-radius: 100px; background: var(--terracotta-dim); color: var(--terracotta); border: 1px solid var(--border); letter-spacing: 0.06em; margin: 3px; }
+
+footer { border-top: 1px solid var(--bordergray); padding: 56px 0; }
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;} .hero-right{display:none;}
+  .split{grid-template-columns:1fr;gap:32px;} .split.rev{direction:ltr;}
+  .screen-block{grid-template-columns:1fr;gap:40px;} .screen-block.rev{direction:ltr;}
+  .stats,.outcome,.reflections{grid-template-columns:1fr;}
+  .steps,.two-col{grid-template-columns:1fr 1fr;}
+  .pricing{grid-template-columns:1fr;}
+  .container{padding:0 24px;} .chapter{padding:64px 0;} .pull{padding:36px 28px;}
+  .showcase-section{padding:64px 0;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-left reveal">
+    <div class="hero-eyebrow"><div class="hero-line"></div><span class="hero-kicker">Product Design · SaaS · Web App</span></div>
+    <h1 class="hero-title">A second brain<br>for the <em>solo principal</em><br>architect.</h1>
+    <p class="hero-sub">A visual project-management tool for the Indian solo-principal architect — juggling fifteen projects, ten WhatsApp groups, and one client meeting at 4&nbsp;PM. The concept, the mockups, and the honest decision not to ship yet.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">UX Research</span>
+      <span class="hero-tag">Product Strategy</span>
+      <span class="hero-tag">Web App Design</span>
+      <span class="hero-tag">SaaS Concept</span>
+      <span class="hero-tag">India Market</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hm-item"><span class="hm-label">Year</span><span class="hm-value">2026</span></div>
+      <div class="hm-item"><span class="hm-label">Role</span><span class="hm-value">Solo · UX, Product, Research</span></div>
+      <div class="hm-item"><span class="hm-label">Status</span><span class="hm-value">Concept & Validation</span></div>
+      <div class="hm-item"><span class="hm-label">Market</span><span class="hm-value">India · A&D Firms</span></div>
+    </div>
+  </div>
+
+  <!-- Hero right: floating project cards -->
+  <div class="hero-right">
+    <div class="hero-fade"></div>
+    <div class="hero-cards-wrap">
+      <div class="hc" style="top:80px;left:20px;transform:rotate(-1.2deg)">
+        <span class="hc-badge warn">Today · 4PM</span>
+        <div class="hc-id">PRJ-021 · Residential</div>
+        <div class="hc-title">Mehta House</div>
+        <div class="hc-loc">↳ Koregaon Park, Pune</div>
+        <div class="hc-strip"><div class="s done"></div><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div></div>
+        <div style="font-family:var(--fm);font-size:8px;opacity:0.4;text-transform:uppercase;letter-spacing:0.08em">Material Selection</div>
+      </div>
+      <div class="hc" style="top:60px;left:230px;transform:rotate(0.8deg)">
+        <span class="hc-badge ok">On Track</span>
+        <div class="hc-id">PRJ-019 · Interior</div>
+        <div class="hc-title">Aroma Cafe</div>
+        <div class="hc-loc">↳ Indiranagar, Bangalore</div>
+        <div class="hc-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s now" style="background:var(--sage)"></div><div class="s"></div></div>
+      </div>
+      <div class="hc" style="top:240px;left:60px;transform:rotate(0.6deg)">
+        <span class="hc-badge">Delayed · 9d</span>
+        <div class="hc-id">PRJ-017 · Bungalow</div>
+        <div class="hc-title">Sethi Residence</div>
+        <div class="hc-loc">↳ Bandra W, Mumbai</div>
+        <div class="hc-strip"><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>
+      </div>
+      <div class="hc" style="top:220px;left:256px;transform:rotate(-0.5deg)">
+        <span class="hc-badge ink">Awaiting</span>
+        <div class="hc-id">PRJ-015 · Corporate</div>
+        <div class="hc-title">Vyom HQ</div>
+        <div class="hc-loc">↳ Cyber City, Gurugram</div>
+        <div class="hc-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s now"></div></div>
+      </div>
+      <div class="hc" style="top:390px;left:120px;transform:rotate(1deg)">
+        <span class="hc-badge ok">On Track</span>
+        <div class="hc-id">PRJ-022 · Interior</div>
+        <div class="hc-title">Kapoor Apart.</div>
+        <div class="hc-loc">↳ Vastrapur, Ahmedabad</div>
+        <div class="hc-strip"><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 01 THE SEED ══ -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">01</div>
+    <div class="chapter-header">
+      <div class="chapter-label">Chapter 01 · The Seed</div>
+      <h2 class="chapter-title">It started with a feeling of <em>irrelevance.</em></h2>
+    </div>
+    <div class="prose">
+      <p>The previous project — codenamed Birds View — was a generic visual second-brain app: a blank canvas, draggable cards, mood boards, notes. It worked. But the market was already full of Milanote, Notion, Mural, Pinterest. The product was fine; the wedge into the market was not. <strong>We shelved it.</strong></p>
+      <p>The new idea arrived from a very specific place: my cousin's architecture firm in Pune. Watching how he ran his practice — fifteen projects across four cities, ten architects under him, a dozen WhatsApp groups, a Google Drive nobody could navigate — it was clear there was a real workflow nobody had built software for.</p>
+      <p>But before drawing a single screen, one question needed an honest answer: <em>does this product already exist?</em></p>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- ══ 02 THE MARKET ══ -->
+<div style="background:var(--surface)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">02</div>
+    <div class="chapter-header">
+      <div class="chapter-label">Chapter 02 · The Market</div>
+      <h2 class="chapter-title">Most of what I had in mind <em>already exists.</em></h2>
+    </div>
+    <div class="prose">
+      <p>Three weeks of teardown later, the answer was: yes, painfully. The visual-canvas-for-architects concept is not new. The moodboard part, the timeline part, the document shelf — all of these exist, and several already combined. <strong>Senior UX work begins with the willingness to say that out loud.</strong></p>
+    </div>
+
+    <div class="comp-wrap reveal">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Tool</th><th>Pricing</th><th>Market</th><th>What it covers</th><th>What's missing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Milanote</td><td>$10/mo</td><td>Global · Creative studios</td>
+            <td>Visual canvas, moodboards, notes, file uploads</td>
+            <td>No project management, no Indian workflow</td>
+          </tr>
+          <tr>
+            <td>Programa</td><td>$59/mo</td><td>AU origin · A&D firms</td>
+            <td>Moodboards, FF&E schedules, timelines, client collab</td>
+            <td>Western pricing, no RERA, no India localization</td>
+          </tr>
+          <tr>
+            <td>Monograph</td><td>$50/mo</td><td>US origin · Solo A&E</td>
+            <td>Phase timelines, fee tracking, invoicing</td>
+            <td>Built for American practice, not Indian</td>
+          </tr>
+          <tr class="hl">
+            <td>Atelier</td><td>₹1,500/mo</td><td>India · Solo principals</td>
+            <td>Canvas + Indian workflow + RERA + WhatsApp replacement</td>
+            <td>The gap nobody has filled yet</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose reveal">
+      <p>Not one of these tools is built for how an <strong>Indian solo-principal architect actually runs a practice</strong>. None model RERA compliance milestones, municipal corporation approval stages, or the structural-consultant handoff workflow. The localization gap was real — and large.</p>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- Pull Quote -->
+<div style="background:var(--surface)"><div class="container">
+  <div class="pull reveal">
+    <p class="pull-text">The competitor isn't another app. It's WhatsApp, Google Drive, Excel, and the principal's memory.</p>
+    <p class="pull-attr">— Insight from market analysis, week 3</p>
+  </div>
+</div></div>
+
+
+<!-- ══ 03 THE PIVOT ══ -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">03</div>
+    <div class="chapter-header">
+      <div class="chapter-label">Chapter 03 · The Pivot</div>
+      <h2 class="chapter-title">From <em>visual canvas</em> to <em>painkiller.</em></h2>
+    </div>
+    <div class="prose">
+      <p>The original idea pitched a "second brain on a canvas" — beautiful, but a <em>vitamin</em>. Nice to have, easy to live without. Vitamins don't sell to Indian small businesses, who are notoriously rational about software spend. The product needed to be a <strong>painkiller</strong>: something a principal architect cannot live without by week three.</p>
+    </div>
+
+    <div class="two-col reveal">
+      <div class="two-col-cell">
+        <div class="two-col-head">What architects say they need</div>
+        <ul class="two-col-list">
+          <li>Beautiful mood boards</li>
+          <li>Project visualization</li>
+          <li>Client presentations</li>
+          <li>Portfolio organization</li>
+        </ul>
+      </div>
+      <div class="two-col-cell">
+        <div class="two-col-head">What actually loses them money</div>
+        <ul class="two-col-list">
+          <li>Material decisions lost in WhatsApp scroll</li>
+          <li>Carpenters building from outdated drawing versions</li>
+          <li>Client meetings where the principal is unprepared</li>
+          <li>Structural consultant delays nobody tracks</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p>This was the wedge. The mood boards stay — they are the seductive surface, the reason a creative person opens the app at all. But the <strong>engine room sits underneath</strong>: material decisions logged with photos and approvals, drawing versions controlled with one always-pinned "latest approved," and a morning brief that summarizes what to ask, what to show, what to decide before every client meeting.</p>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- ══ APP SHOWCASE — LAPTOP MOCKUPS ══ -->
+<section class="showcase-section">
+  <div class="container">
+    <div class="showcase-header reveal">
+      <div class="showcase-eyebrow">Chapter 04 · The Mockups</div>
+      <h2 class="showcase-title">Five screens. <em>One workflow.</em></h2>
+      <p class="showcase-sub">The full Atelier experience — from the morning brief to the material library. Every screen is interactive and live.</p>
+    </div>
+
+    <!-- Screen 1: Canvas / Morning Brief -->
+    <div class="screen-block reveal">
+      <div class="screen-info">
+        <div class="screen-num">Screen 01 / The Canvas</div>
+        <h3 class="screen-title">The morning brief.</h3>
+        <p class="screen-body">What the principal sees with their first coffee. One sentence summarizes the day. Active projects float as cards on a grid that feels like a studio wall, not a SaaS dashboard. Each card carries a phase-strip so the entire firm's state reads in five seconds.</p>
+        <ul class="screen-features">
+          <li>Hero brief — the single most important sentence of the day</li>
+          <li>Floating project cards with slight tilts, like pinned references on a drawing board</li>
+          <li>Right panel: decisions needed, upcoming client meetings with prep notes</li>
+          <li>Revenue this quarter at a glance — without opening a spreadsheet</li>
+        </ul>
+      </div>
+      <div class="laptop-wrap">
+        <div class="laptop">
+          <div class="laptop-screen">
+            <!-- Canvas mini UI -->
+            <div class="mini-ui">
+              <div class="mini-topbar">
+                <div class="mini-logo">Atelier<span>.</span></div>
+                <div class="mini-nav">
+                  <span class="active">Canvas</span>
+                  <span>Projects</span>
+                  <span>Vendors</span>
+                  <span>Library</span>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;letter-spacing:0.06em;text-transform:uppercase">AR. R. SHARMA / 09 LIVE</div>
+              </div>
+              <div class="mini-body">
+                <div class="mini-main">
+                  <div class="mini-hero-label">Tuesday brief — 12 May</div>
+                  <div class="mini-hero-title">Three decisions <em>pending from you</em>, two sites awaiting drawings, one client expects answers by 4&nbsp;PM.</div>
+                  <div style="display:flex;gap:6px;font-family:'JetBrains Mono',monospace;font-size:5.5px;margin-bottom:8px">
+                    <span style="display:flex;align-items:center;gap:2px"><span style="width:4px;height:4px;border-radius:50%;background:#c8553d;display:inline-block"></span>3 BLOCKERS</span>
+                    <span style="display:flex;align-items:center;gap:2px"><span style="width:4px;height:4px;border-radius:50%;background:#5a7a3a;display:inline-block"></span>7 ON TRACK</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.6">₹ 24.6L THIS Q</span>
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.4;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px">— Active Canvas / 09 Projects</div>
+                  <div class="mini-cards">
+                    <div class="mc">
+                      <div class="mc-badge">Today · 4PM</div>
+                      <div class="mc-id">PRJ-021 · Residential</div>
+                      <div class="mc-title">Mehta House</div>
+                      <div class="mc-loc">↳ Koregaon Park, Pune</div>
+                      <div class="mc-strip"><div class="s done"></div><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div></div>
+                      <div class="mc-row"><span>Phase</span><span>Mat. Selection</span></div>
+                    </div>
+                    <div class="mc">
+                      <div class="mc-badge ok">On track</div>
+                      <div class="mc-id">PRJ-019 · Interior</div>
+                      <div class="mc-title">Aroma Cafe</div>
+                      <div class="mc-loc">↳ Indiranagar, BLR</div>
+                      <div class="mc-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s ok"></div><div class="s"></div></div>
+                      <div class="mc-row"><span>Phase</span><span>Execution</span></div>
+                    </div>
+                    <div class="mc">
+                      <div class="mc-badge">Delayed</div>
+                      <div class="mc-id">PRJ-017 · Bungalow</div>
+                      <div class="mc-title">Sethi Residence</div>
+                      <div class="mc-loc">↳ Bandra W, Mumbai</div>
+                      <div class="mc-strip"><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>
+                      <div class="mc-row"><span>Stuck</span><span>Structural · 9d</span></div>
+                    </div>
+                    <div class="mc">
+                      <div class="mc-badge ink">Awaiting</div>
+                      <div class="mc-id">PRJ-015 · Corporate</div>
+                      <div class="mc-title">Vyom HQ</div>
+                      <div class="mc-loc">↳ Cyber City, DL</div>
+                      <div class="mc-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s now"></div></div>
+                      <div class="mc-row"><span>Phase</span><span>Handover</span></div>
+                    </div>
+                    <div class="mc">
+                      <div class="mc-badge ok">On track</div>
+                      <div class="mc-id">PRJ-022 · Interior</div>
+                      <div class="mc-title">Kapoor Apart.</div>
+                      <div class="mc-loc">↳ Vastrapur, AHM</div>
+                      <div class="mc-strip"><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>
+                      <div class="mc-row"><span>Phase</span><span>Concept</span></div>
+                    </div>
+                    <div class="mc" style="opacity:0.55">
+                      <div class="mc-id">PRJ-023 · New</div>
+                      <div class="mc-title">Untitled Brief</div>
+                      <div class="mc-loc">↳ Jaipur</div>
+                      <div class="mc-strip"><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>
+                      <div class="mc-row"><span>Phase</span><span>Briefing</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mini-panel">
+                  <div class="mini-panel-label">— Needs your decision</div>
+                  <div class="mini-alert">Mehta: Tile choice — answer by 4 PM today.</div>
+                  <div class="mini-alert">Sethi: Approve structural plan before Thu.</div>
+                  <div class="mini-alert" style="border-left-color:#0a0a0a">Aroma: Sign off granite sample.</div>
+                  <div class="mini-panel-label" style="margin-top:8px">— Client meetings</div>
+                  <div class="mini-meeting">
+                    <div class="mini-meeting-time">Today · 4:00 PM</div>
+                    <div class="mini-meeting-title">Mehta House — Materials review</div>
+                  </div>
+                  <div class="mini-meeting">
+                    <div class="mini-meeting-time">Thu · 10:00 AM</div>
+                    <div class="mini-meeting-title">Sethi Residence — Floor plan v3</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+        <div class="laptop-stand"></div>
+      </div>
+    </div>
+
+    <!-- Screen 2: Project Detail / Moodboard -->
+    <div class="screen-block rev reveal">
+      <div class="screen-info">
+        <div class="screen-num">Screen 02 / Inside a Project</div>
+        <h3 class="screen-title">A moodboard wall,<br>with team baked in.</h3>
+        <p class="screen-body">Click a project card and you enter its own canvas. Four tabs — Vision (the moodboard), Drawings (version-controlled), Decisions (every material logged), Timeline. Every pinned item carries an avatar showing who added it. The right panel shows what's still waiting on the principal.</p>
+        <ul class="screen-features">
+          <li>Eight kinds of pins: images, references, color palettes, materials, sticky notes</li>
+          <li>Live activity feed — see team movement in real time</li>
+          <li>Client brief lives on the canvas as a pin, not in a hidden settings page</li>
+          <li>Distinct lens for principal vs. team-member view</li>
+        </ul>
+      </div>
+      <div class="laptop-wrap">
+        <div class="laptop">
+          <div class="laptop-screen">
+            <div class="mini-ui">
+              <div class="mini-topbar">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div class="mini-logo">Atelier<span>.</span></div>
+                  <span style="opacity:0.3;font-size:7px">/</span>
+                  <span style="font-family:'Instrument Serif',serif;font-size:9px">Mehta House</span>
+                </div>
+                <div class="mini-nav">
+                  <span class="active">Vision</span>
+                  <span>Drawings</span>
+                  <span>Decisions</span>
+                  <span>Timeline</span>
+                </div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.5">PRJ-021 · PUNE</div>
+              </div>
+              <div style="height:calc(100% - 22px);display:grid;grid-template-columns:1fr 72px">
+                <div class="mini-pinned">
+                  <div class="pin" style="top:12px;left:12px;width:80px;transform:rotate(-1deg)">
+                    <div class="pin-img" style="background:linear-gradient(135deg,#ede4d3,#b86b4b)"></div>
+                    <div class="pin-cap">Warm modernism ref.</div>
+                    <div style="font-size:5px;opacity:0.4;margin-top:2px">↳ S. MEHTA</div>
+                  </div>
+                  <div class="pin" style="top:20px;left:108px;width:72px;transform:rotate(0.8deg)">
+                    <div class="pin-img" style="background:linear-gradient(135deg,#ede4d3,#d4b896)"></div>
+                    <div class="pin-cap">Bathroom tile ref</div>
+                  </div>
+                  <div class="pin" style="top:100px;left:40px;width:78px;transform:rotate(0.5deg)">
+                    <div class="pin-img" style="background:linear-gradient(135deg,#4a3528,#ede4d3)"></div>
+                    <div class="pin-cap">Walnut kitchen</div>
+                  </div>
+                  <div class="pin-note" style="position:absolute;top:92px;left:136px;width:84px;transform:rotate(-0.8deg)">
+                    "Mrs. Mehta wants a reading nook near the bay window."
+                  </div>
+                  <div class="pin" style="top:170px;left:12px;width:70px;transform:rotate(0.3deg);background:#f5e8c8">
+                    <div style="font-size:5px;opacity:0.5;font-family:'JetBrains Mono',monospace;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.08em">Color palette</div>
+                    <div style="display:flex;gap:2px;height:12px">
+                      <div style="flex:1;background:#b86b4b;border-radius:1px"></div>
+                      <div style="flex:1;background:#d4b896;border-radius:1px"></div>
+                      <div style="flex:1;background:#ede4d3;border-radius:1px"></div>
+                      <div style="flex:1;background:#4a3528;border-radius:1px"></div>
+                    </div>
+                  </div>
+                  <div class="pin" style="top:170px;left:100px;width:80px;transform:rotate(-0.4deg)">
+                    <div class="pin-img" style="background:linear-gradient(135deg,#8a9a7b,#ede4d3)"></div>
+                    <div class="pin-cap">Garden elevation</div>
+                  </div>
+                  <!-- Phase strip at bottom -->
+                  <div style="position:absolute;bottom:4px;left:8px;right:8px;display:flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:5px">
+                    <span style="opacity:0.4;text-transform:uppercase;letter-spacing:0.08em">Phase:</span>
+                    <span style="background:#c8553d;color:#fafaf7;padding:1px 5px;font-size:5px">Material Selection</span>
+                    <div style="flex:1;height:2px;background:#e8e8e2;border-radius:1px;overflow:hidden"><div style="width:60%;height:100%;background:#0a0a0a"></div></div>
+                  </div>
+                </div>
+                <!-- Right activity panel -->
+                <div class="mini-panel" style="font-size:5.5px">
+                  <div class="mini-panel-label">— Team</div>
+                  <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:6px">
+                    <div style="display:flex;align-items:center;gap:3px"><div style="width:8px;height:8px;border-radius:50%;background:#c8553d;display:flex;align-items:center;justify-content:center;font-size:4px;color:#fff">RS</div><span style="font-size:5px">R. Sharma</span><span style="color:#5a7a3a;font-size:4px">● LIVE</span></div>
+                    <div style="display:flex;align-items:center;gap:3px"><div style="width:8px;height:8px;border-radius:50%;background:#4a3528;display:flex;align-items:center;justify-content:center;font-size:4px;color:#fff">PJ</div><span style="font-size:5px">P. Joshi</span></div>
+                  </div>
+                  <div class="mini-panel-label">— Activity</div>
+                  <div style="font-size:5px;opacity:0.55;line-height:1.5">
+                    <div>PJ added tile ref · 10m</div>
+                    <div>RS pinned color pal · 2h</div>
+                    <div>Approved: Floor v3 · 1d</div>
+                  </div>
+                  <div class="mini-panel-label" style="margin-top:6px">— Pending</div>
+                  <div class="mini-alert">Tile decision needed by 4 PM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+        <div class="laptop-stand"></div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Library -->
+    <div class="screen-block reveal">
+      <div class="screen-info">
+        <div class="screen-num">Screen 03 / The Library</div>
+        <h3 class="screen-title">Two hundred projects,<br>still scannable.</h3>
+        <p class="screen-body">How does the canvas hold up when the firm has 200 projects across years? It doesn't — so the Library kicks in. A smart attention strip surfaces only the 4 projects needing the principal today. Below it: every project ever, filterable by status, type, city, PM, or payment state.</p>
+        <ul class="screen-features">
+          <li>"Needs attention" smart filter — system does the triage</li>
+          <li>Distinct Indian status types: "Reopened — modification," "Sanction only"</li>
+          <li>Compact cards maintain visual rhythm of the original canvas</li>
+          <li>Map view: all projects across Pune, Mumbai, Delhi, Bangalore on one screen</li>
+        </ul>
+      </div>
+      <div class="laptop-wrap">
+        <div class="laptop">
+          <div class="laptop-screen">
+            <div class="mini-ui">
+              <div class="mini-topbar">
+                <div class="mini-logo">Atelier<span>.</span></div>
+                <div class="mini-nav"><span>Canvas</span><span>Projects</span><span>Vendors</span><span class="active">Library</span></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.5">217 PROJECTS · 47 ACTIVE</div>
+              </div>
+              <div style="padding:6px;height:calc(100% - 22px);overflow:hidden">
+                <!-- Attention strip -->
+                <div style="background:#fff5f3;border:0.5px solid #c8553d;border-radius:3px;padding:5px 6px;margin-bottom:6px;font-family:'JetBrains Mono',monospace">
+                  <div style="font-size:5.5px;color:#c8553d;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px">— Needs attention today · 4 projects</div>
+                  <div style="display:flex;gap:3px">
+                    <div class="mc" style="flex:1;padding:4px;background:#fff">
+                      <div class="mc-badge" style="font-size:4.5px">4PM</div>
+                      <div class="mc-title" style="font-size:7px">Mehta House</div>
+                      <div class="mc-loc" style="font-size:4.5px">Tile decision</div>
+                    </div>
+                    <div class="mc" style="flex:1;padding:4px;background:#fff">
+                      <div class="mc-badge" style="font-size:4.5px">9d late</div>
+                      <div class="mc-title" style="font-size:7px">Sethi Res.</div>
+                      <div class="mc-loc" style="font-size:4.5px">Structural delay</div>
+                    </div>
+                    <div class="mc" style="flex:1;padding:4px;background:#fff">
+                      <div class="mc-badge ink" style="font-size:4.5px">Payment</div>
+                      <div class="mc-title" style="font-size:7px">Vyom HQ</div>
+                      <div class="mc-loc" style="font-size:4.5px">₹4.2L due</div>
+                    </div>
+                    <div class="mc" style="flex:1;padding:4px;background:#fff">
+                      <div class="mc-badge ok" style="font-size:4.5px">Fri 11AM</div>
+                      <div class="mc-title" style="font-size:7px">New Brief</div>
+                      <div class="mc-loc" style="font-size:4.5px">Jaipur · First call</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Full library grid -->
+                <div style="font-family:'JetBrains Mono',monospace;font-size:5px;opacity:0.4;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px">— All Projects · Grid View</div>
+                <div class="mini-lib-grid">
+                  <div class="lib-card"><div class="t">Mehta House</div><div class="loc">Pune</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div></div></div>
+                  <div class="lib-card"><div class="t">Sethi Res.</div><div class="loc">Mumbai</div><div class="lib-strip"><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div></div></div>
+                  <div class="lib-card"><div class="t">Aroma Cafe</div><div class="loc">BLR</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s ok"></div><div class="s"></div></div></div>
+                  <div class="lib-card"><div class="t">Vyom HQ</div><div class="loc">Delhi</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s now"></div></div></div>
+                  <div class="lib-card"><div class="t">Kapoor Apt.</div><div class="loc">Ahm</div><div class="lib-strip"><div class="s done"></div><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div></div></div>
+                  <div class="lib-card"><div class="t">Khanna Villa</div><div class="loc">Delhi</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s ok"></div><div class="s"></div><div class="s"></div></div></div>
+                  <div class="lib-card"><div class="t">Iyer Condo</div><div class="loc">BLR</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s now"></div></div></div>
+                  <div class="lib-card"><div class="t">Modi Bungalow</div><div class="loc">Pune</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s ok"></div><div class="s"></div></div></div>
+                  <div class="lib-card" style="opacity:0.5"><div class="t">Singh Office</div><div class="loc">Gurgaon</div><div class="lib-strip"><div class="s now"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div></div>
+                  <div class="lib-card" style="opacity:0.5"><div class="t">Joshi Flat</div><div class="loc">Pune</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s ok"></div><div class="s ok"></div><div class="s"></div></div></div>
+                  <div class="lib-card" style="opacity:0.35"><div class="t">Patel House</div><div class="loc">Surat</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div></div></div>
+                  <div class="lib-card" style="opacity:0.35"><div class="t">Verma Duplex</div><div class="loc">Mumbai</div><div class="lib-strip"><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div><div class="s done"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+        <div class="laptop-stand"></div>
+      </div>
+    </div>
+
+    <!-- Screen 4: Timeline / Vendor tracking -->
+    <div class="screen-block rev reveal">
+      <div class="screen-info">
+        <div class="screen-num">Screen 04 / Timeline & Vendors</div>
+        <h3 class="screen-title">Who's delayed.<br>Who's waiting on you.</h3>
+        <p class="screen-body">The timeline tab inside each project tracks every external dependency — structural consultants, fabricators, BMC liaisons, clients. Phase-bars show actual vs. planned. Delays surface automatically. No more checking WhatsApp to know who hasn't sent the drawing yet.</p>
+        <ul class="screen-features">
+          <li>Phase-based timeline with actual vs. planned tracking</li>
+          <li>Vendor dependency mapping — who's blocking whom</li>
+          <li>Automatic delay flagging with days overdue</li>
+          <li>RERA milestone integration for compliance tracking</li>
+        </ul>
+      </div>
+      <div class="laptop-wrap">
+        <div class="laptop">
+          <div class="laptop-screen">
+            <div class="mini-ui">
+              <div class="mini-topbar">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div class="mini-logo">Atelier<span>.</span></div>
+                  <span style="opacity:0.3;font-size:7px">/</span>
+                  <span style="font-family:'Instrument Serif',serif;font-size:9px">Sethi Residence</span>
+                </div>
+                <div class="mini-nav"><span>Vision</span><span>Drawings</span><span>Decisions</span><span class="active">Timeline</span></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.5;color:#c8553d">DELAYED · 9D</div>
+              </div>
+              <div style="height:calc(100% - 22px);display:grid;grid-template-columns:1fr 76px">
+                <div class="mini-timeline">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.4;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">— Phase Timeline</div>
+                  <!-- Phase rows -->
+                  <div class="tl-row"><span class="tl-label">Briefing</span><div class="tl-bar-bg"><div class="tl-bar-fill ok" style="width:100%"></div></div><span class="tl-status" style="color:#5a7a3a">Done</span></div>
+                  <div class="tl-row"><span class="tl-label">Concept</span><div class="tl-bar-bg"><div class="tl-bar-fill ok" style="width:100%"></div></div><span class="tl-status" style="color:#5a7a3a">Done</span></div>
+                  <div class="tl-row"><span class="tl-label">DD + BOQ</span><div class="tl-bar-bg"><div class="tl-bar-fill" style="width:100%"></div></div><span class="tl-status">Done</span></div>
+                  <div class="tl-row" style="background:rgba(200,85,61,0.06)"><span class="tl-label" style="color:#c8553d">Structural</span><div class="tl-bar-bg"><div class="tl-bar-fill now" style="width:30%"></div></div><span class="tl-status" style="color:#c8553d">9d late</span></div>
+                  <div class="tl-row" style="opacity:0.4"><span class="tl-label">GFC Drwg</span><div class="tl-bar-bg"><div class="tl-bar-fill" style="width:0%"></div></div><span class="tl-status">—</span></div>
+                  <div class="tl-row" style="opacity:0.4"><span class="tl-label">Execution</span><div class="tl-bar-bg"><div class="tl-bar-fill" style="width:0%"></div></div><span class="tl-status">—</span></div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.4;text-transform:uppercase;letter-spacing:0.1em;margin:8px 0 5px">— Vendor Dependencies</div>
+                  <div class="tl-row" style="background:rgba(200,85,61,0.06)">
+                    <span class="tl-label" style="color:#c8553d;font-size:5px">Patel &amp; Co</span>
+                    <div style="flex:1;font-size:5px;opacity:0.6;padding-left:4px">Structural drawings · awaiting since 9d</div>
+                    <span style="font-size:5px;color:#c8553d;font-family:'JetBrains Mono',monospace">Follow up?</span>
+                  </div>
+                  <div class="tl-row">
+                    <span class="tl-label" style="font-size:5px">BMC Office</span>
+                    <div style="flex:1;font-size:5px;opacity:0.6;padding-left:4px">Sanction plan copy · 4d wait</div>
+                    <span style="font-size:5px;opacity:0.5;font-family:'JetBrains Mono',monospace">Pending</span>
+                  </div>
+                  <div class="tl-row">
+                    <span class="tl-label" style="font-size:5px">Client</span>
+                    <div style="flex:1;font-size:5px;opacity:0.6;padding-left:4px">Kitchen layout choice · Thu meet</div>
+                    <span style="font-size:5px;color:#5a7a3a;font-family:'JetBrains Mono',monospace">Thu AM</span>
+                  </div>
+                </div>
+                <div class="mini-panel">
+                  <div class="mini-panel-label">— Blockers</div>
+                  <div class="mini-alert">Structural drawings from Patel &amp; Co — 9 days overdue.</div>
+                  <div class="mini-alert">BMC sanction copy — liaison agent not responding.</div>
+                  <div class="mini-panel-label" style="margin-top:6px">— Next action</div>
+                  <div style="font-size:5px;line-height:1.5;padding:4px;background:#fff5f3;border-radius:2px">
+                    <span style="color:#c8553d">Thu 10AM:</span> Sethi client meeting. Prepare: revised structural sketch, kitchen options A/B.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+        <div class="laptop-stand"></div>
+      </div>
+    </div>
+
+    <!-- Screen 5: Material Decisions Log -->
+    <div class="screen-block reveal">
+      <div class="screen-info">
+        <div class="screen-num">Screen 05 / Decisions Log</div>
+        <h3 class="screen-title">Every material decision.<br>Logged. Approved. Done.</h3>
+        <p class="screen-body">The Decisions tab is the anti-WhatsApp. Every material choice — tile, wood, hardware, paint — gets a record with photos, options considered, the person who approved it, and the date. No more "which tile did the client choose?" six months later.</p>
+        <ul class="screen-features">
+          <li>Photo-first decision cards — visual reference always attached</li>
+          <li>Status: Pending / Client Approved / Ordered / Installed</li>
+          <li>Full approval trail with dates and names</li>
+          <li>Linked to relevant vendors and purchase orders</li>
+        </ul>
+      </div>
+      <div class="laptop-wrap">
+        <div class="laptop">
+          <div class="laptop-screen">
+            <div class="mini-ui">
+              <div class="mini-topbar">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div class="mini-logo">Atelier<span>.</span></div>
+                  <span style="opacity:0.3;font-size:7px">/</span>
+                  <span style="font-family:'Instrument Serif',serif;font-size:9px">Mehta House</span>
+                </div>
+                <div class="mini-nav"><span>Vision</span><span>Drawings</span><span class="active">Decisions</span><span>Timeline</span></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:5.5px;opacity:0.5">14 DECISIONS · 3 PENDING</div>
+              </div>
+              <div style="padding:6px;height:calc(100% - 22px);overflow:hidden">
+                <div style="display:flex;gap:4px;margin-bottom:5px;font-family:'JetBrains Mono',monospace;font-size:5.5px">
+                  <div style="padding:2px 6px;background:#c8553d;color:#fafaf7;border-radius:2px">All (14)</div>
+                  <div style="padding:2px 6px;background:#fff5f3;border:0.5px solid #c8553d;color:#c8553d;border-radius:2px">Pending (3)</div>
+                  <div style="padding:2px 6px;background:#f5f5f2;border:0.5px solid #e8e8e2;border-radius:2px;opacity:0.6">Approved (8)</div>
+                  <div style="padding:2px 6px;background:#f5f5f2;border:0.5px solid #e8e8e2;border-radius:2px;opacity:0.6">Ordered (3)</div>
+                </div>
+                <!-- Decision cards grid -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                  <!-- Pending decision -->
+                  <div style="border:0.5px solid #c8553d;background:#fff;padding:4px">
+                    <div style="height:28px;background:linear-gradient(135deg,#e8e0d0,#c8b090);margin-bottom:3px;position:relative">
+                      <div style="position:absolute;top:2px;right:2px;background:#c8553d;color:#fff;font-size:4px;padding:1px 3px;font-family:'JetBrains Mono',monospace;text-transform:uppercase">Pending</div>
+                    </div>
+                    <div style="font-family:'Instrument Serif',serif;font-size:7px;line-height:1.1;margin-bottom:2px">Bathroom Tile</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;opacity:0.5">Rustic beige vs matte cream</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;color:#c8553d;margin-top:2px">Answer by 4PM today</div>
+                  </div>
+                  <!-- Approved -->
+                  <div style="border:0.5px solid #5a7a3a;background:#fff;padding:4px">
+                    <div style="height:28px;background:linear-gradient(135deg,#4a3528,#d4b896);margin-bottom:3px;position:relative">
+                      <div style="position:absolute;top:2px;right:2px;background:#5a7a3a;color:#fff;font-size:4px;padding:1px 3px;font-family:'JetBrains Mono',monospace;text-transform:uppercase">✓ Approved</div>
+                    </div>
+                    <div style="font-family:'Instrument Serif',serif;font-size:7px;line-height:1.1;margin-bottom:2px">Kitchen Countertop</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;opacity:0.5">Black granite · Nero Assoluto</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;opacity:0.4;margin-top:2px">Approved: Mrs. Mehta · 8 May</div>
+                  </div>
+                  <!-- Ordered -->
+                  <div style="border:0.5px solid #0a0a0a;background:#fff;padding:4px;opacity:0.85">
+                    <div style="height:28px;background:linear-gradient(135deg,#ede4d3,#8a9a7b);margin-bottom:3px;position:relative">
+                      <div style="position:absolute;top:2px;right:2px;background:#0a0a0a;color:#fafaf7;font-size:4px;padding:1px 3px;font-family:'JetBrains Mono',monospace;text-transform:uppercase">Ordered</div>
+                    </div>
+                    <div style="font-family:'Instrument Serif',serif;font-size:7px;line-height:1.1;margin-bottom:2px">Living Room Flooring</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;opacity:0.5">Italian marble · 24×24</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;opacity:0.4;margin-top:2px">Delivery: 18 May · Sharma Tiles</div>
+                  </div>
+                  <!-- Pending #2 -->
+                  <div style="border:0.5px solid #c8553d;background:#fff;padding:4px">
+                    <div style="height:28px;background:linear-gradient(135deg,#f5e8c8,#b86b4b);margin-bottom:3px;position:relative">
+                      <div style="position:absolute;top:2px;right:2px;background:#c8553d;color:#fff;font-size:4px;padding:1px 3px;font-family:'JetBrains Mono',monospace;text-transform:uppercase">Pending</div>
+                    </div>
+                    <div style="font-family:'Instrument Serif',serif;font-size:7px;line-height:1.1;margin-bottom:2px">Master Bed Paint</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;opacity:0.5">Warm white vs warm ivory</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;color:#c8553d;margin-top:2px">Client input awaited</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+        <div class="laptop-stand"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ 05 BUSINESS SHAPE ══ -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">05</div>
+    <div class="chapter-header">
+      <div class="chapter-label">Chapter 05 · The Business Shape</div>
+      <h2 class="chapter-title">Priced for the way <em>Indian SMBs actually buy.</em></h2>
+    </div>
+    <div class="prose">
+      <p>Western architecture-firm SaaS averages $40–60 per seat per month. Translating that directly to India is a death sentence. Indian small-firm software pricing has different physics: <strong>flat per-firm, not per-seat</strong>. Affordable enough to never require a procurement conversation. The principal pays from her personal card and forwards the invoice to her accountant on Diwali eve.</p>
+    </div>
+
+    <div class="pricing reveal">
+      <div class="tier">
+        <div class="tier-name">Studio · Tier 1</div>
+        <div class="tier-price">₹1,500 <small>/month</small></div>
+        <p class="tier-desc">For practices up to 10 architects. The principal buys, adds her team by email.</p>
+        <ul class="tier-list">
+          <li>Unlimited projects &amp; mood boards</li>
+          <li>Drawing version control</li>
+          <li>Material decisions log</li>
+          <li>Real-time team activity</li>
+          <li>Mobile + desktop access</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Studio · Tier 2</div>
+        <div class="tier-price">₹2,000 <small>/month</small></div>
+        <p class="tier-desc">For practices of 10 to 50 architects. Same product, more seats, finer permissions.</p>
+        <ul class="tier-list">
+          <li>Everything in Tier 1</li>
+          <li>Role-based permissions (PM / Lead / Intern)</li>
+          <li>RERA compliance module (add-on)</li>
+          <li>Custom firm branding on client exports</li>
+          <li>Priority support</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p>At a blended ARPU around ₹20,000/year, the math to a meaningful ₹2–3 Cr ARR business needs ~1,000–1,500 paying firms. The realistic TAM of Indian solo &amp; small architecture practices in tier-1 cities is roughly 30–50,000 firms. <strong>A healthy bootstrappable SMB SaaS company</strong> — not a venture rocket, not a side project.</p>
+    </div>
+
+    <div class="stats reveal">
+      <div class="stat-card">
+        <div class="stat-num">₹1,500</div>
+        <div class="stat-label">Per firm per month</div>
+        <div class="stat-body">Flat per-firm pricing. No per-seat calculation. No procurement conversation. The principal pays from her personal card.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num sand">50k</div>
+        <div class="stat-label">Addressable firms in India</div>
+        <div class="stat-body">Solo and small architecture practices in tier-1 Indian cities. All using WhatsApp and Google Drive as their "software."</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num ivory">₹3Cr</div>
+        <div class="stat-label">ARR at 1,500 firms</div>
+        <div class="stat-body">A profitable, bootstrappable SaaS business serving an underserved market. Not a moonshot — a real one.</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- ══ 06 THE HONEST DECISION ══ -->
+<div style="background:var(--surface)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">06</div>
+    <div class="chapter-header">
+      <div class="chapter-label">Chapter 06 · The Honest Decision</div>
+      <h2 class="chapter-title">The hardest part: <em>deciding not to build yet.</em></h2>
+    </div>
+    <div class="prose">
+      <p>The mockups were ready. Architect friends were waiting. The temptation to start coding was real. But the most senior UX move at this point is also the least Instagrammable: <em>stop, and validate.</em></p>
+      <p>The Birds View project's failure wasn't a design failure. It was a sequencing failure — built before validated. To not repeat that, a four-week research plan was designed before committing to a single line of code.</p>
+    </div>
+
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Recruit 20 architects</div>
+        <div class="step-body">Mix of cousin's network, LinkedIn outreach to strangers in Pune, Mumbai, Bangalore — and alumni from architecture colleges.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Run video interviews</div>
+        <div class="step-body">25 minutes each. Eight questions. Show mockups only at the end. Listen 80%, talk 20%. Record with permission.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Find the patterns</div>
+        <div class="step-body">Which 3 pains show up in 80% of conversations? Which features made eyes light up? Which made them glaze over?</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Make the call</div>
+        <div class="step-body">If 8+ architects say "when can I have this" unprompted — build. If they nod politely — kill it. Either is a win.</div>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p>Killing an idea in week 4 is better than killing it in week 40. The graveyard is full of beautifully-designed Indian SaaS products built without this conversation. <strong>Choosing — for now — to be in the graveyard's negative, not its positive.</strong></p>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- ══ OUTCOMES ══ -->
+<div style="background:var(--bg)"><div class="container">
+  <div class="chapter reveal" style="position:relative">
+    <div class="chapter-ghost">07</div>
+    <div class="chapter-header">
+      <div class="chapter-label">Closing · Reflections</div>
+      <h2 class="chapter-title">What this project <em>taught me</em><br>about being a designer.</h2>
+    </div>
+
+    <div class="pull reveal">
+      <p class="pull-text">The interface work is the visible 10%. The other 90% is being honest about whether the problem is even worth solving — and being willing to say <em>not yet</em>.</p>
+      <p class="pull-attr">— Personal reflection, Atelier 2026</p>
+    </div>
+
+    <div class="reflections reveal">
+      <div class="ref-card">
+        <div class="ref-num">01</div>
+        <div class="ref-title">Beautiful mockups are not validation.</div>
+        <div class="ref-body">A polished design can convince anyone — including its designer — that the product is real. Validation only comes from strangers saying yes with their wallets.</div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-num">02</div>
+        <div class="ref-title">Friends are not your customers.</div>
+        <div class="ref-body">Your friends will be polite. They'll say "great, send me the link" and never use it. Strangers paid ₹500 in an Amazon voucher will be ten times more honest.</div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-num">03</div>
+        <div class="ref-title">Localization is a moat.</div>
+        <div class="ref-body">Global tools rarely build for non-Western workflows. RERA, sanctions, structural handoffs — these are real product surfaces nobody has touched.</div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-num">04</div>
+        <div class="ref-title">Painkiller, not vitamin.</div>
+        <div class="ref-body">People pay for things that prevent loss far more than for things that add delight. Recast every feature: is this a vitamin or a painkiller?</div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-num">05</div>
+        <div class="ref-title">Distribution > product.</div>
+        <div class="ref-body">The hardest part of Indian SaaS isn't building the software. It's finding the first 50 customers. Designers ignore this layer at their peril.</div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-num">06</div>
+        <div class="ref-title">The brave thing is to stop.</div>
+        <div class="ref-body">Knowing when to pause is a senior skill. Most failed startups didn't fail because of bad design. They failed because nobody stopped to ask the harder question.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bordergray);border-radius:16px;overflow:hidden;margin-bottom:80px" class="reveal">
+      <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">🏗️</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Market Research</div><div style="font-size:12px;color:var(--muted)">3 competitors, 1 real gap found</div></div>
+      <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">🖥️</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">5 Live Screens</div><div style="font-size:12px;color:var(--muted)">Fully interactive prototypes</div></div>
+      <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">🇮🇳</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">India-First</div><div style="font-size:12px;color:var(--muted)">RERA, sanction workflows, ₹ pricing</div></div>
+      <div style="background:var(--surface2);padding:28px 22px;text-align:center"><div style="font-size:22px;margin-bottom:8px">⏸️</div><div style="font-family:var(--ff);font-size:13px;font-weight:700;margin-bottom:5px">Honestly Paused</div><div style="font-size:12px;color:var(--muted)">Validated before building</div></div>
+    </div>
+  </div>
+</div></div>
+
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:var(--fs);font-size:18px;color:var(--muted)">Atelier<span style="color:var(--terracotta)">.</span></div>
+      <div style="font-family:var(--fm);font-size:11px;color:var(--dim);margin-top:5px;letter-spacing:0.08em;text-transform:uppercase">The second brain for the solo principal architect</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-family:var(--fm);font-size:11px;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase">Product Design Case Study · 2026</div>
+      <div style="font-family:var(--fm);font-size:11px;color:var(--dim);margin-top:4px;letter-spacing:0.06em;text-transform:uppercase">Ashish Dixit · Solo · UX + Product + Research</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
