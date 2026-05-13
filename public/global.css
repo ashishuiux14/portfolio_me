@@ -895,6 +895,7 @@ footer {
 @media (max-width: 900px) {
   :root {
     --nav-w: 0px;
+    --gu: 24px;
   }
 
   .nav-toggle {
@@ -908,7 +909,7 @@ footer {
     pointer-events: none;
     border-right: none;
     padding-top: 80px;
-    /* Push everything down below toggle */
+    background: var(--bg);
   }
 
   .page {
@@ -922,166 +923,115 @@ footer {
 
   .nav-top {
     height: auto;
-    padding: 20px 40px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+    padding: 30px 24px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
   }
 
   .nav-links {
-    padding: 20px 20px;
-    gap: 8px;
+    padding: 10px 14px;
+    gap: 4px;
   }
 
   .nav-link {
-    height: 50px;
+    height: 54px;
     font-size: 13px;
-    /* Smaller intricate font */
     padding: 0 24px;
   }
 
-  .nav-icon {
-    width: 20px;
-    height: 20px;
-  }
-
-  .nav-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
   .nav-bottom {
-    padding: 32px 40px;
+    padding: 24px;
+    margin-top: auto;
   }
 
-  .projects-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .testi-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+  .projects-grid, .testi-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .proj-card.wide {
-    grid-column: span 2;
+    grid-column: span 1;
   }
 
-  .hud.tl,
-  .hud.bl {
-    left: 20px;
-  }
-
-  .hud.tr,
-  .hud.br {
-    right: 20px;
-  }
-
+  .hud.tl, .hud.bl { left: 16px; }
+  .hud.tr, .hud.br { right: 16px; }
+  
   .hud-info {
-    padding: 8px 12px;
-    gap: 10px;
+    display: none;
   }
 
-  .hud-info-sep {
-    height: 10px;
+  .hud-corner {
+    width: 12px;
+    height: 12px;
   }
 
-  .hud-info-item {
+  .hud-txt {
     font-size: 8px;
   }
 }
 
 @media (max-width: 600px) {
-  .hero-h1 {
-    font-size: 3.5rem !important;
+  :root {
+    --gu: 20px;
+  }
+
+  body {
+    font-size: 16px;
   }
 
   .section-h2 {
-    font-size: 2.8rem !important;
-  }
-
-  .hero-body {
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-  }
-
-  .testi-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    font-size: clamp(2.5rem, 8vw, 4rem) !important;
   }
 
   .testi-card {
-    padding: 16px;
+    padding: 24px 20px;
   }
 
   .testi-quote {
-    font-size: 12px !important;
-    line-height: 1.5 !important;
-  }
-
-  .testi-name {
-    font-size: 11px !important;
-  }
-
-  .testi-role {
-    font-size: 9px !important;
-  }
-
-  .bio {
-    grid-template-columns: 1fr;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .proj-card.wide {
-    grid-column: span 2;
-  }
-
-  .proj-info {
-    padding: 16px;
-  }
-
-  .proj-title {
     font-size: 14px !important;
   }
 
+  .proj-thumb {
+    height: 200px;
+  }
+
+  .proj-title {
+    font-size: 1.8rem !important;
+  }
+
   .proj-sub {
-    font-size: 12px !important;
-    line-height: 1.5 !important;
-    margin-top: 6px !important;
+    font-size: 14px !important;
+    margin-top: 8px !important;
   }
 
-  .hero,
-  .work,
-  .testimonials,
-  .contact-cta-section {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-
-  #bg {
-    left: 0 !important;
-    width: 100vw !important;
+  .hero, .work, .testimonials, .contact-cta-section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 
   #cursor-canvas {
     display: none !important;
   }
 
-  body {
-    cursor: auto !important;
-    font-size: 15px;
-  }
-
-  body * {
+  body, body * {
     cursor: auto !important;
   }
 
   footer {
-    padding: 20px 24px;
+    padding: 30px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    text-align: left;
+  }
+
+  .footer-v {
+    margin-top: 4px;
+  }
+  
+  .batman-egg {
+    font-size: 9px;
   }
 }

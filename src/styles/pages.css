@@ -946,19 +946,18 @@
 }
 
 /* MEDIA QUERIES */
-@media (max-width:900px) {
-
+@media (max-width: 900px) {
   .hero,
   .page-header {
-    padding-top: calc(var(--gu)*3);
+    padding-top: calc(var(--gu)*4);
   }
 
   .hero,
   .work,
   .testimonials,
   .contact-cta-section {
-    padding-left: calc(var(--gu)*1.5);
-    padding-right: calc(var(--gu)*1.5);
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   #hero-3d {
@@ -968,19 +967,22 @@
 
   .bio {
     grid-template-columns: 1fr;
+    padding: calc(var(--gu)*2) 24px;
+    gap: 40px;
   }
 
   .page-header,
   .bio,
   .timeline,
   .tools {
-    padding-left: calc(var(--gu)*1.5);
-    padding-right: calc(var(--gu)*1.5);
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .tl-item {
     grid-template-columns: 1fr;
     gap: 8px;
+    padding: 24px;
   }
 
   .tl-line {
@@ -993,11 +995,12 @@
 
   .contact-wrap {
     grid-template-columns: 1fr;
+    padding: calc(var(--gu)*2) 24px;
   }
 
   .availability {
-    padding-left: calc(var(--gu)*1.5);
-    padding-right: calc(var(--gu)*1.5);
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .form-row {
@@ -1005,7 +1008,7 @@
   }
 }
 
-@media (max-width:560px) {
+@media (max-width: 600px) {
   .hero-inner {
     flex-direction: column;
     align-items: flex-start;
@@ -1014,6 +1017,26 @@
   #hero-3d {
     width: 120px;
     height: 120px;
+  }
+
+  .page-eyebrow {
+    font-size: 9px;
+  }
+
+  .page-h1 {
+    font-size: clamp(3rem, 12vw, 5rem);
+  }
+
+  .bio-h2 {
+    font-size: 3.5rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tl-role {
+    font-size: 1.3rem;
   }
 }
 
@@ -1077,5 +1100,20 @@
   }
   .batman-visual {
     order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .batman-section {
+    padding: calc(var(--gu)*3) 24px;
+  }
+  
+  .batman-h3 {
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+  }
+  
+  .batman-desc {
+    font-size: 14px;
   }
 }
