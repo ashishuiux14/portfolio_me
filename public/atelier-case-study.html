@@ -31,7 +31,7 @@
   --fb: 'Manrope', sans-serif;
   --max: 1080px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
 html { scroll-behavior: smooth; }
 body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; line-height: 1.7; }
 .container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
@@ -1228,6 +1228,11 @@ const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Relay mousemove messages for custom cursor
+document.addEventListener('mousemove', function(e) {
+  window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+});
 </script>
 </body>
 </html>

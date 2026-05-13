@@ -6,8 +6,25 @@ const ProjectAtelier = () => {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    
+    const handler = (e) => {
+      if (e.data && e.data.type === 'iframe-mousemove' && iframeRef.current) {
+        const rect = iframeRef.current.getBoundingClientRect();
+        const x = rect.left + e.data.clientX;
+        const y = rect.top + e.data.clientY;
+
+        document.dispatchEvent(new MouseEvent('mousemove', { 
+          clientX: x, 
+          clientY: y, 
+          bubbles: true 
+        }));
+      }
+    };
+    window.addEventListener('message', handler);
+    
     return () => {
       document.body.style.overflow = 'auto';
+      window.removeEventListener('message', handler);
     };
   }, []);
 
@@ -21,7 +38,7 @@ const ProjectAtelier = () => {
         <iframe
           ref={iframeRef}
           src="/atelier-case-study.html"
-          style={{ width: '100%', height: '100%', border: 'none' }}
+          style={{ width: '100%', height: '100%', border: 'none', display: 'block', cursor: 'none' }}
           title="Atelier Case Study"
         />
       </div>

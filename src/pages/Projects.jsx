@@ -109,16 +109,11 @@ const Projects = () => {
           )}
 
           {isVisible('uiux') && (
-            <Link to="/projects/ev-trip-screens" className="proj-card wide" data-cat="uiux">
-              <div className="proj-thumb"><div className="thumb-grid"></div><span className="thumb-num">04</span></div>
-              <div className="proj-info">
-                <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>
-                <div className="proj-title">EV TRIP SCREENS</div>
-                <div className="proj-date">2024</div>
-                <div className="proj-sub">8 production-ready screens. Dark. Clean. Confident.</div>
+            <div className="proj-card coming-soon" style={{ border: '1px dashed rgba(255,255,255,0.1)', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px', cursor: 'default' }}>
+              <div style={{ fontFamily: 'var(--fm, "JetBrains Mono", monospace)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
+                Coming Up Soon
               </div>
-              <span className="proj-arrow">View UI Gallery →</span>
-            </Link>
+            </div>
           )}
         </div>
       </section>
