@@ -6,10 +6,10 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus({ text: 'Sending...', note: '' });
-    
+
     setTimeout(() => {
-      setStatus({ 
-        text: 'Sent ✓', 
+      setStatus({
+        text: 'Sent ✓',
         note: "Thanks! I'll get back to you within 24 hours.",
         noteColor: 'rgba(61,220,132,0.7)'
       });
@@ -20,7 +20,7 @@ const Contact = () => {
     <>
       <div className="page-header">
         <div className="page-eyebrow">{"// 04 — Let's Talk"}</div>
-        <h1 className="page-h1">GET IN<br/><span className="outline">TOUCH</span><span className="red">.</span></h1>
+        <h1 className="page-h1">GET IN<br /><span className="outline">TOUCH</span><span className="red">.</span></h1>
       </div>
 
       <div className="divider"></div>
@@ -33,7 +33,7 @@ const Contact = () => {
           <div className="contact-items">
             <a href="mailto:hello@ashishdixit.work" className="contact-item">
               <div className="contact-item-icon">
-                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
               </div>
               <div>
                 <div className="contact-item-label">Email</div>
@@ -42,7 +42,7 @@ const Contact = () => {
             </a>
             <a href="https://www.linkedin.com/in/ashishd-uiux" target="_blank" rel="noreferrer" className="contact-item">
               <div className="contact-item-icon">
-                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>
               </div>
               <div>
                 <div className="contact-item-label">LinkedIn</div>
@@ -51,7 +51,7 @@ const Contact = () => {
             </a>
             <div className="contact-item">
               <div className="contact-item-icon">
-                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" /></svg>
               </div>
               <div>
                 <div className="contact-item-label">Location</div>
@@ -104,17 +104,17 @@ const Contact = () => {
               <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
             </div>
             <div className="form-submit">
-              <button 
-                type="submit" 
-                className="btn btn-red" 
+              <button
+                type="submit"
+                className="btn btn-red"
                 id="submit-btn"
                 style={{ opacity: status.text === 'Sending...' ? 0.6 : 1 }}
                 disabled={status.text === 'Sending...'}
               >
                 {status.text}
               </button>
-              <span 
-                className="submit-note" 
+              <span
+                className="submit-note"
                 id="submit-note"
                 style={{ color: status.noteColor || 'var(--grey2)' }}
               >
@@ -133,7 +133,7 @@ const Contact = () => {
             <span className="avail-status">Open to Work</span>
           </div>
           <div className="avail-title">FULL-TIME ROLES</div>
-          <div className="avail-desc">Looking for senior IC product design roles. Open to on-site, hybrid, or remote positions.</div>
+          <div className="avail-desc">Looking for senior Product Design roles. Open to on-site, hybrid, or remote positions.</div>
         </div>
         <div className="avail-card">
           <div className="avail-top">
