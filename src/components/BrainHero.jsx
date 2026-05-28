@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 /* ── Tool definitions ── */
 const TOOLS = [
@@ -156,7 +157,12 @@ export default function BrainHero() {
     r.spinGroup.position.x = window.innerWidth > 900 ? 90 : 0
     r.scene.add(r.spinGroup)
 
-    new GLTFLoader().load('/brain_human.glb', (gltf) => {
+    const dracoLoader = new DRACOLoader()
+    dracoLoader.setDecoderPath('/draco/')
+    const gltfLoader = new GLTFLoader()
+    gltfLoader.setDRACOLoader(dracoLoader)
+
+    gltfLoader.load('/brain_human_draco.glb', (gltf) => {
       const scene = gltf.scene
       scene.updateMatrixWorld(true)
       r.gltfScene = scene

@@ -3,7 +3,7 @@ import React from 'react';
 const HubThumb = () => {
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', background: '#1a2e1a' }}>
-      <img 
+      <img loading="lazy"
         src="/hub-hero.png" 
         alt="3D Hub" 
         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 

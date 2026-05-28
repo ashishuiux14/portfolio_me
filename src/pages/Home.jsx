@@ -56,7 +56,7 @@ const Home = () => {
           </Link>
           <Link to="/projects/ev-trip-intelligence" className="proj-card">
             <div className="proj-thumb" style={{ overflow: 'hidden', padding: 0 }}>
-              <img src="/ev-thumb.svg" alt="EV Trip Intelligence" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              <img loading="lazy" src="/ev-thumb.svg" alt="EV Trip Intelligence" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
             <div className="proj-info">
               <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>
@@ -102,7 +102,7 @@ const Home = () => {
           <div className="testi-card">
             <p className="testi-quote">"Ashish transformed our outdated website into a warm, welcoming, and user-friendly space that aligns beautifully with our mission values. Outstanding collaboration."</p>
             <div className="testi-person">
-              <div className="testi-avatar"><img src="https://framerusercontent.com/images/5te1yznG0pEp9janrkfsBoOtiSY.jpg" alt="Karl Nass" /></div>
+              <div className="testi-avatar"><img loading="lazy" src="https://framerusercontent.com/images/5te1yznG0pEp9janrkfsBoOtiSY.jpg" alt="Karl Nass" /></div>
               <div>
                 <div className="testi-name">Karl Nass</div>
                 <div className="testi-role">Director, Mission & Ministry — DePaul University</div>
@@ -112,7 +112,7 @@ const Home = () => {
           <div className="testi-card">
             <p className="testi-quote">"During his 6-month internship, Ashish consistently demonstrated creative problem-solving, user-first design, and remarkable attention to detail. A truly valuable team member."</p>
             <div className="testi-person">
-              <div className="testi-avatar"><img src="/avatar-lisa.jpg" alt="Lisa Pavati" /></div>
+              <div className="testi-avatar"><img loading="lazy" src="/avatar-lisa.jpg" alt="Lisa Pavati" /></div>
               <div>
                 <div className="testi-name">Lisa Pavati</div>
                 <div className="testi-role">Director — Sustainable Living Guide</div>
@@ -122,7 +122,7 @@ const Home = () => {
           <div className="testi-card">
             <p className="testi-quote">"Ashish’s design thinking is exceptional. His ability to balance brand aesthetics with functional clarity made a strong impact on our digital showcase project."</p>
             <div className="testi-person">
-              <div className="testi-avatar"><img src="/avatar-rahul.jpg" alt="Rahul Kadam" /></div>
+              <div className="testi-avatar"><img loading="lazy" src="/avatar-rahul.jpg" alt="Rahul Kadam" /></div>
               <div>
                 <div className="testi-name">Rahul Kadam</div>
                 <div className="testi-role">Principal Architect — The NGK Studio</div>
@@ -132,7 +132,7 @@ const Home = () => {
           <div className="testi-card">
             <p className="testi-quote">"Ashish brought fresh vision and thoughtful UX strategy to our department’s website redesign. His work improved both engagement and accessibility."</p>
             <div className="testi-person">
-              <div className="testi-avatar"><img src="/avatar-damien.png" alt="Damien Rodrigue" /></div>
+              <div className="testi-avatar"><img loading="lazy" src="/avatar-damien.png" alt="Damien Rodrigue" /></div>
               <div>
                 <div className="testi-name">Damien Rodrigue</div>
                 <div className="testi-role">Mission & Ministry Coordinator, DePaul University</div>

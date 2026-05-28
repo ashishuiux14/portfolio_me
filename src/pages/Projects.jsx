@@ -52,7 +52,7 @@ const Projects = () => {
           {isVisible('uiux') && (
             <Link to="/projects/ev-trip-intelligence" className="proj-card" data-cat="uiux">
               <div className="proj-thumb" style={{ overflow: 'hidden', padding: 0 }}>
-                <img src="/ev-thumb.svg" alt="EV Trip Intelligence" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <img loading="lazy" src="/ev-thumb.svg" alt="EV Trip Intelligence" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
               <div className="proj-info">
                 <div className="proj-meta"><span>DWG 002.2</span><span>·</span><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>

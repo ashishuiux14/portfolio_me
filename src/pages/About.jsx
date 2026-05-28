@@ -9,7 +9,7 @@ const About = () => {
           <h1 className="page-h1">THE<br /><span className="outline">PERSON</span><br />BEHIND<span className="red">.</span></h1>
         </div>
         <div className="header-visual">
-          <img src="/about-diagram.png" alt="Technical Drawing of initials" className="about-diagram-img" />
+          <img loading="lazy" src="/about-diagram.png" alt="Technical Drawing of initials" className="about-diagram-img" />
         </div>
       </div>
 
@@ -20,7 +20,7 @@ const About = () => {
           <div className="bio-label">Who I am</div>
           <h2 className="bio-h2">Ashish<br /><em className="outline">Dixit</em><span className="red">.</span></h2>
           <div className="avatar-box">
-            <img src="/ashish dp.png" alt="Ashish Dixit" className="avatar-img" />
+            <img loading="lazy" src="/ashish dp.png" alt="Ashish Dixit" className="avatar-img" />
             <span className="avatar-label">Chicago, IL</span>
           </div>
         </div>
@@ -122,7 +122,7 @@ const About = () => {
             </p>
           </div>
           <div className="batman-visual">
-            <img src="/about-batman.jpg" alt="Technical Lab" className="batman-img" />
+            <img loading="lazy" src="/about-batman.jpg" alt="Technical Lab" className="batman-img" />
           </div>
         </div>
       </div>
