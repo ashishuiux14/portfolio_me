@@ -1060,7 +1060,9 @@
     margin: 16px auto 0;
     width: 280px;
   }
+}
 
+@media (max-width: 600px) {
   #hero-3d {
     width: 120px;
     height: 120px;
