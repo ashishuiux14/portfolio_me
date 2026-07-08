@@ -588,19 +588,24 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
 <section style="padding:0 0 80px;background:var(--white)">
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
-      <!-- PREV placeholder -->
-      <div style="
-        display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:10px;
-        background:var(--surface);border:1px solid var(--border);
+      <!-- PREV -->
+      <a href="/projects/atelier" target="_top" style="
+        display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+        background:var(--surface);border:1px solid var(--border2);
         border-radius:16px;padding:28px 32px;
-        opacity:0.4;
-      ">
+        text-decoration:none;color:var(--text);
+        transition:background 0.2s,border-color 0.2s;
+      " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(37,99,235,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border2)'">
         <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
-        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em;text-align:left">Coming Soon</div>
-        <div style="font-size:13px;color:var(--muted)">More work on the way</div>
-      </div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Atelier</div>
+        <div style="font-size:13px;color:var(--muted)">A second brain for solo architects</div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <span style="font-size:10px;padding:3px 10px;background:var(--cyan-dim);color:var(--cyan);border-radius:100px;border:1px solid rgba(8,145,178,0.3)">UX Research</span>
+          <span style="font-size:10px;padding:3px 10px;background:var(--white);color:var(--muted);border-radius:100px;border:1px solid var(--bordergray)">System Design</span>
+        </div>
+      </a>
       <!-- NEXT -->
-      <a href="/projects/ev-trip-intelligence" target="_top" style="
+      <a href="/projects/3d-hub" target="_top" style="
         display:flex;flex-direction:column;align-items:flex-end;gap:10px;
         background:var(--surface);border:1px solid var(--border2);
         border-radius:16px;padding:28px 32px;
@@ -608,11 +613,11 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
         transition:background 0.2s,border-color 0.2s;
       " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(37,99,235,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border2)'">
         <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
-        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Voltro EV Trip</div>
-        <div style="font-size:13px;color:var(--muted)">Designing trust in EV mobility</div>
+        <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">3D Hub Social</div>
+        <div style="font-size:13px;color:var(--muted)">Connecting maker ecosystems</div>
         <div style="display:flex;gap:8px;margin-top:4px">
           <span style="font-size:10px;padding:3px 10px;background:var(--cyan-dim);color:var(--cyan);border-radius:100px;border:1px solid rgba(8,145,178,0.3)">UI/UX</span>
-          <span style="font-size:10px;padding:3px 10px;background:var(--white);color:var(--muted);border-radius:100px;border:1px solid var(--bordergray)">Mobile + In-Car</span>
+          <span style="font-size:10px;padding:3px 10px;background:var(--white);color:var(--muted);border-radius:100px;border:1px solid var(--bordergray)">Social Network</span>
         </div>
       </a>
     </div>
