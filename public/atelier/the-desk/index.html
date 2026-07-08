@@ -206,7 +206,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
-  }
+  *, *::before, *::after { cursor: none !important; }
 </style>
 </head>
 <body>
@@ -526,6 +526,9 @@
     document.getElementById('headline').innerHTML =
       `Good morning, Rajat. <em>${stuckWord.charAt(0).toUpperCase() + stuckWord.slice(1)} things are stuck</em> — <span class="hot-n">${hotWord}</span> are getting old<span style="color: var(--rust);">.</span>`;
   }
+  document.addEventListener('mousemove', function(e) {
+    window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
+  });
 </script>
 
 </body>

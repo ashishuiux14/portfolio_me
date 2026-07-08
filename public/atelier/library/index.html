@@ -126,6 +126,7 @@
     .stats { gap: 28px; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  *, *::before, *::after { cursor: none !important; }
 </style>
 </head>
 <body>
@@ -234,6 +235,9 @@
       activeFilter = chip.dataset.f;
       apply();
     });
+  });
+  document.addEventListener('mousemove', function(e) {
+    window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
   });
 </script>
 

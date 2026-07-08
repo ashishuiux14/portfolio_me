@@ -184,6 +184,7 @@
     .board { min-height: 720px; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  *, *::before, *::after { cursor: none !important; }
 </style>
 </head>
 <body>
@@ -375,6 +376,9 @@
       tab.classList.add('on');
       document.getElementById(tab.dataset.panel).classList.add('on');
     });
+  });
+  document.addEventListener('mousemove', function(e) {
+    window.parent.postMessage({ type: 'iframe-mousemove', clientX: e.clientX, clientY: e.clientY }, '*');
   });
 </script>
 
