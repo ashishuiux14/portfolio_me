@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — Mehta House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --paper: #fafaf7;
+    --paper-raise: #ffffff;
+    --ink: #141310;
+    --ink-soft: #55524b;
+    --ink-faint: #8c897f;
+    --hairline: #e6e4dc;
+    --hairline-soft: #f0eee7;
+    --rust: #c8553d;
+    --amber: #b8843a;
+    --amber-bg: #f7efe0;
+    --moss: #5a7a3a;
+    --sticky: #f5e8c8;
+  }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--hairline);
+    position: sticky; top: 0; background: rgba(250,250,247,0.92); backdrop-filter: blur(10px); z-index: 50;
+  }
+  .nav-left { display: flex; align-items: center; gap: 20px; }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 21px; }
+  .logo::after { content: '.'; color: var(--rust); }
+  .crumb { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+  .crumb b { color: var(--ink); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .firm { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #c8553d, #8a3a26); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  .head { max-width: 1100px; margin: 0 auto; padding: 30px 28px 0; }
+  .prj-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--rust); margin-bottom: 10px; }
+  h1 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.02em; }
+  h1 em { font-style: italic; color: var(--ink-soft); }
+  .prj-sub { margin-top: 6px; font-size: 13px; color: var(--ink-faint); }
+  .prj-sub b { color: var(--rust); font-weight: 600; }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 2px; margin-top: 24px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .tab {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 11px 18px; color: var(--ink-faint); cursor: pointer; border: none; background: none;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 150ms;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.on { color: var(--ink); border-bottom-color: var(--rust); }
+  .tab .n { color: var(--rust); margin-left: 4px; }
+
+  .panel-wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px 80px; }
+  .panel { display: none; padding-top: 28px; }
+  .panel.on { display: block; animation: fadeUp 350ms cubic-bezier(0.2, 0.7, 0.3, 1); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ── Moodboard panel ── */
+  .board {
+    position: relative;
+    background:
+      linear-gradient(to right, rgba(20,19,16,0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(20,19,16,0.035) 1px, transparent 1px),
+      var(--paper);
+    background-size: 20px 20px;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    min-height: 520px;
+    overflow: hidden;
+  }
+  .pin {
+    position: absolute;
+    background: var(--paper-raise);
+    border: 1px solid var(--ink);
+    padding: 10px;
+    box-shadow: 3px 4px 0 rgba(20, 19, 16, 0.08);
+    cursor: grab;
+    transition: transform 200ms cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 200ms, z-index 0ms;
+    animation: pinIn 500ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  }
+  @keyframes pinIn { from { opacity: 0; transform: scale(0.94) var(--rot, rotate(0deg)); } to { opacity: 1; transform: scale(1) var(--rot, rotate(0deg)); } }
+  .pin:hover {
+    transform: scale(1.04) rotate(0deg) !important;
+    box-shadow: 6px 10px 24px rgba(20, 19, 16, 0.18);
+    z-index: 20;
+  }
+  .pin .plabel { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .pin .who {
+    width: 16px; height: 16px; border-radius: 50%; font-size: 7px; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .w1 { background: #c8553d; } .w2 { background: #4a6d8c; } .w3 { background: #5a7a3a; } .w4 { background: #b8843a; }
+  .pin .pimg { width: 100%; margin-bottom: 7px; }
+  .pin .ptitle { font-family: 'Instrument Serif', serif; font-size: 13px; line-height: 1.15; }
+  .pin .pmeta { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: var(--ink-faint); margin-top: 4px; }
+
+  .pin.sticky-note { background: var(--sticky); border-color: #d9c48f; }
+  .pin.sticky-note .ptitle { font-style: italic; font-size: 13.5px; }
+
+  .swatch-row { display: grid; grid-template-columns: repeat(5, 1fr); height: 44px; margin-bottom: 7px; }
+  .approved-tag {
+    position: absolute; top: -9px; right: 10px;
+    background: var(--moss); color: #fff;
+    font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 3px 8px;
+  }
+  .pending-tag {
+    position: absolute; top: -9px; right: 10px;
+    background: var(--rust); color: #fff;
+    font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 3px 8px;
+  }
+
+  .board-toolbar {
+    display: flex; gap: 8px; margin-bottom: 18px; align-items: center;
+  }
+  .add-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 8px 16px; border-radius: 100px; background: var(--ink); color: var(--paper); border: none; cursor: pointer;
+    transition: background 150ms;
+  }
+  .add-btn:hover { background: var(--rust); }
+  .board-hint { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* ── Decisions panel ── */
+  .decision {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;
+    padding: 16px 4px; border-bottom: 1px solid var(--hairline-soft);
+  }
+  .d-swatch { width: 44px; height: 44px; border: 1px solid var(--ink); }
+  .d-what { font-family: 'Instrument Serif', serif; font-size: 18px; }
+  .d-meta { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  .d-status {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 100px;
+  }
+  .d-status.approved { background: #ecf1e3; color: var(--moss); }
+  .d-status.pending { background: #faeae5; color: var(--rust); }
+  .d-status.revisit { background: var(--amber-bg); color: var(--amber); }
+
+  /* ── Drawings panel ── */
+  .drawing {
+    display: grid; grid-template-columns: 52px 1fr auto auto; gap: 16px; align-items: center;
+    padding: 14px 4px; border-bottom: 1px solid var(--hairline-soft);
+  }
+  .dwg-icon {
+    width: 52px; height: 64px; border: 1px solid var(--ink); background: var(--paper-raise);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--ink-faint);
+    position: relative;
+  }
+  .dwg-icon::after {
+    content: ''; position: absolute; top: 6px; left: 6px; right: 6px; height: 1px; background: var(--hairline);
+    box-shadow: 0 5px 0 var(--hairline), 0 10px 0 var(--hairline), 0 15px 0 var(--hairline);
+  }
+  .dwg-icon b { position: relative; z-index: 1; background: var(--paper-raise); padding: 1px 3px; color: var(--ink-soft); font-weight: 500; }
+  .dwg-name { font-family: 'Instrument Serif', serif; font-size: 17px; }
+  .dwg-meta { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  .dwg-meta b { color: var(--rust); font-weight: 600; }
+  .ver {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+    background: var(--ink); color: var(--paper); border-radius: 100px; padding: 4px 11px;
+  }
+  .ver.old { background: var(--hairline-soft); color: var(--ink-faint); text-decoration: line-through; }
+  .sent-to { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-faint); text-align: right; line-height: 1.5; }
+  .sent-to b { color: var(--moss); font-weight: 500; display: block; }
+  .sent-to b.warn { color: var(--rust); }
+
+  @media (max-width: 720px) {
+    .nav { padding: 12px 16px; }
+    .head, .panel-wrap { padding-left: 16px; padding-right: 16px; }
+    .crumb { display: none; }
+    .board { min-height: 720px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <span class="logo">Atelier</span>
+    <span class="crumb">Canvas / <b>Mehta House</b></span>
+  </div>
+  <div class="nav-right">
+    <span class="firm">Sharma &amp; Associates</span>
+    <div class="avatar">RS</div>
+  </div>
+</nav>
+
+<div class="head">
+  <div class="prj-meta">PRJ-021 · Residential · Koregaon Park, Pune</div>
+  <h1>Mehta House<em>.</em></h1>
+  <p class="prj-sub">Phase: material decisions · Client meeting <b>today, 4 PM</b> · Tile decision open for 12 days</p>
+
+  <div class="tabs">
+    <button class="tab on" data-panel="moodboard">Moodboard <span class="n">7</span></button>
+    <button class="tab" data-panel="decisions">Decisions <span class="n">5</span></button>
+    <button class="tab" data-panel="drawings">Drawings <span class="n">4</span></button>
+  </div>
+</div>
+
+<div class="panel-wrap">
+
+  <!-- MOODBOARD PANEL -->
+  <div class="panel on" id="moodboard">
+    <div class="board-toolbar">
+      <button class="add-btn">+ Pin something</button>
+      <span class="board-hint">7 pins · 4 contributors · updated 2h ago</span>
+    </div>
+    <div class="board">
+
+      <div class="pin" style="--rot: rotate(-1.2deg); transform: rotate(-1.2deg); top: 4%; left: 3%; width: 24%; animation-delay: 60ms;">
+        <div class="plabel">REF · LIVING <span class="who w2">AK</span></div>
+        <div class="pimg" style="aspect-ratio: 4/3; background: linear-gradient(135deg, #ede4d3 30%, #b86b4b);"></div>
+        <div class="ptitle">Warm modernism reference</div>
+        <div class="pmeta">Pinned 6 May</div>
+      </div>
+
+      <div class="pin" style="--rot: rotate(0.8deg); transform: rotate(0.8deg); top: 7%; left: 31%; width: 21%; animation-delay: 120ms;">
+        <div class="plabel">BATH · OPTION A <span class="who w1">RS</span></div>
+        <div class="pimg" style="aspect-ratio: 4/3; background: linear-gradient(135deg, #ede4d3, #d4b896 70%);"></div>
+        <div class="ptitle">Beige large-format tile</div>
+        <div class="pmeta">Awaiting client choice</div>
+        <span class="pending-tag">Pending</span>
+      </div>
+
+      <div class="pin" style="--rot: rotate(-0.6deg); transform: rotate(-0.6deg); top: 5%; right: 4%; width: 22%; animation-delay: 180ms;">
+        <div class="plabel">PALETTE <span class="who w1">RS</span></div>
+        <div class="swatch-row">
+          <div style="background:#ede4d3"></div><div style="background:#d4b896"></div><div style="background:#c8553d"></div><div style="background:#4a3528"></div><div style="background:#8a9a7b"></div>
+        </div>
+        <div class="ptitle">Five earth tones</div>
+        <div class="pmeta">Approved 2 May</div>
+        <span class="approved-tag">Approved</span>
+      </div>
+
+      <div class="pin" style="--rot: rotate(0.5deg); transform: rotate(0.5deg); top: 40%; left: 6%; width: 27%; animation-delay: 240ms;">
+        <div class="plabel">KITCHEN <span class="who w3">PM</span></div>
+        <div class="pimg" style="aspect-ratio: 16/10; background: linear-gradient(135deg, #4a3528 40%, #ede4d3);"></div>
+        <div class="ptitle">Walnut cabinetry, brass pulls</div>
+        <div class="pmeta">Client loved this one</div>
+      </div>
+
+      <div class="pin sticky-note" style="--rot: rotate(1.4deg); transform: rotate(1.4deg); top: 45%; left: 38%; width: 23%; animation-delay: 300ms;">
+        <div class="plabel">NOTE <span class="who w2">AK</span></div>
+        <div class="ptitle">"Mrs. Mehta wants a reading nook near the bay window. Don't forget."</div>
+        <div class="pmeta">Sticky · 8 May</div>
+      </div>
+
+      <div class="pin" style="--rot: rotate(-0.9deg); transform: rotate(-0.9deg); top: 42%; right: 5%; width: 24%; animation-delay: 360ms;">
+        <div class="plabel">BATH · OPTION B <span class="who w1">RS</span></div>
+        <div class="pimg" style="aspect-ratio: 4/3; background: linear-gradient(160deg, #d9d5cc, #8c897f 80%);"></div>
+        <div class="ptitle">Grey stone-look tile</div>
+        <div class="pmeta">Awaiting client choice</div>
+        <span class="pending-tag">Pending</span>
+      </div>
+
+      <div class="pin" style="--rot: rotate(0.7deg); transform: rotate(0.7deg); bottom: 4%; left: 24%; width: 26%; animation-delay: 420ms;">
+        <div class="plabel">MATERIALS <span class="who w4">VN</span></div>
+        <div class="swatch-row" style="grid-template-columns: repeat(6, 1fr);">
+          <div style="background:#b88c5e"></div><div style="background:#ede4d3"></div><div style="background:#8b7242"></div><div style="background:#f5e8c8"></div><div style="background:#c8553d"></div><div style="background:#3a3530"></div>
+        </div>
+        <div class="ptitle">Sample set · site box 2</div>
+        <div class="pmeta">Physical samples with client</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DECISIONS PANEL -->
+  <div class="panel" id="decisions">
+    <div class="decision">
+      <div class="d-swatch" style="background: linear-gradient(135deg, #ede4d3, #d4b896);"></div>
+      <div>
+        <div class="d-what">Bathroom tile — Option A vs B</div>
+        <div class="d-meta">Sent to client 30 Apr · viewed both · no reply · blocks plumbing layout</div>
+      </div>
+      <span class="d-status pending">Pending · 12d</span>
+    </div>
+    <div class="decision">
+      <div class="d-swatch" style="background: linear-gradient(135deg, #4a3528, #b88c5e);"></div>
+      <div>
+        <div class="d-what">Kitchen cabinetry — walnut + brass</div>
+        <div class="d-meta">Approved in person, 28 Apr · vendor quote requested</div>
+      </div>
+      <span class="d-status approved">Approved</span>
+    </div>
+    <div class="decision">
+      <div class="d-swatch" style="background: linear-gradient(135deg, #ede4d3 30%, #c8553d);"></div>
+      <div>
+        <div class="d-what">Color palette — five earth tones</div>
+        <div class="d-meta">Approved 2 May · logged with reference images</div>
+      </div>
+      <span class="d-status approved">Approved</span>
+    </div>
+    <div class="decision">
+      <div class="d-swatch" style="background: linear-gradient(135deg, #8a9a7b, #ede4d3);"></div>
+      <div>
+        <div class="d-what">Living room flooring — engineered oak</div>
+        <div class="d-meta">Approved 22 Apr · client asked to "maybe see one more option" on 5 May</div>
+      </div>
+      <span class="d-status revisit">Revisit flagged</span>
+    </div>
+    <div class="decision">
+      <div class="d-swatch" style="background: linear-gradient(135deg, #d9d5cc, #55524b);"></div>
+      <div>
+        <div class="d-what">Main door — teak, carved panel</div>
+        <div class="d-meta">Approved 18 Apr · carpenter briefed</div>
+      </div>
+      <span class="d-status approved">Approved</span>
+    </div>
+  </div>
+
+  <!-- DRAWINGS PANEL -->
+  <div class="panel" id="drawings">
+    <div class="drawing">
+      <div class="dwg-icon"><b>DWG</b></div>
+      <div>
+        <div class="dwg-name">Plumbing layout — first floor</div>
+        <div class="dwg-meta"><b>Blocked</b> — waiting on tile decision to finalize niche positions</div>
+      </div>
+      <span class="ver">v3 · draft</span>
+      <div class="sent-to"><b class="warn">Not sent</b>held for decision</div>
+    </div>
+    <div class="drawing">
+      <div class="dwg-icon"><b>DWG</b></div>
+      <div>
+        <div class="dwg-name">Electrical layout — full house</div>
+        <div class="dwg-meta">Revised after client walkthrough · switch positions updated</div>
+      </div>
+      <span class="ver">v4</span>
+      <div class="sent-to"><b>On site</b>sent 9 May · site confirmed v4</div>
+    </div>
+    <div class="drawing">
+      <div class="dwg-icon"><b>DWG</b></div>
+      <div>
+        <div class="dwg-name">Kitchen elevations</div>
+        <div class="dwg-meta">Walnut cabinetry detail · brass pull spec attached</div>
+      </div>
+      <span class="ver">v2</span>
+      <div class="sent-to"><b>With carpenter</b>sent 6 May</div>
+    </div>
+    <div class="drawing">
+      <div class="dwg-icon"><b>DWG</b></div>
+      <div>
+        <div class="dwg-name">Working plan — ground floor</div>
+        <div class="dwg-meta">Superseded — v5 replaced this after column shift</div>
+      </div>
+      <span class="ver old">v4</span>
+      <div class="sent-to"><b>Archived</b>site has v5 ✓</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('on'));
+      panels.forEach(p => p.classList.remove('on'));
+      tab.classList.add('on');
+      document.getElementById(tab.dataset.panel).classList.add('on');
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — The Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --paper: #fafaf7;
+    --paper-raise: #ffffff;
+    --ink: #141310;
+    --ink-soft: #55524b;
+    --ink-faint: #8c897f;
+    --hairline: #e6e4dc;
+    --hairline-soft: #f0eee7;
+    --rust: #c8553d;
+    --rust-bg: #faeae5;
+    --amber: #b8843a;
+    --amber-bg: #f7efe0;
+    --steel: #4a6d8c;
+    --steel-bg: #e9eff4;
+    --plum: #7a5c86;
+    --plum-bg: #f0eaf3;
+    --moss: #5a7a3a;
+    --moss-bg: #ecf1e3;
+  }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  /* ─── Top nav ─── */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--hairline);
+    position: sticky; top: 0; background: rgba(250,250,247,0.92); backdrop-filter: blur(10px); z-index: 50;
+  }
+  .nav-left { display: flex; align-items: center; gap: 28px; }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 21px; letter-spacing: -0.01em; }
+  .logo::after { content: '.'; color: var(--rust); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint); text-decoration: none; padding: 7px 12px; border-radius: 100px; transition: all 150ms;
+  }
+  .nav-link:hover { color: var(--ink); background: var(--hairline-soft); }
+  .nav-link.on { color: var(--paper); background: var(--ink); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .firm {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint);
+  }
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, #c8553d, #8a3a26);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
+  }
+
+  /* ─── Header / brief ─── */
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 34px 28px 80px; }
+  .brief-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rust); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brief-label::before { content: ''; width: 26px; height: 1px; background: var(--rust); }
+  h1 {
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: clamp(30px, 4.4vw, 46px); line-height: 1.08; letter-spacing: -0.02em;
+    max-width: 780px;
+  }
+  h1 em { font-style: italic; color: var(--ink-soft); }
+  h1 .hot-n { color: var(--rust); }
+  .sub {
+    margin-top: 10px; font-size: 14px; color: var(--ink-faint);
+  }
+  .sub strong { color: var(--ink-soft); font-weight: 600; }
+
+  /* ─── Filters ─── */
+  .filters {
+    display: flex; gap: 8px; margin: 26px 0 30px; flex-wrap: wrap;
+  }
+  .chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 8px 15px; border-radius: 100px; border: 1px solid var(--hairline);
+    background: var(--paper-raise); color: var(--ink-soft); cursor: pointer; transition: all 160ms;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .chip .n {
+    background: var(--hairline-soft); color: var(--ink-soft);
+    border-radius: 100px; padding: 1px 7px; font-size: 9px;
+  }
+  .chip.on .n { background: rgba(255,255,255,0.22); color: #fff; }
+
+  /* ─── Lanes ─── */
+  .lane { margin-bottom: 34px; }
+  .lane-head {
+    display: flex; align-items: baseline; gap: 12px;
+    padding-bottom: 10px; margin-bottom: 4px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .lane-title { font-family: 'Instrument Serif', serif; font-size: 22px; letter-spacing: -0.01em; }
+  .lane-count {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+    color: #fff; border-radius: 100px; padding: 2px 9px; letter-spacing: 0.08em;
+  }
+  .lane-hint { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+
+  .lane.client .lane-count { background: var(--rust); }
+  .lane.municipal .lane-count { background: var(--amber); }
+  .lane.consultant .lane-count { background: var(--steel); }
+  .lane.vendor .lane-count { background: var(--plum); }
+  .lane.us .lane-count { background: var(--moss); }
+
+  /* ─── Cards ─── */
+  .card {
+    display: grid; grid-template-columns: 4px 1fr auto auto; gap: 16px; align-items: center;
+    padding: 15px 16px 15px 0; border-bottom: 1px solid var(--hairline-soft);
+    cursor: pointer; transition: background 150ms, transform 150ms, opacity 300ms;
+    animation: cardIn 500ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .card:hover { background: var(--paper-raise); }
+  .card.leaving { opacity: 0; transform: translateX(24px); }
+  .card .edge { width: 4px; height: 46px; border-radius: 100px; }
+  .lane.client .edge { background: var(--rust); }
+  .lane.municipal .edge { background: var(--amber); }
+  .lane.consultant .edge { background: var(--steel); }
+  .lane.vendor .edge { background: var(--plum); }
+  .lane.us .edge { background: var(--moss); }
+
+  .card-main { min-width: 0; }
+  .card-what {
+    font-family: 'Instrument Serif', serif; font-size: 18px; letter-spacing: -0.01em; line-height: 1.2;
+  }
+  .card-what .prj { color: var(--ink-faint); }
+  .card-why { font-size: 12.5px; color: var(--ink-faint); margin-top: 3px; }
+  .card-why strong { color: var(--rust); font-weight: 600; }
+
+  .blocks {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.06em;
+    color: var(--ink-faint); text-align: right; line-height: 1.5; white-space: nowrap;
+  }
+  .blocks b { color: var(--ink-soft); font-weight: 500; display: block; }
+
+  .age {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
+    border-radius: 100px; padding: 5px 12px; min-width: 52px; text-align: center;
+  }
+  .age.fresh { background: var(--hairline-soft); color: var(--ink-soft); }
+  .age.warm { background: var(--amber-bg); color: var(--amber); }
+  .age.hot { background: var(--rust); color: #fff; }
+
+  /* Expanded panel */
+  .card-detail {
+    grid-column: 1 / -1;
+    display: none;
+    padding: 4px 0 14px 20px;
+  }
+  .card.open { background: var(--paper-raise); }
+  .card.open .card-detail { display: block; animation: cardIn 300ms cubic-bezier(0.2, 0.7, 0.3, 1); }
+  .detail-line { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; max-width: 620px; }
+  .detail-line em { font-style: italic; }
+  .actions { display: flex; gap: 8px; }
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 9px 16px; border-radius: 100px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+    cursor: pointer; transition: all 150ms;
+  }
+  .btn:hover { background: var(--rust); border-color: var(--rust); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn.ghost:hover { background: var(--hairline-soft); color: var(--ink); border-color: var(--ink); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--ink); color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+    padding: 12px 22px; border-radius: 100px; opacity: 0;
+    transition: all 350ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    z-index: 100; pointer-events: none;
+    box-shadow: 0 12px 32px rgba(20, 19, 16, 0.25);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast b { color: #e8a08e; font-weight: 500; }
+
+  /* Empty state */
+  .empty {
+    display: none;
+    text-align: center; padding: 60px 20px;
+  }
+  .empty.show { display: block; animation: cardIn 400ms; }
+  .empty-serif { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 26px; color: var(--ink-soft); }
+  .empty-sub { font-size: 13px; color: var(--ink-faint); margin-top: 8px; }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 24px 16px 64px; }
+    .nav { padding: 12px 16px; }
+    .nav-links { display: none; }
+    .blocks { display: none; }
+    .card { grid-template-columns: 4px 1fr auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <span class="logo">Atelier</span>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Canvas</a>
+      <a class="nav-link on" href="#">The Desk</a>
+      <a class="nav-link" href="#">Library</a>
+      <a class="nav-link" href="#">People</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="firm">Sharma &amp; Associates</span>
+    <div class="avatar">RS</div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="brief-label">The Desk · Tuesday, 12 May</div>
+  <h1 id="headline">Good morning, Rajat. <em>Nine things are stuck</em> — <span class="hot-n">four</span> are getting old<span style="color: var(--rust);">.</span></h1>
+  <p class="sub">Sorted by who you're waiting on. Oldest first. <strong>Two client decisions</strong> are blocking site work this week.</p>
+
+  <div class="filters" id="filters">
+    <button class="chip on" data-lane="all">Everything <span class="n">9</span></button>
+    <button class="chip" data-lane="client">Client <span class="n">3</span></button>
+    <button class="chip" data-lane="municipal">Municipal <span class="n">2</span></button>
+    <button class="chip" data-lane="consultant">Consultant <span class="n">2</span></button>
+    <button class="chip" data-lane="vendor">Vendor <span class="n">1</span></button>
+    <button class="chip" data-lane="us">Us <span class="n">1</span></button>
+  </div>
+
+  <!-- CLIENT LANE -->
+  <section class="lane client" data-lane="client">
+    <div class="lane-head">
+      <span class="lane-title">Waiting on the client</span>
+      <span class="lane-count">3</span>
+      <span class="lane-hint">Blocking 5 downstream tasks</span>
+    </div>
+
+    <div class="card" style="animation-delay: 60ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Mehta House ·</span> Bathroom tile decision</div>
+        <div class="card-why">Sent on WhatsApp, 12 days ago. No reply. <strong>Blocks plumbing layout.</strong></div>
+      </div>
+      <div class="blocks"><b>Blocks</b>2 drawings · site visit</div>
+      <div class="age hot">12d</div>
+      <div class="card-detail">
+        <p class="detail-line">Options A &amp; B shared with Mrs. Mehta on 30 Apr. She viewed both. Site team asked twice. <em>Plumber booked for the 19th — decision needed by the 16th or he reschedules.</em></p>
+        <div class="actions">
+          <button class="btn" data-toast="Reminder queued for <b>Mrs. Mehta</b> — polite nudge, WhatsApp">Nudge on WhatsApp</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay: 120ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Aroma Cafe ·</span> Counter granite sign-off</div>
+        <div class="card-why">Client wants their partner to see the sample first.</div>
+      </div>
+      <div class="blocks"><b>Blocks</b>fabrication order</div>
+      <div class="age warm">5d</div>
+      <div class="card-detail">
+        <p class="detail-line">Sample delivered to their office on the 7th. Fabricator quote holds until the 20th.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Reminder queued for <b>Aroma Cafe</b> — WhatsApp">Nudge on WhatsApp</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay: 180ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Khanna Villa ·</span> Facade material approval</div>
+        <div class="card-why">Moodboard shared yesterday. Fresh — no nudge yet.</div>
+      </div>
+      <div class="blocks"><b>Blocks</b>elevation drawings</div>
+      <div class="age fresh">1d</div>
+      <div class="card-detail">
+        <p class="detail-line">Three options pinned in the project moodboard. Client said they'd revert by Friday.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Reminder queued for <b>Mr. Khanna</b> — WhatsApp">Nudge on WhatsApp</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MUNICIPAL LANE -->
+  <section class="lane municipal" data-lane="municipal">
+    <div class="lane-head">
+      <span class="lane-title">Waiting on municipal</span>
+      <span class="lane-count">2</span>
+      <span class="lane-hint">Avg. wait this year: 24 days</span>
+    </div>
+
+    <div class="card" style="animation-delay: 240ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Reddy Residence ·</span> BBMP plan sanction</div>
+        <div class="card-why">Filed via liaison agent. Status: <strong>"in process," three weeks running.</strong></div>
+      </div>
+      <div class="blocks"><b>Blocks</b>everything on site</div>
+      <div class="age hot">21d</div>
+      <div class="card-detail">
+        <p class="detail-line">Agent says the file moved to the senior officer's desk on the 2nd. <em>Client calls every Monday asking for news.</em></p>
+        <div class="actions">
+          <button class="btn" data-toast="Follow-up logged with <b>liaison agent</b> — call scheduled">Call the agent</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay: 300ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Iyer House ·</span> Completion certificate</div>
+        <div class="card-why">Reopened for sanction. Inspector visit pending.</div>
+      </div>
+      <div class="blocks"><b>Blocks</b>final handover</div>
+      <div class="age warm">8d</div>
+      <div class="card-detail">
+        <p class="detail-line">Inspection slot requested. These usually land within two weeks of request.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Follow-up logged with <b>ward office</b>">Follow up</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTANT LANE -->
+  <section class="lane consultant" data-lane="consultant">
+    <div class="lane-head">
+      <span class="lane-title">Waiting on consultant</span>
+      <span class="lane-count">2</span>
+      <span class="lane-hint">1 repeat offender</span>
+    </div>
+
+    <div class="card" style="animation-delay: 360ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Sethi Residence ·</span> Revised structural drawings</div>
+        <div class="card-why">Patel &amp; Co promised "by Monday." <strong>Three Mondays ago.</strong></div>
+      </div>
+      <div class="blocks"><b>Blocks</b>slab casting · 4 people idle</div>
+      <div class="age hot">9d</div>
+      <div class="card-detail">
+        <p class="detail-line">Third delay on this project. Contractor's team is on standby — <em>every idle day is billed.</em> Past history with Patel &amp; Co: average 6 days late across 4 deliverables.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Escalation drafted for <b>Patel &amp; Co</b> — review before sending">Escalate</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay: 420ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Vyom HQ ·</span> HVAC load calculations</div>
+        <div class="card-why">MEP consultant confirmed receipt. Due this Thursday.</div>
+      </div>
+      <div class="blocks"><b>Blocks</b>ceiling coordination</div>
+      <div class="age fresh">2d</div>
+      <div class="card-detail">
+        <p class="detail-line">On schedule. No action needed — tracked so it doesn't quietly slip.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Reminder set for <b>Thursday 10 AM</b>">Remind me Thursday</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VENDOR LANE -->
+  <section class="lane vendor" data-lane="vendor">
+    <div class="lane-head">
+      <span class="lane-title">Waiting on vendor</span>
+      <span class="lane-count">1</span>
+    </div>
+
+    <div class="card" style="animation-delay: 480ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Aroma Cafe ·</span> Pendant light samples</div>
+        <div class="card-why">Importer says stock cleared customs. Delivery "this week."</div>
+      </div>
+      <div class="blocks"><b>Blocks</b>ceiling mock-up</div>
+      <div class="age warm">6d</div>
+      <div class="card-detail">
+        <p class="detail-line">Backup option (local fabricator) identified if samples slip past the 18th.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Reminder queued for <b>vendor</b> — WhatsApp">Nudge vendor</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- US LANE -->
+  <section class="lane us" data-lane="us">
+    <div class="lane-head">
+      <span class="lane-title">Waiting on us</span>
+      <span class="lane-count">1</span>
+      <span class="lane-hint">The honest column</span>
+    </div>
+
+    <div class="card" style="animation-delay: 540ms;">
+      <div class="edge"></div>
+      <div class="card-main">
+        <div class="card-what"><span class="prj">Kapoor Farmhouse ·</span> Fee proposal revision</div>
+        <div class="card-why">Client asked for a phased breakup. Sitting in your drafts.</div>
+      </div>
+      <div class="blocks"><b>Blocks</b>project kickoff</div>
+      <div class="age warm">4d</div>
+      <div class="card-detail">
+        <p class="detail-line"><em>The column nobody else shows you.</em> The client is waiting on you here — a warm lead cooling by the day.</p>
+        <div class="actions">
+          <button class="btn" data-toast="Draft opened — <b>Kapoor fee proposal</b>">Open the draft</button>
+          <button class="btn ghost" data-resolve>Mark resolved</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="empty" id="empty">
+    <div class="empty-serif">Nothing stuck in this lane.</div>
+    <div class="empty-sub">Enjoy it while it lasts.</div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Filter chips ──
+  const chips = document.querySelectorAll('.chip');
+  const lanes = document.querySelectorAll('.lane');
+  const empty = document.getElementById('empty');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      const key = chip.dataset.lane;
+      let visibleCards = 0;
+      lanes.forEach(l => {
+        const cardCount = l.querySelectorAll('.card').length;
+        const show = (key === 'all' || l.dataset.lane === key) && cardCount > 0;
+        l.style.display = show ? '' : 'none';
+        if (show) visibleCards += cardCount;
+      });
+      empty.classList.toggle('show', visibleCards === 0);
+    });
+  });
+
+  // ── Expand cards ──
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.btn')) return;
+      const wasOpen = card.classList.contains('open');
+      document.querySelectorAll('.card.open').forEach(c => c.classList.remove('open'));
+      if (!wasOpen) card.classList.add('open');
+    });
+  });
+
+  // ── Toast ──
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(html) {
+    toast.innerHTML = html;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+  document.querySelectorAll('[data-toast]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showToast(btn.dataset.toast);
+    });
+  });
+
+  // ── Resolve ──
+  const words = ['zero','one','two','three','four','five','six','seven','eight','nine'];
+  document.querySelectorAll('[data-resolve]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.card');
+      const lane = btn.closest('.lane');
+      card.classList.add('leaving');
+      showToast('Resolved — <b>moved to the project log</b>');
+      setTimeout(() => {
+        card.remove();
+        const count = lane.querySelectorAll('.card').length;
+        lane.querySelector('.lane-count').textContent = count;
+        if (count === 0) lane.style.display = 'none';
+        updateTotals();
+      }, 320);
+    });
+  });
+
+  function updateTotals() {
+    const all = document.querySelectorAll('.card').length;
+    const hot = document.querySelectorAll('.age.hot').length;
+    document.querySelector('.chip[data-lane="all"] .n').textContent = all;
+    lanes.forEach(l => {
+      const chipN = document.querySelector(`.chip[data-lane="${l.dataset.lane}"] .n`);
+      if (chipN) chipN.textContent = l.querySelectorAll('.card').length;
+    });
+    const stuckWord = words[Math.min(all, 9)];
+    const hotWord = words[Math.min(hot, 9)];
+    document.getElementById('headline').innerHTML =
+      `Good morning, Rajat. <em>${stuckWord.charAt(0).toUpperCase() + stuckWord.slice(1)} things are stuck</em> — <span class="hot-n">${hotWord}</span> are getting old<span style="color: var(--rust);">.</span>`;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — Canvas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --paper: #fafaf7;
+    --paper-raise: #ffffff;
+    --ink: #141310;
+    --ink-soft: #55524b;
+    --ink-faint: #8c897f;
+    --hairline: #e6e4dc;
+    --hairline-soft: #f0eee7;
+    --rust: #c8553d;
+    --amber: #b8843a;
+    --amber-bg: #f7efe0;
+    --moss: #5a7a3a;
+    --moss-bg: #ecf1e3;
+    --rust-bg: #faeae5;
+  }
+  html, body {
+    background:
+      linear-gradient(to right, rgba(20,19,16,0.028) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(20,19,16,0.028) 1px, transparent 1px),
+      var(--paper);
+    background-size: 22px 22px;
+    color: var(--ink); font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased;
+  }
+
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--hairline);
+    position: sticky; top: 0; background: rgba(250,250,247,0.92); backdrop-filter: blur(10px); z-index: 50;
+  }
+  .nav-left { display: flex; align-items: center; gap: 28px; }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 21px; }
+  .logo::after { content: '.'; color: var(--rust); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint); text-decoration: none; padding: 7px 12px; border-radius: 100px; transition: all 150ms;
+  }
+  .nav-link:hover { color: var(--ink); background: var(--hairline-soft); }
+  .nav-link.on { color: var(--paper); background: var(--ink); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .firm { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, #c8553d, #8a3a26);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 36px 28px 80px; }
+  .brief-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rust); margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .brief-label::before { content: ''; width: 26px; height: 1px; background: var(--rust); }
+  h1 {
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -0.02em; max-width: 820px;
+  }
+  h1 em { font-style: italic; color: var(--ink-soft); }
+  h1 a { color: var(--rust); text-decoration: none; border-bottom: 2px solid rgba(200, 85, 61, 0.3); transition: border-color 150ms; }
+  h1 a:hover { border-color: var(--rust); }
+
+  .toolbar { display: flex; align-items: center; gap: 8px; margin: 28px 0 32px; flex-wrap: wrap; }
+  .chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 8px 15px; border-radius: 100px; border: 1px solid var(--hairline);
+    background: var(--paper-raise); color: var(--ink-soft); cursor: pointer; transition: all 160ms;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .view-hint { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* ── Cards wall ── */
+  .wall {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .pcard {
+    background: var(--paper-raise);
+    border: 1px solid var(--ink);
+    padding: 20px 20px 16px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 220ms cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 220ms;
+    animation: rise 550ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+    box-shadow: 3px 3px 0 rgba(20, 19, 16, 0.08);
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .pcard:hover {
+    transform: translateY(-5px) rotate(-0.4deg);
+    box-shadow: 6px 10px 0 rgba(20, 19, 16, 0.1);
+  }
+  .pcard.tilt-r:hover { transform: translateY(-5px) rotate(0.4deg); }
+  .pcard.hidden { display: none; }
+
+  .badge {
+    position: absolute; top: -11px; left: 16px;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 4px 10px; color: #fff; font-weight: 500;
+  }
+  .badge.today { background: var(--rust); }
+  .badge.delayed { background: var(--rust); }
+  .badge.ontrack { background: var(--moss); }
+  .badge.waiting { background: var(--amber); }
+
+  .pid { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .pname { font-family: 'Instrument Serif', serif; font-size: 24px; line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .ploc { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-faint); margin-bottom: 16px; }
+
+  .strip { display: flex; gap: 3px; height: 4px; margin-bottom: 14px; }
+  .strip span { flex: 1; background: var(--hairline); border-radius: 100px; }
+  .strip .done { background: var(--ink); }
+  .strip .now-warn { background: var(--rust); }
+  .strip .now-ok { background: var(--moss); }
+
+  .prow { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 5px 0; border-top: 1px solid var(--hairline-soft); }
+  .prow .k { color: var(--ink-faint); letter-spacing: 0.08em; text-transform: uppercase; }
+  .prow .v { color: var(--ink); font-weight: 500; }
+  .prow .v.warn { color: var(--rust); }
+  .prow .v.ok { color: var(--moss); }
+
+  .team { display: flex; margin-top: 12px; }
+  .tdot {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--paper-raise);
+    margin-left: -6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tdot:first-child { margin-left: 0; }
+  .t1 { background: #c8553d; } .t2 { background: #4a6d8c; } .t3 { background: #5a7a3a; } .t4 { background: #b8843a; } .t5 { background: #7a5c86; }
+
+  @media (max-width: 880px) { .wall { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) {
+    .wall { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .wrap { padding: 26px 16px 64px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <span class="logo">Atelier</span>
+    <div class="nav-links">
+      <a class="nav-link on" href="#">Canvas</a>
+      <a class="nav-link" href="#">The Desk</a>
+      <a class="nav-link" href="#">Library</a>
+      <a class="nav-link" href="#">People</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="firm">Sharma &amp; Associates</span>
+    <div class="avatar">RS</div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="brief-label">Canvas · Tuesday, 12 May · 9 live projects</div>
+  <h1>Three decisions <em>pending from you</em>, two sites awaiting drawings, and <a href="#">Mehta House at 4 PM</a> — the tile call is still open<span style="color: var(--rust);">.</span></h1>
+
+  <div class="toolbar">
+    <button class="chip on" data-f="all">All projects</button>
+    <button class="chip" data-f="attention">Needs attention</button>
+    <button class="chip" data-f="ontrack">On track</button>
+    <span class="view-hint">Studio wall view</span>
+  </div>
+
+  <div class="wall">
+
+    <div class="pcard" data-state="attention" style="animation-delay: 40ms;">
+      <span class="badge today">Today · 4 PM</span>
+      <div class="pid">PRJ-021 · Residential</div>
+      <div class="pname">Mehta House</div>
+      <div class="ploc">↳ Koregaon Park, Pune</div>
+      <div class="strip"><span class="done"></span><span class="done"></span><span class="now-warn"></span><span></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Material decisions</span></div>
+      <div class="prow"><span class="k">Stuck</span><span class="v warn">Tile · 12 days</span></div>
+      <div class="prow"><span class="k">Next</span><span class="v">Client · today 4 PM</span></div>
+      <div class="team"><div class="tdot t1">RS</div><div class="tdot t2">AK</div><div class="tdot t3">PM</div></div>
+    </div>
+
+    <div class="pcard tilt-r" data-state="attention" style="animation-delay: 90ms;">
+      <span class="badge delayed">Delayed</span>
+      <div class="pid">PRJ-017 · Bungalow</div>
+      <div class="pname">Sethi Residence</div>
+      <div class="ploc">↳ Bandra West, Mumbai</div>
+      <div class="strip"><span class="done"></span><span class="now-warn"></span><span></span><span></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Structure</span></div>
+      <div class="prow"><span class="k">Stuck</span><span class="v warn">Patel &amp; Co · 9 days</span></div>
+      <div class="prow"><span class="k">Impact</span><span class="v warn">4 people idle</span></div>
+      <div class="team"><div class="tdot t1">RS</div><div class="tdot t4">VN</div></div>
+    </div>
+
+    <div class="pcard" data-state="ontrack" style="animation-delay: 140ms;">
+      <span class="badge ontrack">On track</span>
+      <div class="pid">PRJ-019 · Interior</div>
+      <div class="pname">Aroma Cafe</div>
+      <div class="ploc">↳ Indiranagar, Bangalore</div>
+      <div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="now-ok"></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Execution</span></div>
+      <div class="prow"><span class="k">Next</span><span class="v">Site visit · 14 May</span></div>
+      <div class="prow"><span class="k">Waiting</span><span class="v">Granite sign-off</span></div>
+      <div class="team"><div class="tdot t2">AK</div><div class="tdot t5">SG</div></div>
+    </div>
+
+    <div class="pcard tilt-r" data-state="attention" style="animation-delay: 190ms;">
+      <span class="badge waiting">Waiting · BBMP</span>
+      <div class="pid">PRJ-023 · Residential</div>
+      <div class="pname">Reddy Residence</div>
+      <div class="ploc">↳ Whitefield, Bangalore</div>
+      <div class="strip"><span class="done"></span><span class="done"></span><span class="now-warn"></span><span></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Sanction</span></div>
+      <div class="prow"><span class="k">Stuck</span><span class="v warn">BBMP · 21 days</span></div>
+      <div class="prow"><span class="k">Note</span><span class="v">Client calls Mondays</span></div>
+      <div class="team"><div class="tdot t1">RS</div></div>
+    </div>
+
+    <div class="pcard" data-state="ontrack" style="animation-delay: 240ms;">
+      <span class="badge ontrack">On track</span>
+      <div class="pid">PRJ-025 · Commercial</div>
+      <div class="pname">Vyom HQ</div>
+      <div class="ploc">↳ Hinjewadi, Pune</div>
+      <div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="now-ok"></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Services coord.</span></div>
+      <div class="prow"><span class="k">Next</span><span class="v">HVAC calcs · Thu</span></div>
+      <div class="prow"><span class="k">Health</span><span class="v ok">Ahead of plan</span></div>
+      <div class="team"><div class="tdot t2">AK</div><div class="tdot t3">PM</div><div class="tdot t4">VN</div><div class="tdot t5">SG</div></div>
+    </div>
+
+    <div class="pcard tilt-r" data-state="ontrack" style="animation-delay: 290ms;">
+      <span class="badge ontrack">Fresh</span>
+      <div class="pid">PRJ-026 · Farmhouse</div>
+      <div class="pname">Kapoor Farmhouse</div>
+      <div class="ploc">↳ Karjat, Maharashtra</div>
+      <div class="strip"><span class="now-ok"></span><span></span><span></span><span></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Proposal</span></div>
+      <div class="prow"><span class="k">Waiting</span><span class="v warn">On us · fee revision</span></div>
+      <div class="prow"><span class="k">Note</span><span class="v">Warm lead</span></div>
+      <div class="team"><div class="tdot t1">RS</div></div>
+    </div>
+
+    <div class="pcard" data-state="attention" style="animation-delay: 340ms;">
+      <span class="badge waiting">Client review</span>
+      <div class="pid">PRJ-022 · Villa</div>
+      <div class="pname">Khanna Villa</div>
+      <div class="ploc">↳ Amritsar, Punjab</div>
+      <div class="strip"><span class="done"></span><span class="now-warn"></span><span></span><span></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Facade design</span></div>
+      <div class="prow"><span class="k">Waiting</span><span class="v">Material approval</span></div>
+      <div class="prow"><span class="k">Sent</span><span class="v">Yesterday</span></div>
+      <div class="team"><div class="tdot t3">PM</div><div class="tdot t5">SG</div></div>
+    </div>
+
+    <div class="pcard tilt-r" data-state="ontrack" style="animation-delay: 390ms;">
+      <span class="badge ontrack">On track</span>
+      <div class="pid">PRJ-020 · Interior</div>
+      <div class="pname">Nair Apartment</div>
+      <div class="ploc">↳ Powai, Mumbai</div>
+      <div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="now-ok"></span><span></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Furniture</span></div>
+      <div class="prow"><span class="k">Next</span><span class="v">Vendor quotes · Fri</span></div>
+      <div class="prow"><span class="k">Health</span><span class="v ok">Smooth</span></div>
+      <div class="team"><div class="tdot t4">VN</div><div class="tdot t2">AK</div></div>
+    </div>
+
+    <div class="pcard" data-state="attention" style="animation-delay: 440ms;">
+      <span class="badge waiting">Reopened</span>
+      <div class="pid">PRJ-011 · Residential</div>
+      <div class="pname">Iyer House</div>
+      <div class="ploc">↳ Jayanagar, Bangalore</div>
+      <div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="now-warn"></span></div>
+      <div class="prow"><span class="k">Phase</span><span class="v">Completion cert.</span></div>
+      <div class="prow"><span class="k">Waiting</span><span class="v warn">Inspector · 8 days</span></div>
+      <div class="prow"><span class="k">Type</span><span class="v">Reopened for sanction</span></div>
+      <div class="team"><div class="tdot t1">RS</div><div class="tdot t3">PM</div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.pcard');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      const f = chip.dataset.f;
+      cards.forEach(card => {
+        card.classList.toggle('hidden', f !== 'all' && card.dataset.state !== f);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

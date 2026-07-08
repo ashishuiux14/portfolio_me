@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --paper: #fafaf7;
+    --paper-raise: #ffffff;
+    --ink: #141310;
+    --ink-soft: #55524b;
+    --ink-faint: #8c897f;
+    --hairline: #e6e4dc;
+    --hairline-soft: #f0eee7;
+    --rust: #c8553d;
+    --amber: #b8843a;
+    --moss: #5a7a3a;
+  }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px; border-bottom: 1px solid var(--hairline);
+    position: sticky; top: 0; background: rgba(250,250,247,0.92); backdrop-filter: blur(10px); z-index: 50;
+  }
+  .nav-left { display: flex; align-items: center; gap: 28px; }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 21px; }
+  .logo::after { content: '.'; color: var(--rust); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint); text-decoration: none; padding: 7px 12px; border-radius: 100px; transition: all 150ms;
+  }
+  .nav-link:hover { color: var(--ink); background: var(--hairline-soft); }
+  .nav-link.on { color: var(--paper); background: var(--ink); }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .firm { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #c8553d, #8a3a26); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 34px 28px 80px; }
+  .brief-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rust); margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .brief-label::before { content: ''; width: 26px; height: 1px; background: var(--rust); }
+  h1 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(30px, 4.2vw, 44px); letter-spacing: -0.02em; }
+  h1 em { font-style: italic; color: var(--ink-soft); }
+
+  /* Big stats */
+  .stats { display: flex; gap: 44px; margin: 24px 0 28px; flex-wrap: wrap; }
+  .stat .sv { font-family: 'Instrument Serif', serif; font-size: 40px; line-height: 1; letter-spacing: -0.02em; }
+  .stat .sv.rust { color: var(--rust); }
+  .stat .sv.moss { color: var(--moss); }
+  .stat .sl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin-top: 5px; }
+
+  /* Toolbar: search + filters */
+  .toolbar { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; align-items: center; }
+  .search {
+    flex: 1; min-width: 220px;
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid var(--hairline); border-radius: 100px;
+    background: var(--paper-raise); padding: 10px 18px;
+    transition: border-color 150ms;
+  }
+  .search:focus-within { border-color: var(--ink); }
+  .search input {
+    flex: 1; border: none; outline: none; background: none;
+    font-family: 'Manrope', sans-serif; font-size: 13px; color: var(--ink);
+  }
+  .search input::placeholder { color: var(--ink-faint); }
+  .search .mag { color: var(--ink-faint); font-size: 13px; }
+  .chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 9px 15px; border-radius: 100px; border: 1px solid var(--hairline);
+    background: var(--paper-raise); color: var(--ink-soft); cursor: pointer; transition: all 160ms;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  .result-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 16px; }
+  .result-count b { color: var(--ink); font-weight: 500; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .mini {
+    background: var(--paper-raise);
+    border: 1px solid var(--ink);
+    padding: 14px 14px 12px;
+    cursor: pointer;
+    transition: transform 180ms cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 180ms;
+    animation: rise 450ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+    box-shadow: 2px 2px 0 rgba(20,19,16,0.06);
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .mini:hover { transform: translateY(-3px); box-shadow: 4px 6px 0 rgba(20,19,16,0.1); }
+  .mini.hidden { display: none; }
+  .mini.archived { opacity: 0.55; }
+  .mini .mname { font-family: 'Instrument Serif', serif; font-size: 17px; line-height: 1.1; letter-spacing: -0.01em; }
+  .mini .mmeta { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin: 5px 0 10px; }
+  .mini .mmeta b { color: var(--rust); font-weight: 500; }
+  .mini .mmeta b.ok { color: var(--moss); }
+  .mini .strip { display: flex; gap: 2px; height: 3px; }
+  .mini .strip span { flex: 1; background: var(--hairline); border-radius: 100px; }
+  .mini .strip .done { background: var(--ink); }
+  .mini .strip .warn { background: var(--rust); }
+  .mini .strip .ok { background: var(--moss); }
+
+  .no-results {
+    display: none;
+    text-align: center; padding: 60px 20px;
+  }
+  .no-results.show { display: block; }
+  .no-results .nr-serif { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; color: var(--ink-soft); }
+  .no-results .nr-sub { font-size: 13px; color: var(--ink-faint); margin-top: 6px; }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 680px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    .wrap { padding: 24px 16px 64px; }
+    .stats { gap: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <span class="logo">Atelier</span>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Canvas</a>
+      <a class="nav-link" href="#">The Desk</a>
+      <a class="nav-link on" href="#">Library</a>
+      <a class="nav-link" href="#">People</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="firm">Sharma &amp; Associates</span>
+    <div class="avatar">RS</div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="brief-label">Library · Every project since 2014</div>
+  <h1>The whole practice, <em>on one shelf.</em></h1>
+
+  <div class="stats">
+    <div class="stat"><div class="sv">217</div><div class="sl">Total projects</div></div>
+    <div class="stat"><div class="sv moss">47</div><div class="sl">Active</div></div>
+    <div class="stat"><div class="sv rust">14</div><div class="sl">Reopened for sanction</div></div>
+    <div class="stat"><div class="sv">156</div><div class="sl">Completed</div></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      <span class="mag">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search by name, city, or type — try 'Pune' or 'sanction'…">
+    </div>
+    <button class="chip on" data-f="all">All</button>
+    <button class="chip" data-f="active">Active</button>
+    <button class="chip" data-f="attention">Needs attention</button>
+    <button class="chip" data-f="reopened">Reopened</button>
+    <button class="chip" data-f="done">Completed</button>
+  </div>
+
+  <div class="result-count" id="resultCount">Showing <b>24</b> of 217 projects</div>
+
+  <div class="grid" id="grid">
+    <div class="mini" data-f="active attention" data-s="mehta house pune residential" style="animation-delay: 20ms;"><div class="mname">Mehta House</div><div class="mmeta">Pune · Resi · <b>Stuck 12d</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="warn"></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active attention" data-s="sethi residence mumbai bungalow" style="animation-delay: 40ms;"><div class="mname">Sethi Residence</div><div class="mmeta">Mumbai · Bungalow · <b>Stuck 9d</b></div><div class="strip"><span class="done"></span><span class="warn"></span><span></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="aroma cafe bangalore interior" style="animation-delay: 60ms;"><div class="mname">Aroma Cafe</div><div class="mmeta">Bangalore · Interior · <b class="ok">On track</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="ok"></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="vyom hq pune commercial" style="animation-delay: 80ms;"><div class="mname">Vyom HQ</div><div class="mmeta">Pune · Commercial · <b class="ok">Ahead</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="ok"></span></div></div>
+    <div class="mini" data-f="active attention" data-s="reddy residence bangalore sanction" style="animation-delay: 100ms;"><div class="mname">Reddy Residence</div><div class="mmeta">Bangalore · <b>BBMP 21d</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="warn"></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active reopened attention" data-s="iyer house bangalore reopened sanction" style="animation-delay: 120ms;"><div class="mname">Iyer House</div><div class="mmeta">Bangalore · <b>Reopened</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="warn"></span></div></div>
+    <div class="mini" data-f="active" data-s="khanna villa amritsar facade" style="animation-delay: 140ms;"><div class="mname">Khanna Villa</div><div class="mmeta">Amritsar · Villa · Client review</div><div class="strip"><span class="done"></span><span class="warn"></span><span></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="nair apartment mumbai interior" style="animation-delay: 160ms;"><div class="mname">Nair Apartment</div><div class="mmeta">Mumbai · Interior · <b class="ok">Smooth</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="ok"></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="kapoor farmhouse karjat proposal" style="animation-delay: 180ms;"><div class="mname">Kapoor Farmhouse</div><div class="mmeta">Karjat · <b>Proposal on us</b></div><div class="strip"><span class="ok"></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active reopened" data-s="joshi bungalow pune reopened sanction only" style="animation-delay: 200ms;"><div class="mname">Joshi Bungalow</div><div class="mmeta">Pune · <b>Sanction only</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="warn"></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="kothari haveli jaipur restoration" style="animation-delay: 220ms;"><div class="mname">Kothari Haveli</div><div class="mmeta">Jaipur · Restoration</div><div class="strip"><span class="done"></span><span class="done"></span><span></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="d'souza villa goa hospitality" style="animation-delay: 240ms;"><div class="mname">D'Souza Villa</div><div class="mmeta">Goa · Hospitality</div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span></span><span></span></div></div>
+    <div class="mini archived" data-f="done" data-s="bansal residence delhi completed" style="animation-delay: 260ms;"><div class="mname">Bansal Residence</div><div class="mmeta">Delhi · <b class="ok">Completed 2025</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div></div>
+    <div class="mini archived" data-f="done" data-s="verma house pune completed" style="animation-delay: 280ms;"><div class="mname">Verma House</div><div class="mmeta">Pune · <b class="ok">Completed 2025</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div></div>
+    <div class="mini" data-f="active" data-s="mirza penthouse mumbai interior" style="animation-delay: 300ms;"><div class="mname">Mirza Penthouse</div><div class="mmeta">Mumbai · Interior</div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span></span><span></span></div></div>
+    <div class="mini archived" data-f="done" data-s="agarwal duplex nagpur completed" style="animation-delay: 320ms;"><div class="mname">Agarwal Duplex</div><div class="mmeta">Nagpur · <b class="ok">Completed 2024</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div></div>
+    <div class="mini" data-f="active" data-s="fernandes cottage goa residential" style="animation-delay: 340ms;"><div class="mname">Fernandes Cottage</div><div class="mmeta">Goa · Residential</div><div class="strip"><span class="done"></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="mini" data-f="active attention" data-s="patil warehouse jalgaon industrial" style="animation-delay: 360ms;"><div class="mname">Patil Warehouse</div><div class="mmeta">Jalgaon · Industrial · <b>Stuck 6d</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="warn"></span><span></span><span></span></div></div>
+    <div class="mini archived" data-f="done" data-s="malhotra villa delhi completed" style="animation-delay: 380ms;"><div class="mname">Malhotra Villa</div><div class="mmeta">Delhi · <b class="ok">Completed 2024</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div></div>
+    <div class="mini" data-f="active reopened" data-s="shah townhouse ahmedabad reopened sanction" style="animation-delay: 400ms;"><div class="mname">Shah Townhouse</div><div class="mmeta">Ahmedabad · <b>Reopened</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="warn"></span><span></span></div></div>
+    <div class="mini" data-f="active" data-s="rao clinic hyderabad commercial" style="animation-delay: 420ms;"><div class="mname">Rao Clinic</div><div class="mmeta">Hyderabad · Commercial</div><div class="strip"><span class="done"></span><span class="done"></span><span></span><span></span><span></span></div></div>
+    <div class="mini archived" data-f="done" data-s="gupta apartment pune completed" style="animation-delay: 440ms;"><div class="mname">Gupta Apartment</div><div class="mmeta">Pune · <b class="ok">Completed 2023</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div></div>
+    <div class="mini" data-f="active" data-s="thakur resort lonavala hospitality" style="animation-delay: 460ms;"><div class="mname">Thakur Resort</div><div class="mmeta">Lonavala · Hospitality</div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span></span><span></span></div></div>
+    <div class="mini archived" data-f="done" data-s="chopra house chandigarh completed" style="animation-delay: 480ms;"><div class="mname">Chopra House</div><div class="mmeta">Chandigarh · <b class="ok">Completed 2023</b></div><div class="strip"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div></div>
+  </div>
+
+  <div class="no-results" id="noResults">
+    <div class="nr-serif">No projects match that.</div>
+    <div class="nr-sub">Try a different name, city, or status — or clear the filter.</div>
+  </div>
+</div>
+
+<script>
+  const minis = document.querySelectorAll('.mini');
+  const searchInput = document.getElementById('searchInput');
+  const chips = document.querySelectorAll('.chip');
+  const resultCount = document.getElementById('resultCount');
+  const noResults = document.getElementById('noResults');
+  let activeFilter = 'all';
+
+  function apply() {
+    const q = searchInput.value.trim().toLowerCase();
+    let shown = 0;
+    minis.forEach(m => {
+      const matchF = activeFilter === 'all' || (m.dataset.f || '').split(' ').includes(activeFilter);
+      const matchQ = !q || (m.dataset.s || '').includes(q);
+      const show = matchF && matchQ;
+      m.classList.toggle('hidden', !show);
+      if (show) shown++;
+    });
+    resultCount.innerHTML = `Showing <b>${shown}</b> of 217 projects`;
+    noResults.classList.toggle('show', shown === 0);
+  }
+
+  searchInput.addEventListener('input', apply);
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      activeFilter = chip.dataset.f;
+      apply();
+    });
+  });
+</script>
+
+</body>
+</html>
