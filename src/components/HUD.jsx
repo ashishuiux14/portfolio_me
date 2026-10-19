@@ -9,7 +9,6 @@ const HUD = () => {
     if (p === '/') return 'AD-001';
     if (p === '/projects') return 'AD-002';
     if (p.startsWith('/projects/cleanero')) return '002.1';
-    if (p.startsWith('/projects/ev-trip')) return '002.2';
     if (p.startsWith('/projects/3d-hub')) return '002.3';
     if (p.startsWith('/projects/travelogue')) return '002.4';
     if (p.startsWith('/projects/atelier')) return '002.5';
@@ -25,7 +24,6 @@ const HUD = () => {
     if (p === '/') return 'ashishdixit.work';
     if (p === '/projects') return '// Projects';
     if (p.startsWith('/projects/cleanero')) return '// Cleaneró';
-    if (p.startsWith('/projects/ev-trip')) return '// EV Trip Intelligence';
     if (p.startsWith('/projects/3d-hub')) return '// 3D Hub';
     if (p.startsWith('/projects/travelogue')) return '// Travelogue';
     if (p.startsWith('/projects/atelier')) return '// Atelier';
