@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, Suspense, lazy } from 'react';
 
 // Components
@@ -14,8 +14,6 @@ const About = lazy(() => import('./pages/About'));
 const Projects = lazy(() => import('./pages/Projects'));
 const ThreeDPrinting = lazy(() => import('./pages/ThreeDPrinting'));
 const Contact = lazy(() => import('./pages/Contact'));
-const ProjectEV = lazy(() => import('./pages/ProjectEV'));
-const ProjectEVScreens = lazy(() => import('./pages/ProjectEVScreens'));
 const ProjectCleanero = lazy(() => import('./pages/ProjectCleanero'));
 const Project3DHub = lazy(() => import('./pages/Project3DHub'));
 const ProjectTravelogue = lazy(() => import('./pages/ProjectTravelogue'));
@@ -54,8 +52,8 @@ function App() {
             <Route path="/projects/travelogue" element={<ProjectTravelogue />} />
             <Route path="/projects/atelier" element={<ProjectAtelier />} />
             <Route path="/projects/iphone-dock" element={<ProjectIphoneDock />} />
-            <Route path="/projects/ev-trip-intelligence" element={<ProjectEV />} />
-            <Route path="/projects/ev-trip-screens" element={<ProjectEVScreens />} />
+            <Route path="/projects/ev-trip-intelligence" element={<Navigate to="/projects" replace />} />
+            <Route path="/projects/ev-trip-screens" element={<Navigate to="/projects" replace />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </Suspense>

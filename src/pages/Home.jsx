@@ -41,7 +41,7 @@ const Home = () => {
             <div className="section-tag">Selected Work</div>
             <h2 className="section-h2">PROJECTS<span>.</span></h2>
           </div>
-          <span className="section-count">{'// 05 CASE STUDIES'}</span>
+          <span className="section-count">{'// 04 CASE STUDIES'}</span>
         </div>
         <div className="projects-grid">
           <Link to="/projects/atelier" className="proj-card">
@@ -86,17 +86,6 @@ const Home = () => {
               <div className="proj-title">TRAVELOGUE</div>
               <div className="proj-date">January 25 — March 25</div>
               <div className="proj-sub">A social travel app for collaborative planning, storytelling, and itinerary access.</div>
-            </div>
-          </Link>
-          <Link to="/projects/ev-trip-intelligence" className="proj-card">
-            <div className="proj-thumb" style={{ overflow: 'hidden', padding: 0 }}>
-              <img loading="lazy" src="/voltro_hero_thumbnail.svg" alt="Voltro" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            </div>
-            <div className="proj-info">
-              <div className="proj-meta"><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>
-              <div className="proj-title">VOLTRO</div>
-              <div className="proj-date">2024</div>
-              <div className="proj-sub">Designing trust in EV mobility through predictive intelligence.</div>
             </div>
           </Link>
         </div>

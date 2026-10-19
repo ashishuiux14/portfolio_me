@@ -95,21 +95,6 @@ const Projects = () => {
           )}
 
           {isVisible('uiux') && (
-            <Link to="/projects/ev-trip-intelligence" className="proj-card" data-cat="uiux">
-              <div className="proj-thumb" style={{ overflow: 'hidden', padding: 0 }}>
-                <img loading="lazy" src="/voltro_hero_thumbnail.svg" alt="Voltro" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              </div>
-              <div className="proj-info">
-                <div className="proj-meta"><span>DWG 002.5</span><span>·</span><span>UI/UX</span><span>·</span><span>Mobile + In-Car</span></div>
-                <div className="proj-title">VOLTRO</div>
-                <div className="proj-date">2024</div>
-                <div className="proj-sub">Designing trust in EV mobility through predictive intelligence.</div>
-              </div>
-              <span className="proj-arrow">View Case Study →</span>
-            </Link>
-          )}
-
-          {isVisible('uiux') && (
             <div className="proj-card coming-soon" style={{ border: '1px dashed rgba(255,255,255,0.1)', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px', cursor: 'default' }}>
               <div style={{ fontFamily: 'var(--fm, "JetBrains Mono", monospace)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
                 Coming Up Soon
