@@ -1,7 +1,7 @@
 // Single source for every list on the site, so cards, routes and nav never disagree.
 
 export const CONTACT = {
-  email: 'ashishdixit.ux@gmail.com',
+  email: 'design.ashishd@gmail.com',
   linkedin: 'https://www.linkedin.com/in/ashishd-uiux',
   linkedinHandle: 'ashishd-uiux',
   resume: '/Ashish_UX_UI_Resume.pdf',
