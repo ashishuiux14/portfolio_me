@@ -31,13 +31,13 @@ const Contact = () => {
           <p className="contact-intro">I'm always excited to collaborate on innovative and exciting projects. Whether it's a full-time role, freelance work, or just a conversation — reach out.</p>
 
           <div className="contact-items">
-            <a href="mailto:hello@ashishdixit.work" className="contact-item">
+            <a href="mailto:design.ashishd@gmail.com" className="contact-item">
               <div className="contact-item-icon">
                 <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
               </div>
               <div>
                 <div className="contact-item-label">Email</div>
-                <div className="contact-item-value">ashishdixit.ux@gmail.com</div>
+                <div className="contact-item-value">design.ashishd@gmail.com</div>
               </div>
             </a>
             <a href="https://www.linkedin.com/in/ashishd-uiux" target="_blank" rel="noreferrer" className="contact-item">

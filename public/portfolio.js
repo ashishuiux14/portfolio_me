@@ -330,7 +330,7 @@
        6. COPY EMAIL UTILITY
     ───────────────────────────────────────── */
     window.copyEmail = function () {
-      navigator.clipboard.writeText('ashishdixit.ux@gmail.com').then(() => {
+      navigator.clipboard.writeText('design.ashishd@gmail.com').then(() => {
         document.querySelectorAll('.copy-confirm').forEach(el => {
           el.classList.add('show');
           setTimeout(() => el.classList.remove('show'), 2000);
