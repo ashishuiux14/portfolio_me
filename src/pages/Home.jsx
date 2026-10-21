@@ -71,7 +71,7 @@ export default function Home() {
             <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" /></div>
             <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.5} label="Example count" /></div>
             <div className="lab-cell"><Rotary material="alu" zoom={0.42} label="Example rotary switch" /></div>
-            <div className="lab-cell"><SubmitButton material="alu" zoom={0.5} /></div>
+            <div className="lab-cell"><SubmitButton material="alu" zoom={0.74} /></div>
           </div>
         </section>
 
