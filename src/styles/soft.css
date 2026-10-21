@@ -124,14 +124,14 @@ button { font: inherit; color: inherit; }
 }
 .rail-inner { height: 100%; border-radius: var(--radius); padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; scrollbar-width: none; }
 .rail-inner::-webkit-scrollbar { display: none; }
-.monogram {
-  height: 104px; flex: none; border-radius: 26px; display: grid; place-items: center;
-  background: linear-gradient(145deg, #C9DCEB, #B2C9DC);
-  box-shadow: var(--sh-up), inset 2px 2px 3px rgba(255,255,255,.6);
+/* AD mark: stone frame, blue well. The blue is fixed in both themes. */
+.monogram { flex: none; display: block; padding: 9px; border-radius: 28px; background: var(--bg); box-shadow: var(--sh-up); }
+.mono-well {
+  display: grid; place-items: center; height: 96px; border-radius: 20px; padding: 12px 18px;
+  background: linear-gradient(160deg, #8FA2B4 0%, #A9BCCD 38%, #BCCFE0 100%);
+  box-shadow: inset 6px 8px 14px rgba(46,74,99,.45), inset -3px -4px 8px rgba(255,255,255,.35);
 }
-:root[data-theme="dark"] .monogram { background: linear-gradient(145deg, #3E5368, #31445A); box-shadow: var(--sh-up), inset 2px 2px 3px rgba(255,255,255,.12); }
-.monogram span { font: 600 52px/1 var(--display); letter-spacing: -.02em; color: #BBD0E2; text-shadow: -2px -2px 2px rgba(255,255,255,.75), 3px 3px 4px rgba(84,112,138,.45); }
-:root[data-theme="dark"] .monogram span { color: #3A4F64; text-shadow: -1px -1px 1px rgba(255,255,255,.18), 3px 3px 4px rgba(0,0,0,.5); }
+.mono-well svg { width: 100%; height: 100%; display: block; overflow: visible; }
 .who { display: flex; flex-direction: column; padding: 0 6px; }
 .who b { font-weight: 500; font-size: 19px; }
 .who span { font-size: 14px; color: var(--ink-2); }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import Icon from './Icon';
+import Monogram from './Monogram';
 import { ClayToggle } from '../lab/Art';
 import { CONTACT } from '../data/site';
 
@@ -92,7 +93,7 @@ export function Rail({ theme, setTheme }) {
   return (
     <aside className="rail">
       <div className="rail-inner up">
-        <Link to="/" className="monogram" aria-label="Ashish Dixit, home"><span aria-hidden="true">AD</span></Link>
+        <Link to="/" className="monogram" aria-label="Ashish Dixit, home"><Monogram title="AD" /></Link>
         <div className="who"><b>Ashish Dixit</b><span>Senior Product Designer · Chicago</span></div>
         <NavLinks />
         <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
