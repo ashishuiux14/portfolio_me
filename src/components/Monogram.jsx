@@ -3,14 +3,14 @@
 export default function Monogram({ title = 'Ashish Dixit' }) {
   return (
     <span className="mono-well">
-      <svg viewBox="-0.35 -0.35 10.75 5.75" role="img" aria-label={title}>
+      <svg viewBox="0 0 10.03 5" role="img" aria-label={title}>
         <defs>
-          <filter id="ad-lift" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0.07" dy="0.11" stdDeviation="0.1" floodColor="#2E4A63" floodOpacity="0.45" />
-            <feDropShadow dx="-0.04" dy="-0.05" stdDeviation="0.05" floodColor="#FFFFFF" floodOpacity="0.55" />
+          <filter id="ad-lift" x="-30%" y="-30%" width="160%" height="170%">
+            <feDropShadow dx="0.16" dy="0.22" stdDeviation="0.22" floodColor="#2E4A63" floodOpacity="0.42" />
+            <feDropShadow dx="-0.06" dy="-0.08" stdDeviation="0.1" floodColor="#FFFFFF" floodOpacity="0.4" />
           </filter>
         </defs>
-        <g fill="#B2C5D5" stroke="#4E7395" strokeWidth="0.045" strokeLinejoin="round" filter="url(#ad-lift)">
+        <g fill="#ADBFCD" stroke="#55778F" strokeWidth="0.04" strokeLinejoin="round" filter="url(#ad-lift)">
           {/* a */}
           <path d="M0.12 0 H3.5 A0.5 0.5 0 0 1 3.5 1 H0.12 Q0 1 0 0.88 V0.12 Q0 0 0.12 0 Z" />
           <path d="M0.75 2 H2.95 Q3.05 2 3.05 2.1 V2.35 Q3.05 3 2.4 3 H1.5 A0.5 0.5 0 0 0 1.5 4 H3.45 Q4.05 4 4.05 3.4 V1.5 A0.48 0.48 0 0 1 5 1.5 V4.75 Q5 5 4.75 5 H0.75 Q0 5 0 4.25 V2.75 Q0 2 0.75 2 Z" />
