@@ -48,10 +48,10 @@ html[data-case="travelogue"][data-theme="dark"] { --orange: #EE8A62; }
 
 html[data-case="cleanero"] {
   --bg: var(--s-bg); --white: var(--s-raised); --surface: var(--s-soft);
-  --bordergray: var(--s-line); --text: var(--s-ink); --muted: var(--s-ink2); --dim: var(--s-ink3); --navy: var(--s-ink);
+  --bordergray: var(--s-line); --text: var(--s-ink); --muted: var(--s-ink2); --dim: var(--s-ink3); --navy: #2C2926;
   --ff: var(--s-display); --fb: var(--s-display);
 }
-html[data-case="cleanero"][data-theme="dark"] { --blue: #7FA6F5; --blue-mid: #7FA6F5; }
+html[data-case="cleanero"][data-theme="dark"] { --blue: #7FA6F5; --blue-mid: #7FA6F5; --navy: #1F1D1B; }
 
 html[data-case="iphone-dock"] {
   --bg: var(--s-bg); --surface: var(--s-bg); --surface2: var(--s-raised); --surface3: var(--s-soft);
@@ -91,3 +91,34 @@ html[data-case="iphone-dock"] .hero-overlay-bottom { background: linear-gradient
 html[data-case="iphone-dock"] .photo-card .photo-label { color: #F5F5F5; }
 html[data-case="3d-hub"] footer { background: var(--s-deep) !important; color: var(--s-ink); }
 html[data-case="atelier"] nav, html[data-case="atelier"] header[style*="sticky"], html[data-case="atelier"] .topbar { background: color-mix(in srgb, var(--s-bg) 85%, transparent) !important; }
+
+/* ---------- headlines: outline-only words were drawn for dark heroes ---------- */
+html[data-case] .hero-title em { color: var(--s-ink3) !important; -webkit-text-stroke: 0 !important; }
+html[data-case] .section-ghost, html[data-case] .chapter-ghost, html[data-case] .chapter-num,
+html[data-case] [class*="ghost"] { -webkit-text-stroke: 1px var(--s-line) !important; }
+
+/* the dock's hero render sits to the right and fades out under the headline */
+html[data-case="iphone-dock"] .hero-img-wrap {
+  left: 34% !important;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+          mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+}
+
+/* ---------- images lie flat on the surface: no drop shadows ---------- */
+html[data-case] img, html[data-case] picture, html[data-case] video { box-shadow: none !important; filter: none !important; }
+html[data-case] .soft-flat { box-shadow: none !important; }
+html[data-case]:not([data-case="3d-hub"]) .hero-title { color: var(--s-ink) !important; }
+html[data-case="3d-hub"] .hero-title em { color: rgba(255,255,255,.62) !important; }
+
+/* Cleaneró hero: sits on the page, not on a dark slab; dark navy stays for quote and showcase panels */
+html[data-case="cleanero"] .hero { background: var(--s-bg) !important; }
+html[data-case="cleanero"] .hero-grid { display: none; }
+html[data-case="cleanero"] .hero-img { opacity: 1 !important; }
+html[data-case="cleanero"] .hero-img-overlay { background: linear-gradient(to right, var(--s-bg) 0%, transparent 30%), linear-gradient(to top, var(--s-bg) 0%, transparent 25%) !important; }
+html[data-case="cleanero"] .hero-sub { color: var(--s-ink2) !important; }
+html[data-case="cleanero"] .hero-tag { color: var(--s-ink2) !important; border-color: var(--s-line) !important; }
+html[data-case="cleanero"] .hero-meta-label { color: var(--s-ink3) !important; }
+html[data-case="cleanero"] .hero-meta-value { color: var(--s-ink) !important; }
+html[data-case="cleanero"] .hero-kicker { color: var(--blue) !important; }
+html[data-case] figure, html[data-case] [class*="img"], html[data-case] [class*="image"], html[data-case] [class*="photo"],
+html[data-case] [class*="shot"], html[data-case] [class*="gallery"], html[data-case] [class*="media"], html[data-case] [class*="visual"], html[data-case] [class*="frame"] { box-shadow: none !important; }

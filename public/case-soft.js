@@ -47,5 +47,23 @@
       else if (r >= 12 && bordered && h < 60) el.classList.add('soft-chip');
     }
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', soften); else soften();
+  // anything that is essentially a picture frame lies flat: no lift, no drop shadow
+  function flatten() {
+    var imgs = document.body.querySelectorAll('img, picture, video');
+    for (var i = 0; i < imgs.length; i++) {
+      var im = imgs[i], a = im.offsetWidth * im.offsetHeight;
+      if (a < 6400) continue;
+      var el = im.parentElement, depth = 0;
+      while (el && el !== document.body && depth < 4) {
+        var ea = el.offsetWidth * el.offsetHeight;
+        if (!ea || a / ea < 0.45) break;
+        el.classList.remove('soft-raised', 'soft-chip');
+        el.classList.add('soft-flat');
+        el = el.parentElement; depth++;
+      }
+    }
+  }
+  function run() { soften(); flatten(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  window.addEventListener('load', flatten);   // images that size themselves late
 })();
