@@ -1,0 +1,488 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Rotary Switch Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a 960px column with a browser-style tab strip at the top. Each tab swaps the whole page into one material: surface, type softness and physics. Single light theme on purpose; both materials are lit from the top left. */
+:root{
+  --bg:#E5E5E8; --strip:#D2D2D7; --ink:#4B4E57; --ink-2:#6F727B; --ink-3:#9497A0; --rule:rgba(140,145,160,.3);
+  --lo:rgba(158,163,176,.58); --hi:#FFFFFF; --green-ink:#3E8F59; --red-ink:#B65A5A; --soft:100;
+  --display:"Fraunces", "Iowan Old Style", Georgia, serif;
+  --sans:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+body[data-mat="alu"]{--bg:#DADADC; --strip:#C6C6CA; --ink:#2F3136; --ink-2:#5D6068; --ink-3:#8C8F96; --rule:rgba(0,0,0,.1); --green-ink:#1F8A40; --red-ink:#C23B3B; --soft:0}
+*{box-sizing:border-box}
+html{background:#E5E5E8}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);padding-inline:16px;padding-block:44px 120px;-webkit-font-smoothing:antialiased;transition:background-color .35s}
+.sheet{max-width:960px;margin:0 auto;display:flex;flex-direction:column}
+h1,h2,h3{margin:0;text-wrap:balance;font-family:var(--display);font-variation-settings:"SOFT" var(--soft),"opsz" 96;font-weight:500;color:var(--ink)}
+p{margin:0}
+.label{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.intro{display:flex;flex-direction:column;gap:14px;margin-bottom:34px}
+.intro h1{font-size:clamp(36px,6vw,58px);line-height:1.04;letter-spacing:-.015em}
+.intro p{font-size:17.5px;color:var(--ink-2);max-width:640px}
+
+/* chrome-style tabs */
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;display:flex;align-items:flex-end;gap:2px;padding:8px 10px 0;background:var(--strip);border-radius:14px 14px 0 0;transition:background-color .35s}
+.tab{position:relative;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;padding:11px 22px 12px 16px;min-width:0;border-radius:11px 11px 0 0;background:transparent;font:500 14px var(--sans);color:var(--ink-2);white-space:nowrap}
+.tab:hover:not([aria-selected="true"]){background:rgba(255,255,255,.35)}
+.tab[aria-selected="true"]{background:var(--bg);color:var(--ink)}
+.tab[aria-selected="true"]::before,.tab[aria-selected="true"]::after{content:"";position:absolute;bottom:0;width:12px;height:12px;pointer-events:none}
+.tab[aria-selected="true"]::before{left:-12px;background:radial-gradient(circle at 0 0,transparent 11.5px,var(--bg) 12px)}
+.tab[aria-selected="true"]::after{right:-12px;background:radial-gradient(circle at 100% 0,transparent 11.5px,var(--bg) 12px)}
+.tab:focus-visible{outline:2px solid var(--green-ink);outline-offset:-4px}
+.tab .ico{width:16px;height:16px;border-radius:50%;flex:none}
+.ico-clay{background:radial-gradient(circle at 36% 30%,#fff,#e3e3e7);box-shadow:2px 2px 4px rgba(130,135,150,.5),-1px -1px 2px #fff}
+.ico-alu{background:repeating-radial-gradient(circle,rgba(255,255,255,.2) 0 .5px,rgba(0,0,0,.06) .5px 1px),conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35)}
+.tab .sub{color:var(--ink-3);font-weight:400}
+.panelwrap{padding-top:48px}
+[role="tabpanel"]{display:flex;flex-direction:column;gap:100px}
+[role="tabpanel"][hidden]{display:none!important}
+
+.hero{display:flex;flex-direction:column;gap:20px}
+.hero h2{font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.015em}
+.hero h2 em{font-style:italic;color:var(--green-ink)}
+.lede{font-size:18px;color:var(--ink-2);max-width:620px}
+
+/* plates per material */
+.plate{display:flex;flex-direction:column;gap:22px;padding:28px;min-width:0}
+.m-clay .plate{border-radius:30px;background:linear-gradient(145deg,#ececef,#e0e0e4);box-shadow:14px 14px 30px var(--lo),-14px -14px 30px var(--hi),inset 1px 1px 1px rgba(255,255,255,.8)}
+.m-alu .plate{border-radius:18px;background:linear-gradient(180deg,#EEEEEF,#DFDFE1);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 14px 30px rgba(40,42,48,.13),0 2px 4px rgba(40,42,48,.12)}
+.plate-top{display:flex;justify-content:space-between;align-items:center;gap:12px 18px;flex-wrap:wrap}
+.live{display:inline-flex;gap:8px;align-items:center}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:#5FBF7C}
+.stage{display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:36px 24px;padding:30px 8px}
+.slot{display:flex;flex-direction:column;align-items:center;gap:26px;min-width:0}
+.row-btn{display:flex;align-items:center;gap:20px}
+.cancel{font:500 15px var(--sans);color:var(--ink-2)}
+.readout{font:400 13px/1.5 var(--mono);color:var(--ink-2);min-height:20px;text-align:center;max-width:380px}
+.msg{font-size:14px;color:var(--red-ink);min-height:22px;text-align:center;max-width:360px}
+
+section{display:flex;flex-direction:column;gap:26px}
+.head{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:baseline}
+.num{font:400 64px/1 var(--display);font-variation-settings:"SOFT" var(--soft),"opsz" 144;color:#BDBFC6;grid-row:span 2}
+.head h3{font-size:32px;line-height:1.15;letter-spacing:-.01em}
+.head p{color:var(--ink-2);max-width:600px}
+@media (max-width:560px){.head{grid-template-columns:1fr}.num{grid-row:auto;font-size:48px}}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.notes>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.notes p{font-size:15px;color:var(--ink-2)}
+@media (max-width:680px){.notes{grid-template-columns:1fr}}
+.detail{font-size:15px;color:var(--ink-2);max-width:740px;padding-top:18px;border-top:1px solid var(--rule)}
+.detail b{color:var(--ink);font-weight:600}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+.ctl{display:flex;align-items:center;gap:12px;font:500 13px var(--sans);color:var(--ink-2)}
+.ctl output{font:500 12px var(--mono);color:var(--ink);min-width:62px}
+.check{display:inline-flex;align-items:center;gap:10px;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.check input{accent-color:#5FBF7C;width:16px;height:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:10px;border-radius:5px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;cursor:pointer}
+.m-clay input[type=range]{background:linear-gradient(145deg,#d9d9dd,#ececef);box-shadow:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi)}
+.m-clay input[type=range]::-webkit-slider-thumb{background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5),-2px -2px 5px #fff}
+.m-clay input[type=range]::-moz-range-thumb{background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5)}
+.m-alu input[type=range]{height:8px;background:linear-gradient(180deg,#1b1b1d,#38383b);box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 1px 0 #fff}
+.m-alu input[type=range]::-webkit-slider-thumb{background:repeating-radial-gradient(circle,rgba(255,255,255,.18) 0 .6px,rgba(0,0,0,.06) .6px 1.3px),conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35),0 3px 5px rgba(0,0,0,.35)}
+.m-alu input[type=range]::-moz-range-thumb{background:conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35)}
+input[type=range]:focus-visible{outline:2px solid #5FBF7C;outline-offset:4px}
+.seg{display:inline-flex;gap:4px;padding:4px}
+.seg button{border:0;background:none;font:500 13px var(--sans);color:var(--ink-2);padding:7px 13px;cursor:pointer}
+.seg button:focus-visible{outline:2px solid #5FBF7C;outline-offset:2px}
+.m-clay .seg{border-radius:16px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 8px var(--lo),inset -4px -4px 8px var(--hi)}
+.m-clay .seg button{border-radius:11px}
+.m-clay .seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(145deg,#f3f3f5,#e2e2e6);box-shadow:4px 4px 9px var(--lo),-3px -3px 7px var(--hi)}
+.m-alu .seg{border-radius:10px;background:linear-gradient(180deg,#cfcfd2,#dedee0);box-shadow:inset 0 2px 3px rgba(0,0,0,.18),0 1px 0 #fff}
+.m-alu .seg button{border-radius:7px}
+.m-alu .seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(180deg,#fbfbfb,#e3e3e5);box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,0,0,.25)}
+
+/* comparison */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:720px){.vs{grid-template-columns:1fr}}
+.alu-pad{border-radius:18px;padding:34px;background:linear-gradient(180deg,#EEEEEF,#DFDFE1);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(40,42,48,.12)}
+.scroll{overflow-x:auto}
+.spec{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.spec th,.spec td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.spec th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.spec td:first-child{font-weight:600;color:var(--ink)}
+.common{margin-top:110px;display:flex;flex-direction:column;gap:26px}
+.common .plate{border-radius:24px;background:linear-gradient(160deg,#ececef,#dfdfe2);box-shadow:inset 0 1px 0 #fff,0 14px 30px rgba(40,42,48,.12)}
+footer{margin-top:80px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--rule)}
+
+/* sound switch */
+.sound{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom, 0px));z-index:10;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;padding:8px 16px 8px 8px;border-radius:999px;font:500 13px var(--sans);color:#2F3136;
+  background:linear-gradient(180deg,#fafafa,#e1e1e3);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.25)}
+.sound:focus-visible{outline:2px solid #2BB556;outline-offset:3px}
+.sound .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#1b1b1d,#333336);box-shadow:inset 0 2px 3px rgba(0,0,0,.6);color:#8c8f96}
+.sound[aria-pressed="true"] .ic{color:#7fe39c;box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 0 10px rgba(43,181,86,.45)}
+.sound .on-ic{display:none}
+.sound[aria-pressed="true"] .on-ic{display:block}
+.sound[aria-pressed="true"] .off-ic{display:none}
+
+/* ---- rotary switch: a bar knob in a round recessed well ---- */
+.rs{position:relative;width:220px;height:220px;border:0;padding:0;background:none;cursor:pointer;flex:none;touch-action:none;-webkit-tap-highlight-color:transparent;outline:none;border-radius:50%}
+.rs-well,.rs-knob,.rs-shadow{position:absolute;left:50%;top:50%;border-radius:50%;pointer-events:none}
+.rs-well{width:204px;height:204px;margin:-102px 0 0 -102px}
+.rs-shadow{width:156px;height:156px;margin:-74px 0 0 -76px;filter:blur(9px)}
+.rs-knob{width:150px;height:150px;margin:-75px 0 0 -75px}
+.rs-turnwrap{position:absolute;inset:0;border-radius:50%}
+.rs-turn{position:absolute;inset:0;border-radius:50%;overflow:hidden;will-change:transform}
+.rs-bar{position:absolute;left:-4px;right:-4px;top:50%;height:50px;margin-top:-25px}
+.rs-line{position:absolute;left:12px;top:50%;width:26px;height:6px;margin-top:-3px;border-radius:1px;background:#D2302A;transition:background-color .14s,box-shadow .14s}
+.rs.is-on .rs-line{background:#2FB65A}
+.rs:focus-visible{box-shadow:0 0 0 4px var(--bg),0 0 0 7px rgba(43,181,86,.55)}
+
+/* ---- soft: moulded plastic ---- */
+.rs.plastic .rs-well{background:linear-gradient(150deg,#B9B9BC 0%,#CACACD 45%,#D9D9DC 100%);
+  box-shadow:inset 6px 8px 14px rgba(0,0,0,.28),inset -2px -3px 6px rgba(255,255,255,.35),0 0 0 1.5px rgba(255,255,255,.85),-1px -1px 0 1.5px rgba(0,0,0,.05)}
+.rs.plastic .rs-shadow{background:radial-gradient(circle,rgba(0,0,0,.5),rgba(0,0,0,0) 70%);transform:translate(4px,9px)}
+.rs.plastic .rs-knob{background:radial-gradient(circle at 38% 30%,#F2F2F3 0%,#E2E2E4 48%,#CDCDD0 100%);
+  box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -3px 6px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.08)}
+.rs.plastic .rs-turnwrap{filter:drop-shadow(2px 4px 3px rgba(0,0,0,.18))}
+.rs.plastic .rs-bar{background:linear-gradient(180deg,var(--e1,#fff) 0,var(--e1,#fff) 2px,#E9E9EB 2px,#E4E4E6 50%,#DCDCDF calc(100% - 2px),var(--e2,#b5b5b9) calc(100% - 2px))}
+
+/* ---- hard: chrome knob ---- */
+.rs.alu .rs-well{background:linear-gradient(150deg,#A9ACB1 0%,#BFC2C6 45%,#D3D5D9 100%);
+  box-shadow:inset 6px 8px 14px rgba(0,0,0,.34),inset -2px -3px 6px rgba(255,255,255,.35),0 0 0 1.5px rgba(255,255,255,.85),-1px -1px 0 1.5px rgba(0,0,0,.06)}
+.rs.alu .rs-shadow{background:radial-gradient(circle,rgba(0,0,0,.6),rgba(0,0,0,0) 70%);transform:translate(3px,9px)}
+.rs.alu .rs-knob{
+  background:
+    repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.13) 0 .6px,rgba(0,0,0,.07) .6px 1.3px),
+    conic-gradient(from 0deg,#a6a8ac 0deg,#77797e 55deg,#d6d8db 108deg,#ffffff 135deg,#d2d4d7 162deg,#76787d 225deg,#c4c6c9 288deg,#ffffff 315deg,#b5b7bb 342deg,#a6a8ac 360deg);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 2px rgba(0,0,0,.35),0 0 0 1px rgba(40,42,46,.4)}
+.rs.alu .rs-turnwrap{filter:drop-shadow(1px 4px 3px rgba(0,0,0,.3))}
+.rs.alu .rs-bar{background:
+    linear-gradient(180deg,var(--e1,#fff) 0,var(--e1,#fff) 2px,transparent 2px,transparent calc(100% - 2px),var(--e2,#55575c) calc(100% - 2px)),
+    linear-gradient(90deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.55) 46%,rgba(255,255,255,0) 66%),
+    linear-gradient(180deg,#C9CCD0 0%,#ECEDEF 30%,#FFFFFF 50%,#D9DBDE 70%,#A9ACB1 100%)}
+.rs.alu .rs-line{background:#C8261F;box-shadow:inset 0 1px 1px rgba(0,0,0,.35)}
+.rs.alu.is-on .rs-line{background:#4BEA7C;box-shadow:0 0 8px 2px rgba(60,230,110,.55)}
+
+/* layout bits */
+.readout{font:400 13px/1.5 var(--mono);color:var(--ink-2);min-height:20px;text-align:center;max-width:320px}
+.angle{font:500 13px var(--mono);color:var(--ink-2)}
+.angle b{color:var(--ink);font-weight:500}
+.where{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:720px){.where{grid-template-columns:1fr}}
+.where div{padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.m-clay .where div{border-radius:18px;background:linear-gradient(145deg,#ececef,#e2e2e6);box-shadow:inset 3px 3px 7px var(--lo),inset -3px -3px 7px var(--hi)}
+.m-alu .where div{border-radius:12px;background:linear-gradient(180deg,#e2e2e4,#ececed);box-shadow:inset 0 2px 4px rgba(0,0,0,.1),0 1px 0 #fff}
+.where b{font-weight:600}
+.where span{font-size:14px;color:var(--ink-2)}
+.split{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:28px;align-items:center}
+@media (max-width:760px){.split{grid-template-columns:minmax(0,1fr)}}
+.log{display:flex;flex-direction:column;gap:6px;min-width:0;padding:16px 18px}
+.m-clay .log{border-radius:18px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 9px var(--lo),inset -4px -4px 9px var(--hi)}
+.m-alu .log{border-radius:12px;background:linear-gradient(180deg,#1a1a1c,#2a2a2d);box-shadow:inset 0 2px 5px rgba(0,0,0,.6),0 1px 0 #fff}
+.log ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.log li{font:400 13px/1.5 var(--mono);color:var(--ink-3)}
+.m-clay .log li:first-child{color:var(--ink)}
+.m-alu .log li{color:#7d8087}
+.m-alu .log li:first-child{color:#7fe39c}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;color:var(--ink-2);align-items:center;margin-top:8px}
+.m-alu .log .keys{color:#a3a6ad}
+kbd{font:500 12px var(--mono);border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.m-alu .log kbd{border-color:#444;color:#ddd}
+.vs .slot{padding:26px 10px}
+.plastic-pad{border-radius:28px;padding:34px;background:linear-gradient(145deg,#efeee9,#e4e2dc)}
+
+.ico-plastic{background:radial-gradient(circle at 38% 32%,#f4f4f5,#cdcdd0);box-shadow:0 0 0 1px rgba(0,0,0,.18),1px 1px 2px rgba(0,0,0,.25)}
+</style>
+<main class="sheet">
+  <div class="intro">
+    <span class="label">Material study 07 · Rotary switch</span>
+    <h1>A switch you turn</h1>
+    <p>A two-position rotary switch: a bar knob sitting in a round, recessed well. No numbers. A short line at the end of the bar is red while it points left, off, and turns green when you turn the knob half a turn to the right, on. Choose a material below.</p>
+  </div>
+  <div class="strip" role="tablist" aria-label="Material">
+    <button class="tab" role="tab" id="tab-clay" aria-controls="panel-clay" aria-selected="true" tabindex="0"><span class="ico ico-plastic"></span>Plastic <span class="sub">· Soft</span></button>
+    <button class="tab" role="tab" id="tab-alu" aria-controls="panel-alu" aria-selected="false" tabindex="-1"><span class="ico ico-alu"></span>Aluminium <span class="sub">· Hard</span></button>
+  </div>
+  <div class="panelwrap">
+    <div role="tabpanel" id="panel-clay" aria-labelledby="tab-clay" class="m-clay"></div>
+    <div role="tabpanel" id="panel-alu" aria-labelledby="tab-alu" class="m-alu" hidden></div>
+  </div>
+
+  <div class="common">
+    <div class="head"><span class="num">05</span><h3>Plastic and aluminium, side by side</h3><p>Same switch, same half turn. Turn both and notice what each material does with the same movement.</p></div>
+    <div class="plate">
+      <div class="vs">
+        <div class="slot plastic-pad" id="vs-p"></div>
+        <div class="slot alu-pad" id="vs-a"></div>
+      </div>
+      <div class="scroll">
+      <table class="spec">
+        <thead><tr><th>Moment</th><th>Plastic</th><th>Aluminium</th></tr></thead>
+        <tbody>
+          <tr><td>Turn</td><td>Smooth, light, follows the finger closely</td><td>Heavier, resists until halfway</td></tr>
+          <tr><td>Timing</td><td>Eases in and out, 260 ms</td><td>Accelerates into the stop, 160 ms</td></tr>
+          <tr><td>Arrival</td><td>Settles gently, no bounce</td><td>Stops dead</td></tr>
+          <tr><td>Indicator</td><td>Painted line fades from red to green</td><td>Inlaid line snaps from red to glowing green</td></tr>
+          <tr><td>Sound</td><td>A dull, rounded click</td><td>A sharp click with a short ring</td></tr>
+          <tr><td>Shared rules</td><td colspan="2">Tap turns it · drag past halfway commits · red line on the left is off, green line on the right is on · Space, Enter and the arrow keys · announced as a switch</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <footer><span class="label">Material study 07 · Ashish Dixit</span><span class="label">A replacement for the toggle where it matters</span></footer>
+</main>
+
+<button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound">
+  <span class="ic" aria-hidden="true">
+    <svg class="off-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+    <svg class="on-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+  </span>
+  <span id="sound-t">Sound off</span>
+</button>
+<div id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>
+
+<script>
+(function(){
+"use strict";
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const COPY = {
+  clay:{
+    h:'Made of <em>plastic</em>',
+    lede:'Moulded, matte, light grey plastic with a flat raised bar across the face. It turns smoothly and lightly and settles without a bounce. The line on the bar is red when off and turns green when the turn completes. Nothing squashes: plastic this thick doesn’t.',
+    s1:['Tap it, or turn it','Tap and it turns half a turn on its own. Or grab it and turn: the knob follows your finger, and once it passes halfway, letting go finishes the turn.'],
+    n1:[['Why it follows so closely','Light plastic has little mass and little friction, so the knob tracks the finger almost one to one. It never feels like it’s fighting you.'],['Why no bounce','A rigid moulded part has no give. Unlike clay, it arrives and settles, with an easing curve that slows it into the end instead of a spring that overshoots.']],
+    s2:['Red is off, green is on','No numbers and no words. The only mark is a short line at the end of the bar. It’s red while the switch points left, and turns green when the turn completes on the right.'],
+    n2:[['Why the colour isn’t alone','Red and green are hard to tell apart for many people, so the line’s position carries the state too: left is off, right is on. Either one is enough on its own.'],['Why the colour waits','The line turns green only when the turn completes, never halfway. A half-turned switch is still off, and the colour should never suggest otherwise.']]
+  },
+  alu:{
+    h:'Made of <em>aluminium</em>',
+    lede:'The same knob in chrome: a turned face and a polished bar. It’s heavier: it resists until halfway, then snaps to the stop with a crisp click, and the red line switches to a glowing green. Turn the sound on at the bottom right.',
+    s1:['Tap it, or turn it','Tap and it snaps half a turn. Or grab it and turn: it moves less than your finger, because a spring holds it in place. Past halfway the spring takes over and finishes the turn on its own.'],
+    n1:[['Why it resists','A metal knob on a detent spring has weight. Feeling the resistance, then the release, is what makes it feel engineered rather than drawn.'],['Why it stops dead','Metal against a metal stop doesn’t settle or bounce. The motion accelerates into the end and stops, and the click lands on that exact frame.']],
+    s2:['Red is off, green is on','No numbers and no words. The only mark is a short inlaid line at the end of the chrome bar. It’s red while the switch points left, and snaps to a glowing green when it reaches the right.'],
+    n2:[['Why the colour isn’t alone','Red and green are hard to tell apart for many people, so the line’s position carries the state too: left is off, right is on.'],['Why it switches instantly','The chrome version treats the line like an indicator lamp: no fade, no halfway. It’s red until contact, then green.']]
+  }
+};
+const S3 = ['Where it replaces a toggle','A rotary switch costs a moment more effort than a toggle. That’s the point: use it where a change should feel deliberate.'];
+const S4 = ['Every turn has a keyboard twin','Focus the switch and use the keys. A screen reader hears it as a switch, on or off, and the log shows exactly what it says.'];
+const N4 = [['Why it’s a switch, not a slider','It has two states, so it’s announced as on or off. The rotation is how it looks, not how it works.'],['Why the arrows go both ways','Right or up turns it on, left or down turns it off, matching where the line points when off and on.']];
+
+/* ---------- sound ---------- */
+const Snd = {
+  ctx:null, on:false, buf:null,
+  ensure(){
+    if(!this.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return null; this.ctx = new AC(); }
+    if(this.ctx.state === "suspended") this.ctx.resume();
+    if(!this.buf){ const n = Math.floor(this.ctx.sampleRate*0.08), b = this.ctx.createBuffer(1, n, this.ctx.sampleRate), d = b.getChannelData(0); for(let i=0;i<n;i++) d[i] = Math.random()*2-1; this.buf = b; }
+    return this.ctx;
+  },
+  hit(t, f, q, g, dur, type){
+    const c = this.ctx, s = c.createBufferSource(), fl = c.createBiquadFilter(), a = c.createGain();
+    s.buffer = this.buf; fl.type = type || "bandpass"; fl.frequency.value = f; fl.Q.value = q;
+    a.gain.setValueAtTime(0.0001, t); a.gain.linearRampToValueAtTime(g, t+0.0008); a.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    s.connect(fl); fl.connect(a); a.connect(c.destination); s.start(t); s.stop(t+dur+0.02);
+  },
+  ring(t, f, g, dur){ const c = this.ctx, o = c.createOscillator(), a = c.createGain(); o.frequency.value = f; a.gain.setValueAtTime(0.0001, t); a.gain.linearRampToValueAtTime(g, t+0.001); a.gain.exponentialRampToValueAtTime(0.0001, t+dur); o.connect(a); a.connect(c.destination); o.start(t); o.stop(t+dur+0.02); },
+  play(k){
+    if(!this.on) return; const c = this.ensure(); if(!c) return; const t = c.currentTime + 0.002;
+    if(k === "plastic"){ this.hit(t, 260, 0.8, 0.4, 0.05, "lowpass"); this.hit(t, 1150, 1.6, 0.32, 0.03); this.hit(t+0.016, 900, 1.4, 0.12, 0.025); }
+    if(k === "alu"){ this.hit(t, 420, 0.9, 0.32, 0.035, "lowpass"); this.hit(t, 2600, 3, 0.55, 0.018); this.hit(t+0.008, 4300, 6, 0.35, 0.02); this.ring(t+0.008, 6200, 0.03, 0.09); }
+    if(k === "back"){ this.hit(t, 700, 1.2, 0.18, 0.025); }
+  }
+};
+const soundBtn = document.getElementById("sound"), soundT = document.getElementById("sound-t");
+function setSound(v){ Snd.on = v; soundBtn.setAttribute("aria-pressed", String(v)); soundT.textContent = v ? "Sound on" : "Sound off"; try{ localStorage.setItem("alu-sound", v ? "1" : "0"); }catch(e){} }
+soundBtn.addEventListener("click", () => { const v = !Snd.on; setSound(v); if(v){ Snd.ensure(); Snd.play(document.body.dataset.mat === "alu" ? "alu" : "plastic"); } });
+try{ if(localStorage.getItem("alu-sound") === "1"){ soundBtn.setAttribute("aria-pressed","true"); soundT.textContent = "Sound on (tap to resume)"; } }catch(e){}
+document.addEventListener("pointerdown", function once(e){
+  try{ if(localStorage.getItem("alu-sound") === "1" && !Snd.on && !e.target.closest(".sound")){ setSound(true); Snd.ensure(); } }catch(_){}
+  document.removeEventListener("pointerdown", once, true);
+}, true);
+const live = document.getElementById("live");
+function announce(t){ live.textContent = ""; setTimeout(() => live.textContent = t, 30); }
+
+/* ---------- the switch ---------- */
+const switches = [];
+function html(m, id, label, on){
+  return `<button type="button" class="rs ${m === "alu" ? "alu" : "plastic"}${on ? " is-on" : ""}" id="${id}" role="switch" aria-checked="${!!on}" aria-label="${label}">
+    <span class="rs-well"></span><span class="rs-shadow"></span><span class="rs-knob"><span class="rs-turnwrap"><span class="rs-turn"><span class="rs-bar"></span><span class="rs-line"></span></span></span></span></button>`;
+}
+function Rotary(id, m, opts){
+  const el = document.getElementById(id);
+  const o = Object.assign({slow:false, onEvent:null}, opts);
+  const hard = m === "alu";
+  const turn = el.querySelector(".rs-turn");
+  const on0 = el.getAttribute("aria-checked") === "true";
+  const s = {a:on0 ? 180 : 0, on:on0, anim:null, drag:null};
+  const emit = (t, i) => o.onEvent && o.onEvent(t, i);
+  const bar = el.querySelector(".rs-bar");
+  function render(){
+    turn.style.transform = `rotate(${s.a.toFixed(2)}deg)`;
+    const r = s.a * Math.PI / 180, f = 0.7071 * (Math.cos(r) - Math.sin(r));   // how much the bar's top edge faces the light (top left)
+    const edge = v => v >= 0 ? `rgba(255,255,255,${(0.35 + 0.6*v).toFixed(3)})` : `rgba(0,0,0,${(0.12 + 0.3*-v).toFixed(3)})`;
+    bar.style.setProperty("--e1", edge(f)); bar.style.setProperty("--e2", edge(-f));
+    o.onAngle && o.onAngle(s.a);
+  }
+  function contact(on){ s.on = on; el.classList.toggle("is-on", on); Snd.play(hard ? "alu" : "plastic"); emit("contact", {on}); }
+  function run(to, kind, done){
+    const dist = Math.abs(to - s.a) / 180;
+    if(dist < 0.001){ s.a = to; render(); done && done(); return; }
+    const base = kind === "back" ? 0.14 : hard ? 0.16 : 0.26;
+    s.anim = {a0:s.a, a1:to, t:0, dur:base * (0.4 + 0.6*dist), kind, done};
+  }
+  function commit(){
+    const to = s.on ? 0 : 180, on = !s.on;
+    el.setAttribute("aria-checked", String(on));
+    announce(on ? "On" : "Off");
+    run(to, "turn", () => contact(on));
+    return on;
+  }
+  function step(dt){
+    if(o.slow) dt *= 0.25;
+    const a = s.anim; if(!a) return;
+    a.t += dt; const u = Math.min(a.t / a.dur, 1);
+    let e;
+    if(reduce) e = u;
+    else if(a.kind === "back") e = 1 - Math.pow(1-u, 2);
+    else if(hard) e = Math.pow(u, 2.4);
+    else e = u < 0.5 ? 4*u*u*u : 1 - Math.pow(-2*u + 2, 3)/2;
+    s.a = a.a0 + (a.a1 - a.a0) * e; render();
+    if(u >= 1){ s.a = a.a1; s.anim = null; render(); a.done && a.done(); }
+  }
+  function angleAt(e){ const r = el.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height/2), e.clientX - (r.left + r.width/2)) * 180 / Math.PI; }
+  el.addEventListener("pointerdown", e => {
+    if(e.button !== 0 || s.anim) return;
+    el.setPointerCapture(e.pointerId); el.focus({preventScroll:true});
+    s.drag = {prev:angleAt(e), acc:0, start:s.a, from:s.on, active:false, committed:false};
+  });
+  el.addEventListener("pointermove", e => {
+    const d = s.drag; if(!d || d.committed) return;
+    const a = angleAt(e); let diff = a - d.prev; if(diff > 180) diff -= 360; if(diff < -180) diff += 360; d.prev = a; d.acc += diff;
+    if(!d.active && Math.abs(d.acc) > 6) d.active = true;
+    if(!d.active) return;
+    const k = hard ? 0.7 : 1;
+    s.a = Math.min(180, Math.max(0, d.start + d.acc * k)); render();
+    const travelled = d.from ? 180 - s.a : s.a;
+    if(hard && travelled >= 90){ d.committed = true; commit(); emit("commit", {on:!d.from}); }
+  });
+  function release(cancel){
+    const d = s.drag; if(!d) return; s.drag = null;
+    if(d.committed) return;
+    if(!d.active){ if(!cancel){ const on = commit(); emit("tap", {on}); } return; }
+    const travelled = d.from ? 180 - s.a : s.a;
+    if(!cancel && travelled >= 90){ const on = commit(); emit("commit", {on}); }
+    else { run(d.from ? 180 : 0, "back", () => Snd.play("back")); emit("back", {deg:Math.round(travelled)}); }
+  }
+  el.addEventListener("pointerup", () => release(false));
+  el.addEventListener("pointercancel", () => release(true));
+  el.addEventListener("lostpointercapture", () => { if(s.drag) release(true); });
+  el.addEventListener("click", e => e.preventDefault());
+  el.addEventListener("keydown", e => {
+    if(s.anim) { if([" ","Enter","ArrowRight","ArrowLeft","ArrowUp","ArrowDown"].includes(e.key)) e.preventDefault(); return; }
+    if(e.key === " " || e.key === "Enter"){ e.preventDefault(); const on = commit(); emit("key", {on}); }
+    else if((e.key === "ArrowRight" || e.key === "ArrowUp")){ e.preventDefault(); if(!s.on){ commit(); emit("key", {on:true}); } else { announce("Already on"); emit("same", {on:true}); } }
+    else if((e.key === "ArrowLeft" || e.key === "ArrowDown")){ e.preventDefault(); if(s.on){ commit(); emit("key", {on:false}); } else { announce("Already off"); emit("same", {on:false}); } }
+  });
+  render();
+  const api = {step, o};
+  switches.push(api); return api;
+}
+
+/* ---------- panels ---------- */
+function notes(n){ return `<div class="notes">${n.map(([t,p]) => `<div><span class="label">${t}</span><p>${p}</p></div>`).join("")}</div>`; }
+function head(num, s){ return `<div class="head"><span class="num">${num}</span><h3>${s[0]}</h3><p>${s[1]}</p></div>`; }
+function panel(m){
+  const c = COPY[m], p = m, mat = m === "alu" ? "alu" : "plastic";
+  return `
+  <header class="hero">
+    <h2>${c.h}</h2>
+    <p class="lede">${c.lede}</p>
+    <div class="plate" style="margin-top:10px">
+      <div class="plate-top"><span class="label live">The finished switch</span><span class="label">Tap · or turn it clockwise</span></div>
+      <div class="stage"><div class="slot">${html(mat, p+"-h", "Power")}<span class="label">Red line left, off · green line right, on</span></div></div>
+    </div>
+  </header>
+  <section>${head("01", c.s1)}
+    <div class="plate"><div class="plate-top"><span class="label live">Turn it slowly</span><label class="check"><input type="checkbox" id="${p}-1-slow"> Slow motion</label></div>
+      <div class="stage"><div class="slot">${html(mat, p+"-1", "Power")}<span class="angle" id="${p}-1-ang">Turned <b>0°</b> · off</span><span class="readout" id="${p}-1-r">Grab the knob and turn it clockwise.</span></div></div></div>
+    ${notes(c.n1)}
+  </section>
+  <section>${head("02", c.s2)}
+    <div class="plate"><div class="plate-top"><span class="label live">Off and on</span></div>
+      <div class="stage">
+        <div class="slot">${html(mat, p+"-2a", "Power, off")}<span class="label">Off · red, pointing left</span></div>
+        <div class="slot">${html(mat, p+"-2b", "Power, on", true)}<span class="label">On · green, pointing right</span></div>
+      </div></div>
+    ${notes(c.n2)}
+  </section>
+  <section>${head("03", S3)}
+    <div class="where">
+      <div><b>Master switches</b><span>Turning a whole system on or off: a smart home, a device, an account’s live mode.</span></div>
+      <div><b>Things that cost money</b><span>Auto-renew, live billing, a production deploy. A turn reads as a decision; a flick reads as a whim.</span></div>
+      <div><b>Hardware-style panels</b><span>Studio tools, settings that mirror a physical device, anywhere the interface wants to feel built.</span></div>
+    </div>
+    ${notes([["Why not everywhere","For quick, frequent settings a toggle is faster and smaller. The rotary switch earns its place where an accidental change would hurt."],["Why exactly half a turn","180° puts off and on at opposite sides, so the line’s direction alone tells the state, even from across the room."]])}
+  </section>
+  <section>${head("04", S4)}
+    <div class="plate"><div class="split">
+      <div class="stage" style="padding:10px 0"><div class="slot">${html(mat, p+"-4", "Power")}</div></div>
+      <div class="log"><span class="label">What a screen reader announces</span><ol id="${p}-4-log"><li>Focus the switch with Tab, then use the keys.</li></ol>
+        <div class="keys"><span><kbd>Space</kbd> <kbd>Enter</kbd></span><span>Turn it to the other side</span><span><kbd>→</kbd> <kbd>↑</kbd></span><span>Turn it on</span><span><kbd>←</kbd> <kbd>↓</kbd></span><span>Turn it off</span></div>
+      </div></div></div>
+    ${notes(N4)}
+  </section>`;
+}
+document.getElementById("panel-clay").innerHTML = panel("clay");
+document.getElementById("panel-alu").innerHTML = panel("alu");
+document.getElementById("vs-p").innerHTML = html("plastic", "vs-pp", "Plastic switch") + '<span class="label">Plastic · soft</span>';
+document.getElementById("vs-a").innerHTML = html("alu", "vs-aa", "Aluminium switch") + '<span class="label">Aluminium · hard</span>';
+
+["clay","alu"].forEach(m => {
+  const $ = id => document.getElementById(`${m}-${id}`);
+  Rotary(`${m}-h`, m);
+  const ang = $("1-ang"), r1 = $("1-r");
+  let onNow = false;
+  const s1 = Rotary(`${m}-1`, m, {
+    onAngle(a){ ang.innerHTML = `Turned <b>${Math.round(a)}°</b> · ${onNow ? "on" : "off"}`; },
+    onEvent(t, i){
+      if(t === "contact"){ onNow = i.on; ang.innerHTML = `Turned <b>${i.on ? 180 : 0}°</b> · ${i.on ? "on" : "off"}`; }
+      if(t === "tap") r1.textContent = `Tapped: turned ${i.on ? "on" : "off"} by itself.`;
+      if(t === "commit") r1.textContent = m === "alu" ? `Past halfway: the spring took over and snapped it ${i.on ? "on" : "off"}.` : `Released past halfway: it finished the turn ${i.on ? "on" : "off"}.`;
+      if(t === "back") r1.textContent = `Turned ${i.deg}°, short of halfway: it went back.`;
+    }
+  });
+  $("1-slow").addEventListener("change", e => s1.o.slow = e.target.checked);
+  Rotary(`${m}-2a`, m); Rotary(`${m}-2b`, m);
+  const log = $("4-log"); let logged = false;
+  const add = t => { if(!logged){ log.innerHTML = ""; logged = true; } const li = document.createElement("li"); li.textContent = t; log.prepend(li); while(log.children.length > 6) log.lastChild.remove(); };
+  const sw4 = document.getElementById(`${m}-4`);
+  sw4.addEventListener("focus", () => add(`“Power, switch, ${sw4.getAttribute("aria-checked") === "true" ? "on" : "off"}”`));
+  Rotary(`${m}-4`, m, {onEvent(t, i){ if(t === "contact") add(`“${i.on ? "On" : "Off"}”`); if(t === "same") add(`“Already ${i.on ? "on" : "off"}”`); }});
+});
+Rotary("vs-pp", "clay"); Rotary("vs-aa", "alu");
+
+/* ---------- tabs ---------- */
+const tabs = [document.getElementById("tab-clay"), document.getElementById("tab-alu")];
+function select(i, focus){
+  tabs.forEach((t, j) => { const on = i === j; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute("aria-controls")).hidden = !on; });
+  document.body.dataset.mat = i === 0 ? "clay" : "alu";
+  if(focus) tabs[i].focus();
+  try{ localStorage.setItem("rotary-mat", String(i)); }catch(e){}
+}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => select(i));
+  t.addEventListener("keydown", e => { if(e.key === "ArrowRight" || e.key === "ArrowLeft"){ e.preventDefault(); select(1 - i, true); } });
+});
+let startTab = 0;
+if(location.hash === "#aluminium" || location.hash === "#hard") startTab = 1;
+else if(location.hash !== "#plastic" && location.hash !== "#soft"){ try{ if(localStorage.getItem("rotary-mat") === "1") startTab = 1; }catch(e){} }
+select(startTab);
+
+let last = performance.now();
+(function frame(now){ const dt = Math.min((now - last)/1000, 1/30); last = now; for(const s of switches) s.step(dt); requestAnimationFrame(frame); })(last);
+})();
+</script>
+
+</body></html>

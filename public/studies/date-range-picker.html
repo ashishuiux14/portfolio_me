@@ -1,0 +1,980 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Date Range Picker Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one reading column (640px) inside a 960px sheet; demos use the full sheet width, like plates in a drawing set. */
+:root{
+  --paper:#EEF0ED; --sheet:#FAFAF8; --ink:#16191D; --ink-2:#474D55; --ink-3:#858B93;
+  --rule:#D6DAD5; --hover:#E7EAE6; --accent:#2944D1; --accent-ink:#FFFFFF;
+  --band:rgba(41,68,209,.15); --band-pv:rgba(41,68,209,.07);
+  --danger:#B4261C; --danger-bg:rgba(180,38,28,.07); --dis:#BEC3C8;
+  --serif:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans:"Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#101215; --sheet:#171A1E; --ink:#E8E9E6; --ink-2:#B3B8BF; --ink-3:#7A8089;
+  --rule:#2A2F35; --hover:#23272C; --accent:#91A3FF; --accent-ink:#0E1122;
+  --band:rgba(145,163,255,.22); --band-pv:rgba(145,163,255,.10);
+  --danger:#FF8F85; --danger-bg:rgba(255,143,133,.10); --dis:#454A51; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#101215; --sheet:#171A1E; --ink:#E8E9E6; --ink-2:#B3B8BF; --ink-3:#7A8089;
+  --rule:#2A2F35; --hover:#23272C; --accent:#91A3FF; --accent-ink:#0E1122;
+  --band:rgba(145,163,255,.22); --band-pv:rgba(145,163,255,.10);
+  --danger:#FF8F85; --danger-bg:rgba(255,143,133,.10); --dis:#454A51; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--sans);padding-inline:16px;padding-block:40px 80px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:96px}
+.prose{max-width:640px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow,.label{font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+a{color:var(--accent)}
+code,kbd{font:400 .86em var(--mono)}
+kbd{border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--sheet);white-space:nowrap}
+
+/* hero */
+.hero{display:flex;flex-direction:column;gap:20px}
+.hero h1{font:400 clamp(40px,7vw,72px)/1.02 var(--serif);letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{font-size:18px;color:var(--ink-2);max-width:640px}
+.byline{display:flex;flex-wrap:wrap;gap:6px 18px}
+
+/* sections */
+section{display:flex;flex-direction:column;gap:22px}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:4px 20px;align-items:baseline}
+.num{font:400 64px/1 var(--serif);color:var(--ink-3);grid-row:span 2}
+.sec-head h2{font:600 26px/1.2 var(--sans);letter-spacing:-.01em}
+.sec-head p{color:var(--ink-2);max-width:600px}
+@media (max-width:560px){.sec-head{grid-template-columns:1fr}.num{grid-row:auto;font-size:48px}}
+
+.plate{background:var(--sheet);border:1px solid var(--rule);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.plate-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.live{display:inline-flex;align-items:center;gap:6px}
+.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.caption{font-size:14px;color:var(--ink-2)}
+
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.notes>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.notes p{font-size:15px;color:var(--ink-2)}
+@media (max-width:640px){.notes{grid-template-columns:1fr}}
+.detail{font-size:15px;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:16px;max-width:720px}
+.detail b{color:var(--ink);font-weight:600}
+
+/* controls */
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:10px;padding:3px;gap:2px;background:var(--paper);flex-wrap:wrap}
+.seg button{border:0;background:none;color:var(--ink-2);font:500 13px var(--sans);padding:6px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--sheet);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08),0 0 0 1px var(--rule)}
+.seg button:focus-visible,.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check{display:inline-flex;align-items:center;gap:8px;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.btn{border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:500 13px var(--sans);padding:6px 12px;border-radius:8px;cursor:pointer}
+.btn:hover{background:var(--hover)}
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* field */
+.field{display:flex;align-items:center;gap:10px;height:50px;border:1px solid var(--rule);border-radius:11px;padding:0 14px;background:var(--sheet);min-width:0}
+.field svg{flex:none;color:var(--ink-3)}
+.field input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:500 16px var(--sans);outline:none;height:100%}
+.field input::placeholder{color:var(--ink-3)}
+.field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--band)}
+.dur{flex:none;font:500 12px var(--mono);color:var(--ink-2);background:var(--paper);border:1px solid var(--rule);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.readout{font-size:14px;color:var(--ink-2);min-height:22px;display:flex;flex-direction:column;gap:2px}
+.readout b{color:var(--ink);font-weight:600}
+.readout .note{font:400 12.5px var(--mono);color:var(--ink-3)}
+.readout.err{color:var(--danger)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:400 13px var(--mono);border:1px dashed var(--rule);background:none;color:var(--ink-2);border-radius:8px;padding:4px 10px;cursor:pointer}
+.chip:hover{border-style:solid;color:var(--ink)}
+
+/* picker */
+.picker{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:12px;background:var(--sheet);min-width:0}
+.pk-body{display:grid;grid-template-columns:156px minmax(0,1fr)}
+.pk-body.no-presets{grid-template-columns:minmax(0,1fr)}
+.pk-presets{display:flex;flex-direction:column;gap:2px;padding:14px 10px;border-right:1px solid var(--rule)}
+.pk-presets button{text-align:left;border:0;background:none;color:var(--ink-2);font:500 13.5px var(--sans);padding:7px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.pk-presets button:hover{background:var(--hover);color:var(--ink)}
+.pk-presets button[aria-pressed="true"]{background:var(--band);color:var(--ink)}
+.pk-presets button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.picker.narrow .pk-body{grid-template-columns:minmax(0,1fr)}
+.picker.narrow .pk-presets{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--rule);padding:10px}
+.pk-cal{position:relative;padding:14px 14px 10px}
+.pk-nav{position:absolute;inset:12px 12px auto 12px;display:flex;justify-content:space-between;pointer-events:none}
+.pk-nav button{pointer-events:auto;width:30px;height:30px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:500 16px/1 var(--sans);cursor:pointer}
+.pk-nav button:hover{background:var(--hover)}
+.pk-nav button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.pk-months{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:28px}
+.pk-title{text-align:center;font:600 14.5px/30px var(--sans);margin-bottom:6px}
+.pk-wd,.pk-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.pk-wd span{text-align:center;font:500 10.5px/24px var(--mono);color:var(--ink-3);letter-spacing:.06em}
+.pk-grid{row-gap:2px}
+.day{position:relative;height:40px;border:0;background:none;padding:0;color:var(--ink);font:500 14px var(--sans);cursor:pointer;z-index:0;font-variant-numeric:tabular-nums;outline:none}
+.day::before{content:"";position:absolute;top:4px;bottom:4px;left:0;right:0;z-index:-1}
+.day .n{position:relative;display:grid;place-items:center;width:32px;height:32px;margin:0 auto;border-radius:50%;transition:background-color .12s,color .12s}
+.day:hover:not(.dis):not(.s):not(.e) .n{background:var(--hover)}
+.day:focus-visible .n{box-shadow:0 0 0 2px var(--accent)}
+.day.today .n::after{content:"";position:absolute;bottom:3px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor}
+.day.dis{color:var(--dis);cursor:not-allowed}
+.day.in::before{background:var(--band)}
+.day.pv::before{background:var(--band-pv)}
+.day.in.bs::before{left:50%}
+.day.in.be::before{right:50%}
+.day.in.rl:not(.bs)::before{left:3px;border-radius:999px 0 0 999px}
+.day.in.rr:not(.be)::before{right:3px;border-radius:0 999px 999px 0}
+.day.in.rl.rr:not(.bs):not(.be)::before{border-radius:999px}
+.day.in.bs.rr::before,.day.in.be.rl::before,.day.in.bs.be::before{background:transparent}
+.day.in:hover:not(.s):not(.e) .n{background:transparent}
+.day.s .n,.day.e .n{background:var(--accent);color:var(--accent-ink)}
+.day.hv .n{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.day.flash .n{background:var(--danger-bg);color:var(--danger)}
+.mode-cells .day::before{display:none}
+.mode-cells .day.in .n{background:var(--band);border-radius:8px}
+.mode-cells .day.pv .n{background:var(--band-pv)}
+.mode-cells .day.s .n,.mode-cells .day.e .n{background:var(--accent);border-radius:8px}
+.pk-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding:10px 14px;font-size:14px;min-height:46px}
+.pk-sum{font-weight:600;font-variant-numeric:tabular-nums}
+.pk-sum .muted{color:var(--ink-3);font-weight:500}
+.pk-msg{font-size:13px;color:var(--ink-2)}
+.pk-msg.err{color:var(--danger)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* native demo */
+.native{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.native label{display:flex;flex-direction:column;gap:6px}
+.native input{font:500 15px var(--sans);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-radius:9px;padding:9px 11px}
+.native-status{font-size:14px;color:var(--ink-2)}
+.native-status.err{color:var(--danger)}
+
+/* anatomy */
+.scroll{overflow-x:auto}
+.anatomy{display:block;width:100%;min-width:640px;height:auto}
+.a-box{fill:var(--sheet);stroke:var(--rule);stroke-width:1}
+.a-panel{fill:var(--sheet);stroke:var(--ink-3);stroke-width:1}
+.a-band{fill:var(--band)}
+.a-cap{fill:var(--accent)}
+.a-cap-t{fill:var(--accent-ink);font:600 12px var(--sans)}
+.a-t{fill:var(--ink);font:500 12px var(--sans)}
+.a-t2{fill:var(--ink-3);font:500 12px var(--sans)}
+.a-pill{fill:var(--band)}
+.a-line{stroke:var(--ink-3);stroke-width:1;fill:none}
+.a-dot{fill:var(--ink-3)}
+.a-k{fill:var(--accent);font:500 10.5px var(--mono);letter-spacing:.06em}
+.a-s{fill:var(--ink-2);font:400 12px var(--sans)}
+.a-head{fill:var(--ink);font:600 13px var(--sans)}
+
+/* screen reader log */
+.sr-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:760px){.sr-grid{grid-template-columns:1fr}}
+.log{border:1px solid var(--rule);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--paper);min-width:0}
+.log ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.log li{font:400 13px/1.5 var(--mono);color:var(--ink-3)}
+.log li:first-child{color:var(--ink)}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;color:var(--ink-2);align-items:center}
+
+/* states */
+.states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 18px}
+@media (max-width:760px){.states{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.states{grid-template-columns:1fr}}
+.state{display:flex;flex-direction:column;gap:8px;min-width:0}
+.state .field{height:46px;pointer-events:none}
+.state .field span.v{flex:1;min-width:0;font:500 15px var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.state .muted{color:var(--ink-3)}
+.state .help{font-size:12.5px;color:var(--ink-3)}
+.f-focus{border-color:var(--accent)!important;box-shadow:0 0 0 3px var(--band)}
+.f-err{border-color:var(--danger)!important}
+.f-err+.help{color:var(--danger)}
+.f-dis{background:var(--paper)!important;color:var(--ink-3)}
+.caret{display:inline-block;width:1.5px;height:18px;background:var(--accent);vertical-align:-3px;margin-left:1px}
+
+/* closing lists */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+@media (max-width:720px){.cols{grid-template-columns:1fr}}
+.cols h3{font:600 20px/1.3 var(--sans);margin-bottom:14px}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.list li{padding:12px 0;border-top:1px solid var(--rule);font-size:15px;color:var(--ink-2)}
+.list li b{color:var(--ink);font-weight:600;display:block}
+footer{border-top:1px solid var(--rule);padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<main class="sheet">
+
+  <header class="hero">
+    <span class="eyebrow">Interaction study 01 · Date range picker</span>
+    <h1>Two clicks that shouldn’t <em>need thinking</em></h1>
+    <p class="lede">A date range picker shows up in nearly every product: reports, bookings, invoices, leave requests. The usual version works, and it still makes people count squares, fight a date mask and guess what the second click will do. This study starts from the plain version and adds one decision at a time, each with its reason and the alternative I rejected.</p>
+    <div class="byline"><span class="label">Ashish Dixit</span><span class="label">Senior Product Designer</span><span class="label">8 decisions · 10 min</span></div>
+
+    <div class="plate" style="margin-top:12px">
+      <div class="plate-top">
+        <span class="label live">The finished component · live</span>
+        <div class="seg" id="hero-ctx" role="group" aria-label="Context">
+          <button type="button" data-v="report" aria-pressed="true">Report</button>
+          <button type="button" data-v="booking" aria-pressed="false">Booking</button>
+        </div>
+      </div>
+      <label class="field" for="hero-input">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        <input id="hero-input" autocomplete="off" placeholder="Type a range, e.g. oct 3 - 17" aria-describedby="hero-readout">
+        <span class="dur" id="hero-dur"></span>
+      </label>
+      <div class="readout" id="hero-readout"></div>
+      <div id="hero-picker"></div>
+      <p class="caption">Type a range, pick a preset or click two dates. Switch between Report and Booking to see the rules change.</p>
+    </div>
+  </header>
+
+  <!-- 01 -->
+  <section>
+    <div class="sec-head"><span class="num">01</span><h2>Start with what already works</h2><p>Two native date inputs. They are accessible and cost nothing to build, so every layer after this has to earn its place over them.</p></div>
+    <div class="plate">
+      <span class="label live">The plain version</span>
+      <div class="native">
+        <label><span class="label">Start</span><input type="date" id="nat-a"></label>
+        <label><span class="label">End</span><input type="date" id="nat-b"></label>
+      </div>
+      <p class="native-status" id="nat-status" role="status">Try setting the end before the start.</p>
+    </div>
+    <div class="notes">
+      <div><span class="label">What it gets right</span><p>Native inputs work with every screen reader, follow the person’s locale and need no maintenance. If a custom picker can’t beat them on speed and clarity, it shouldn’t exist.</p></div>
+      <div><span class="label">What it misses</span><p>Two separate pop-ups that know nothing about each other. No sense of how long the span is. Nothing stops an end date before the start date.</p></div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section>
+    <div class="sec-head"><span class="num">02</span><h2>Name the parts</h2><p>Before changing anything, agree on what each piece is called. The rest of this study uses these names.</p></div>
+    <div class="plate">
+      <div class="scroll">
+      <svg class="anatomy" viewBox="0 0 760 340" role="img" aria-label="Anatomy of the date range picker: trigger field, presets, month navigation, start cap, range band, end cap and summary.">
+        <!-- trigger -->
+        <rect class="a-box" x="200" y="24" width="360" height="44" rx="9"/>
+        <text class="a-t" x="216" y="51">Oct 3 – Oct 14, 2026</text>
+        <rect class="a-box" x="486" y="35" width="62" height="22" rx="11"/>
+        <text class="a-t2" x="517" y="50" text-anchor="middle">12 days</text>
+        <!-- panel -->
+        <rect class="a-panel" x="200" y="84" width="360" height="236" rx="11"/>
+        <line class="a-line" x1="306" y1="96" x2="306" y2="276"/>
+        <text class="a-t2" x="214" y="118">Last 7 days</text>
+        <rect class="a-pill" x="208" y="128" width="90" height="24" rx="6"/>
+        <text class="a-t" x="214" y="144">Month to date</text>
+        <text class="a-t2" x="214" y="170">Last month</text>
+        <text class="a-t2" x="214" y="196">Year to date</text>
+        <!-- month header -->
+        <text class="a-head" x="433" y="118" text-anchor="middle">October 2026</text>
+        <text class="a-t" x="330" y="118">‹</text>
+        <text class="a-t" x="538" y="118">›</text>
+        <!-- band -->
+        <rect class="a-band" x="322" y="168" width="234" height="28" rx="14"/>
+        <rect class="a-band" x="322" y="204" width="117" height="28" rx="14"/>
+        <circle class="a-cap" cx="541" cy="146" r="14"/>
+        <circle class="a-cap" cx="439" cy="218" r="14"/>
+        <!-- row 0: 1,2,3 at cols 4..6 -->
+        <text class="a-t" x="473" y="150" text-anchor="middle">1</text>
+        <text class="a-t" x="507" y="150" text-anchor="middle">2</text>
+        <text class="a-cap-t" x="541" y="150" text-anchor="middle">3</text>
+        <!-- row 1: 4..10 -->
+        <text class="a-t" x="337" y="186" text-anchor="middle">4</text>
+        <text class="a-t" x="371" y="186" text-anchor="middle">5</text>
+        <text class="a-t" x="405" y="186" text-anchor="middle">6</text>
+        <text class="a-t" x="439" y="186" text-anchor="middle">7</text>
+        <text class="a-t" x="473" y="186" text-anchor="middle">8</text>
+        <text class="a-t" x="507" y="186" text-anchor="middle">9</text>
+        <text class="a-t" x="541" y="186" text-anchor="middle">10</text>
+        <!-- row 2: 11..17 -->
+        <text class="a-t" x="337" y="222" text-anchor="middle">11</text>
+        <text class="a-t" x="371" y="222" text-anchor="middle">12</text>
+        <text class="a-t" x="405" y="222" text-anchor="middle">13</text>
+        <text class="a-cap-t" x="439" y="222" text-anchor="middle">14</text>
+        <text class="a-t2" x="473" y="222" text-anchor="middle">15</text>
+        <text class="a-t2" x="507" y="222" text-anchor="middle">16</text>
+        <text class="a-t2" x="541" y="222" text-anchor="middle">17</text>
+        <circle class="a-dot" cx="371" cy="228" r="2"/>
+        <!-- footer -->
+        <line class="a-line" x1="200" y1="276" x2="560" y2="276"/>
+        <text class="a-t" x="216" y="303">Oct 3 – Oct 14 · 12 days</text>
+
+        <!-- callouts left -->
+        <line class="a-line" x1="150" y1="46" x2="200" y2="46"/><circle class="a-dot" cx="200" cy="46" r="2.5"/>
+        <text class="a-k" x="16" y="42">TRIGGER</text><text class="a-s" x="16" y="58">shows the answer</text>
+        <line class="a-line" x1="150" y1="140" x2="208" y2="140"/><circle class="a-dot" cx="208" cy="140" r="2.5"/>
+        <text class="a-k" x="16" y="136">PRESETS</text><text class="a-s" x="16" y="152">the common asks</text>
+        <line class="a-line" x1="150" y1="226" x2="364" y2="228"/><circle class="a-dot" cx="364" cy="228" r="2.5"/>
+        <text class="a-k" x="16" y="222">TODAY</text><text class="a-s" x="16" y="238">marked, not chosen</text>
+        <line class="a-line" x1="150" y1="300" x2="208" y2="300"/><circle class="a-dot" cx="208" cy="300" r="2.5"/>
+        <text class="a-k" x="16" y="296">SUMMARY</text><text class="a-s" x="16" y="312">the span, counted</text>
+        <!-- callouts right -->
+        <line class="a-line" x1="548" y1="114" x2="600" y2="100"/><circle class="a-dot" cx="548" cy="114" r="2.5"/>
+        <text class="a-k" x="606" y="96">MONTH NAV</text><text class="a-s" x="606" y="112">moves the pair</text>
+        <line class="a-line" x1="556" y1="146" x2="600" y2="146"/><circle class="a-dot" cx="556" cy="146" r="2.5"/>
+        <text class="a-k" x="606" y="142">START CAP</text><text class="a-s" x="606" y="158">a handle, solid</text>
+        <line class="a-line" x1="556" y1="182" x2="600" y2="190"/><circle class="a-dot" cx="556" cy="182" r="2.5"/>
+        <text class="a-k" x="606" y="186">RANGE BAND</text><text class="a-s" x="606" y="202">rounds at row breaks</text>
+        <line class="a-line" x1="439" y1="232" x2="439" y2="254"/><line class="a-line" x1="439" y1="254" x2="600" y2="254"/><circle class="a-dot" cx="439" cy="232" r="2.5"/>
+        <text class="a-k" x="606" y="250">END CAP</text><text class="a-s" x="606" y="266">same weight as start</text>
+      </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section>
+    <div class="sec-head"><span class="num">03</span><h2>Show the range before it’s chosen</h2><p>After the first click, the calendar previews what the second click would select. The 6th is already picked here. Move the pointer over a later date.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Interactive</span>
+        <div class="controls"><label class="check"><input type="checkbox" id="pv-toggle" checked> Preview on hover</label><button type="button" class="btn" id="pv-reset">Reset</button></div>
+      </div>
+      <div id="pv-picker"></div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>Without a preview, people choose the end date blind and then check the result by counting. With it, the second click becomes a confirmation of something they can already see.</p></div>
+      <div><span class="label">Why not highlight only the hovered day</span><p>A single highlighted day tells you where the pointer is. It doesn’t tell you what you are about to select, which is the only question that matters at that moment.</p></div>
+    </div>
+    <p class="detail"><b>In detail.</b> The preview is the same band as a finished range at half strength, so committing reads as the preview settling, not as something new appearing. The day under the pointer gets a ring instead of a fill, because it isn’t chosen yet. Arrow keys drive the same preview, so keyboard users get it too.</p>
+  </section>
+
+  <!-- 04 -->
+  <section>
+    <div class="sec-head"><span class="num">04</span><h2>When the second click lands before the first</h2><p>Someone picks the 18th, then clicks the 9th. The calendar can respond in three reasonable ways. Choose one and click a date before the 18th.</p></div>
+    <div class="plate">
+      <div class="plate-top">
+        <div class="seg" id="strat" role="group" aria-label="Behaviour">
+          <button type="button" data-v="error" aria-pressed="false">Show an error</button>
+          <button type="button" data-v="swap" aria-pressed="false">Swap the dates</button>
+          <button type="button" data-v="restart" aria-pressed="true">Start over from there</button>
+        </div>
+        <button type="button" class="btn" id="strat-reset">Reset to the 18th</button>
+      </div>
+      <div id="strat-picker"></div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why start over</span><p>A click before the start almost always means the first click was wrong. Treating it as the new start matches that intent, and the preview immediately shows what the next click will do.</p></div>
+      <div><span class="label">Why not swap, why not an error</span><p>Swapping quietly builds a range out of a mistake, and the person has to notice it and undo it. An error blames someone for a reasonable click and hands them a fix the calendar could have made.</p></div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section>
+    <div class="sec-head"><span class="num">05</span><h2>Let people type, and say how it was read</h2><p>People who already know their dates are faster on the keyboard than in any calendar. The field accepts the way people actually write dates and shows its interpretation as they type.</p></div>
+    <div class="plate">
+      <span class="label live">Interactive · try one</span>
+      <div class="chips" id="type-chips">
+        <button type="button" class="chip">oct 3 - 17</button>
+        <button type="button" class="chip">last 30 days</button>
+        <button type="button" class="chip">12/24 - 1/2</button>
+        <button type="button" class="chip">3 nov to 9 nov</button>
+        <button type="button" class="chip">2026-11-02 to 2026-11-06</button>
+        <button type="button" class="chip">next week</button>
+        <button type="button" class="chip">feb 30</button>
+      </div>
+      <label class="field" for="type-input">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        <input id="type-input" autocomplete="off" placeholder="Type a range" aria-describedby="type-readout">
+        <span class="dur" id="type-dur"></span>
+      </label>
+      <div class="readout" id="type-readout"></div>
+      <div id="type-picker"></div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>Typing is the fastest path for people who repeat a task and the main path for many keyboard and screen reader users. Showing how the input was read is what makes forgiving parsing safe.</p></div>
+      <div><span class="label">Why not a mask like MM/DD/YYYY</span><p>A mask accepts one format, breaks on paste and confuses anyone who writes the day first. It moves the work of formatting onto the person instead of the software.</p></div>
+    </div>
+    <p class="detail"><b>In detail.</b> With no year typed, the field assumes the current year. When the end would land before the start, as in <code>12/24 - 1/2</code>, the end rolls into the next year and the readout says so. Numbers are read month first, and the readout flags it whenever both numbers could be a month. Impossible dates such as <code>feb 30</code> are refused with an example of what works.</p>
+  </section>
+
+  <!-- 06 -->
+  <section>
+    <div class="sec-head"><span class="num">06</span><h2>Same component, opposite rules</h2><p>A report looks back. A booking looks forward. The presets, the dates you can’t pick and the unit of the summary all flip with it.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Interactive</span>
+        <div class="seg" id="ctx" role="group" aria-label="Context">
+          <button type="button" data-v="report" aria-pressed="true">Report</button>
+          <button type="button" data-v="booking" aria-pressed="false">Booking</button>
+        </div>
+      </div>
+      <div id="ctx-picker"></div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>Presets are where most selections happen, so they have to match the job. Disabling impossible dates prevents an error instead of reporting one after the fact.</p></div>
+      <div><span class="label">Why not one universal preset list</span><p>“Last 30 days” on a hotel search, or “This weekend” on a revenue report, tells the person the component wasn’t designed for their task.</p></div>
+    </div>
+    <p class="detail"><b>In detail.</b> “Last 7 days” includes today, so it starts six days back. Getting that off by one is a classic reporting bug. A booking counts nights, which is the number of days minus one, because that is what the price is based on. A same-day booking is refused with a reason.</p>
+  </section>
+
+  <!-- 07 -->
+  <section>
+    <div class="sec-head"><span class="num">07</span><h2>One band, not eighteen squares</h2><p>How a range is drawn decides whether it reads as one thing or many. This range crosses three week rows and a month boundary.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Interactive</span>
+        <div class="seg" id="band" role="group" aria-label="Drawing">
+          <button type="button" data-v="cells" aria-pressed="false">Separate squares</button>
+          <button type="button" data-v="band" aria-pressed="true">Continuous band</button>
+        </div>
+      </div>
+      <div id="band-picker"></div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>A continuous band reads as a single span with two ends. Separate squares read as many individual choices, and the start and end get lost among them.</p></div>
+      <div><span class="label">Why not squares</span><p>Squares are easier to build, since every day is styled on its own. That saving goes to the engineer, and the cost goes to everyone who reads the calendar.</p></div>
+    </div>
+    <p class="detail"><b>In detail.</b> The band sits behind each day and rounds off wherever a week row breaks or a month ends, so the eye can follow it from one row to the next. The start and end sit on top as solid circles of equal weight, which makes them read as the two handles they are.</p>
+  </section>
+
+  <!-- 08 -->
+  <section>
+    <div class="sec-head"><span class="num">08</span><h2>Every move has a keyboard twin</h2><p>Everything the pointer can do, the keyboard can do, and a screen reader hears what changed. Click a date, then use the keys.</p></div>
+    <div class="sr-grid">
+      <div class="plate"><span class="label live">Interactive</span><div id="kb-picker"></div></div>
+      <div class="log">
+        <span class="label">What a screen reader announces</span>
+        <ol id="kb-log"><li>Click a date, then use the arrow keys.</li></ol>
+        <div class="keys">
+          <span><kbd>←</kbd> <kbd>→</kbd></span><span>Previous or next day</span>
+          <span><kbd>↑</kbd> <kbd>↓</kbd></span><span>Same day last or next week</span>
+          <span><kbd>PgUp</kbd> <kbd>PgDn</kbd></span><span>Same day last or next month</span>
+          <span><kbd>Home</kbd> <kbd>End</kbd></span><span>Start or end of the week</span>
+          <span><kbd>Enter</kbd></span><span>Choose the focused day</span>
+          <span><kbd>Esc</kbd></span><span>Clear a half-finished range</span>
+        </div>
+      </div>
+    </div>
+    <p class="detail"><b>In detail.</b> Only one day sits in the tab order at a time and the arrows move focus, so a single Tab leaves the calendar. Announcements are polite, so they never cut off what the screen reader is already saying, and they lead with the result: the date, then what it means for the range.</p>
+  </section>
+
+  <!-- 09 -->
+  <section>
+    <div class="sec-head"><span class="num">09</span><h2>Every state the field can be in</h2><p>The closed field carries most of the work, so each state has to say what happened and what comes next.</p></div>
+    <div class="plate">
+      <div class="states">
+        <div class="state"><span class="label">Empty</span>
+          <div class="field"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg><span class="v muted">Add dates</span></div>
+          <span class="help">Placeholder names the action, not the format.</span></div>
+        <div class="state"><span class="label">Focused</span>
+          <div class="field f-focus"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg><span class="v">oct 3 - 1<span class="caret"></span></span></div>
+          <span class="help">Start Oct 3. Keep typing the end date.</span></div>
+        <div class="state"><span class="label">Start chosen</span>
+          <div class="field"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg><span class="v">Oct 3 – <span class="muted">choose end</span></span></div>
+          <span class="help">The open end is named, not left blank.</span></div>
+        <div class="state"><span class="label">Complete</span>
+          <div class="field"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg><span class="v">Oct 3 – Oct 17, 2026</span><span class="dur">15 days</span></div>
+          <span class="help">Year shown once, span counted.</span></div>
+        <div class="state"><span class="label">Can’t read it</span>
+          <div class="field f-err"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg><span class="v">oct 35 - 40</span></div>
+          <span class="help">October has 31 days. Try “Oct 3 – 17”.</span></div>
+        <div class="state"><span class="label">Locked</span>
+          <div class="field f-dis"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 7.5h13M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg><span class="v">Oct 1 – Oct 31, 2026</span></div>
+          <span class="help">Set by your workspace admin. Says who, so people know where to ask.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="cols">
+      <div>
+        <h3>What I’d measure after shipping</h3>
+        <ul class="list">
+          <li><b>Time to a finished range</b>From opening the field to a complete selection, split by typed, clicked and preset.</li>
+          <li><b>Edits right after selecting</b>A range changed within seconds of being set means the preview or presets missed.</li>
+          <li><b>Preset use per context</b>Presets nobody picks get removed; ranges people build by hand often become new presets.</li>
+          <li><b>Errors from typed input</b>Every refused entry is a format to support or a hint to rewrite.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Rejected along the way</h3>
+        <ul class="list">
+          <li><b>A slider for the range</b>Fine for prices, too imprecise for dates, and hard to use with a keyboard.</li>
+          <li><b>Closing the panel on the second click</b>Right for a booking. In a report, people adjust a range several times, so the panel stays open.</li>
+          <li><b>Two months side by side on phones</b>One month at full width, with presets in a scrolling row above it.</li>
+          <li><b>Showing days from neighbouring months in the grid</b>They make a band look like it continues into dates that aren’t selected.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer><span class="label">Interaction study 01 · Ashish Dixit</span><span class="label">Plain HTML, CSS and JavaScript · no libraries</span></footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+/* ---------- dates ---------- */
+const DAY = 864e5;
+const D = (y,m,d) => new Date(y,m,d);
+const now = new Date();
+const TODAY = D(now.getFullYear(), now.getMonth(), now.getDate());
+const key = d => d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+const fromKey = k => D(Math.floor(k/10000), Math.floor(k/100)%100 - 1, k%100);
+const addDays = (d,n) => D(d.getFullYear(), d.getMonth(), d.getDate()+n);
+const som = d => D(d.getFullYear(), d.getMonth(), 1);
+const eom = d => D(d.getFullYear(), d.getMonth()+1, 0);
+const addMonths = (d,n) => D(d.getFullYear(), d.getMonth()+n, 1);
+const dim = (y,m) => D(y,m+1,0).getDate();
+const sameMonthDay = (d,n) => { const t = addMonths(d,n); return D(t.getFullYear(), t.getMonth(), Math.min(d.getDate(), dim(t.getFullYear(), t.getMonth()))); };
+const same = (a,b) => !!a && !!b && key(a) === key(b);
+const span = (a,b) => Math.round((b - a)/DAY) + 1;
+const MS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MF = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const WD = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const WDF = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const fmt = (d, o={}) => `${o.wd ? WD[d.getDay()]+", " : ""}${MS[d.getMonth()]} ${d.getDate()}${o.year ? ", "+d.getFullYear() : ""}`;
+const fmtFull = d => `${WDF[d.getDay()]}, ${MF[d.getMonth()]} ${d.getDate()}`;
+function fmtRange(s, e, o={}){
+  if(!s) return "";
+  if(!e) return `${fmt(s,o)} – `;
+  if(same(s,e)) return fmt(s,{...o, year:true});
+  if(s.getFullYear() === e.getFullYear()) return `${fmt(s,o)} – ${fmt(e,{...o, year:true})}`;
+  return `${fmt(s,{...o, year:true})} – ${fmt(e,{...o, year:true})}`;
+}
+function duration(s, e, ctx){
+  const n = span(s,e);
+  if(ctx === "booking"){ const nights = n-1; return `${nights} night${nights===1?"":"s"}`; }
+  return `${n} day${n===1?"":"s"}`;
+}
+
+/* ---------- presets ---------- */
+function presets(ctx){
+  const t = TODAY, dow = t.getDay();
+  if(ctx === "booking"){
+    const fri = addDays(t, (5 - dow + 7) % 7);
+    const mon = addDays(t, ((1 - dow + 7) % 7) || 7);
+    return [
+      ["Tonight", t, addDays(t,1)],
+      ["This weekend", fri, addDays(fri,2)],
+      ["Next weekend", addDays(fri,7), addDays(fri,9)],
+      ["A week from Monday", mon, addDays(mon,7)],
+      ["All of next month", addMonths(t,1), addMonths(t,2)],
+    ];
+  }
+  const lm = addMonths(t,-1);
+  return [
+    ["Today", t, t],
+    ["Yesterday", addDays(t,-1), addDays(t,-1)],
+    ["Last 7 days", addDays(t,-6), t],
+    ["Last 30 days", addDays(t,-29), t],
+    ["Month to date", som(t), t],
+    ["Last month", lm, eom(lm)],
+    ["Year to date", D(t.getFullYear(),0,1), t],
+  ];
+}
+
+/* ---------- parser ---------- */
+function monthIndex(w){
+  if(!w || w.length < 3) return -1;
+  return MF.findIndex(m => m.toLowerCase().startsWith(w));
+}
+function inferYear(m, d, ctx, prev){
+  if(prev){
+    let y = prev.getFullYear();
+    if(key(D(y,m,d)) < key(prev)) y += 1;
+    return y;
+  }
+  let y = TODAY.getFullYear();
+  const c = D(y,m,d);
+  if(ctx === "report" && key(c) > key(TODAY)) y -= 1;
+  if(ctx === "booking" && key(c) < key(TODAY)) y += 1;
+  return y;
+}
+function parsePart(str, ctx, prev, notes){
+  let m, d, y = null, r;
+  if((r = str.match(/^([a-z]+)\.? (\d{1,2})(?:st|nd|rd|th)?(?: (\d{4}|\d{2}))?$/))){ m = monthIndex(r[1]); d = +r[2]; if(r[3]) y = +r[3]; }
+  else if((r = str.match(/^(\d{1,2})(?:st|nd|rd|th)? ([a-z]+)\.?(?: (\d{4}|\d{2}))?$/))){ m = monthIndex(r[2]); d = +r[1]; if(r[3]) y = +r[3]; }
+  else if((r = str.match(/^(\d{1,2})[\/.](\d{1,2})(?:[\/.](\d{4}|\d{2}))?$/))){
+    m = +r[1]-1; d = +r[2]; if(r[3]) y = +r[3];
+    if(+r[1] <= 12 && +r[2] <= 12 && r[1] !== r[2]) notes.push(`${r[1]}/${r[2]} read month first, as ${MF[m]} ${d}.`);
+  }
+  else if(prev && (r = str.match(/^(\d{1,2})(?:st|nd|rd|th)?$/))){
+    m = prev.getMonth(); d = +r[1]; const py = prev.getFullYear();
+    if(d < 1 || d > dim(py, m)) return {error:`${MF[m]} has ${dim(py,m)} days.`};
+    return {date: D(py,m,d), hadYear:false, dayOnly:true};
+  }
+  else if((r = str.match(/^([a-z]+)\.?$/)) && monthIndex(r[1]) >= 0){ return {partialMonth: monthIndex(r[1])}; }
+  else return {error:`Couldn’t read “${str}”.`};
+  if(m < 0 || m > 11) return {error:`“${str}” doesn’t name a month.`};
+  if(y !== null && y < 100) y += 2000;
+  const yy = y !== null ? y : inferYear(m, d, ctx, prev);
+  if(d < 1 || d > dim(yy, m)) return {error:`${MF[m]} has ${dim(yy,m)} days.`};
+  return {date: D(yy,m,d), hadYear: y !== null};
+}
+function relative(s, ctx){
+  const t = TODAY, dow = t.getDay(); let r;
+  const book = ctx === "booking";
+  if(s === "today" || s === "tonight") return book ? [t, addDays(t,1)] : [t, t];
+  if(s === "tomorrow") return book ? [addDays(t,1), addDays(t,2)] : [addDays(t,1), addDays(t,1)];
+  if(s === "yesterday") return [addDays(t,-1), addDays(t,-1)];
+  if((r = s.match(/^(?:last|past|previous) (\d{1,3}) (days?|weeks?|months?)$/))){
+    const n = +r[1];
+    if(/^month/.test(r[2])) return [addDays(sameMonthDay(t,-n),1), t, `Runs from ${n} month${n>1?"s":""} back up to today.`];
+    const days = /^week/.test(r[2]) ? n*7 : n;
+    return [addDays(t,-(days-1)), t, `Includes today, so it starts ${days-1} day${days-1===1?"":"s"} back.`];
+  }
+  if((r = s.match(/^next (\d{1,3}) (days?|nights?|weeks?)$/))){
+    const n = +r[1] * (/^week/.test(r[2]) ? 7 : 1);
+    return book ? [t, addDays(t,n)] : [addDays(t,1), addDays(t,n)];
+  }
+  const sun = addDays(t,-dow);
+  if(s === "this week") return [sun, addDays(sun,6)];
+  if(s === "last week") return [addDays(sun,-7), addDays(sun,-1), "Sunday to Saturday."];
+  if(s === "next week") return book ? [addDays(sun,7), addDays(sun,14)] : [addDays(sun,7), addDays(sun,13)];
+  if(s === "this month") return ctx === "report" ? [som(t), t, "Up to today."] : [som(t), eom(t)];
+  if(s === "last month"){ const lm = addMonths(t,-1); return [lm, eom(lm)]; }
+  if(s === "next month"){ const nm = addMonths(t,1); return book ? [nm, addMonths(t,2)] : [nm, eom(nm)]; }
+  if(s === "this weekend" || s === "next weekend"){
+    const fri = addDays(t, (5 - dow + 7) % 7 + (s === "next weekend" ? 7 : 0));
+    return book ? [fri, addDays(fri,2)] : [addDays(fri,1), addDays(fri,2)];
+  }
+  if(s === "ytd" || s === "year to date") return [D(t.getFullYear(),0,1), t];
+  return null;
+}
+function parse(raw, ctx){
+  const s = raw.toLowerCase().replace(/[–—]/g,"-").replace(/,/g," ").replace(/\s+/g," ").trim();
+  if(!s) return {empty:true};
+  const notes = [];
+  let a, b, r;
+  const rel = relative(s, ctx);
+  if(rel){ a = rel[0]; b = rel[1]; if(rel[2]) notes.push(rel[2]); }
+  else if((r = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?: ?(?:-|to|until|through|thru) ?(\d{4})-(\d{1,2})-(\d{1,2}))?$/))){
+    a = D(+r[1], +r[2]-1, +r[3]);
+    if(a.getDate() !== +r[3] || a.getMonth() !== +r[2]-1) return {error:`${r[1]}-${r[2]}-${r[3]} isn’t a real date.`};
+    if(r[4]){ b = D(+r[4], +r[5]-1, +r[6]); if(b.getDate() !== +r[6] || b.getMonth() !== +r[5]-1) return {error:`${r[4]}-${r[5]}-${r[6]} isn’t a real date.`}; }
+    else b = a;
+  } else {
+    const parts = s.split(/\s*(?:-|\bto\b|\buntil\b|\bthrough\b|\bthru\b)\s*/);
+    if(parts.length > 2) return {error:"Use one dash or “to” between the two dates."};
+    const pa = parsePart(parts[0], ctx, null, notes);
+    if(pa.partialMonth !== undefined) return {partial:true, text:`${MF[pa.partialMonth]}… add a day.`};
+    if(pa.error) return {error: pa.error};
+    a = pa.date;
+    if(!pa.hadYear && a.getFullYear() !== TODAY.getFullYear()) notes.push(`No year typed, so ${a.getFullYear()} was assumed.`);
+    if(parts.length === 1){ b = ctx === "booking" ? addDays(a,1) : a; }
+    else if(parts[1] === ""){ return {partial:true, start:a, text:`Start ${fmt(a,{wd:true, year:true})}. Add the end date.`}; }
+    else {
+      const pb = parsePart(parts[1], ctx, a, notes);
+      if(pb.partialMonth !== undefined) return {partial:true, start:a, text:`Start ${fmt(a,{wd:true})}. ${MF[pb.partialMonth]}… add a day.`};
+      if(pb.error) return {error: pb.error};
+      if(pb.dayOnly && key(pb.date) < key(a)) return {partial:true, start:a, text:`Start ${fmt(a,{wd:true})}. Keep typing the end date.`};
+      b = pb.date;
+      if(!pb.hadYear && b.getFullYear() > a.getFullYear()) notes.push(`The end crosses into ${b.getFullYear()}.`);
+    }
+  }
+  if(key(b) < key(a)) return {error:"The end date is before the start date."};
+  if(ctx === "report" && key(b) > key(TODAY)) return {error:"Reports can’t include future dates."};
+  if(ctx === "booking" && key(a) < key(TODAY)) return {error:"Check-in can’t be in the past."};
+  if(ctx === "booking" && same(a,b)) return {error:"Check-out has to be at least one night after check-in."};
+  return {ok:true, s:a, e:b, notes};
+}
+
+/* ---------- picker ---------- */
+function Picker(root, opts){
+  const o = Object.assign({months:2, preview:true, strategy:"restart", band:"band", context:"report", presets:true, summary:true}, opts);
+  const st = {s:o.start||null, e:o.end||null, h:null, view:null, focus:o.start||TODAY, msg:"", err:false};
+  const listeners = [];
+  let n = o.months, cells = new Map();
+
+  root.classList.add("picker");
+  root.innerHTML = `<div class="pk-body${o.presets?"":" no-presets"}">${o.presets?'<div class="pk-presets" role="group" aria-label="Presets"></div>':""}<div class="pk-cal"><div class="pk-nav"><button type="button" class="pk-prev" aria-label="Previous month">‹</button><button type="button" class="pk-next" aria-label="Next month">›</button></div><div class="pk-months"></div></div></div>${o.summary?'<div class="pk-foot"><span class="pk-sum"></span><span class="pk-msg"></span></div>':""}<div class="sr" aria-live="polite"></div>`;
+  const $ = s => root.querySelector(s);
+  const monthsEl = $(".pk-months"), presetsEl = $(".pk-presets"), sumEl = $(".pk-sum"), msgEl = $(".pk-msg"), liveEl = $(".sr");
+  root.classList.toggle("mode-cells", o.band === "cells");
+
+  const disabled = d => (o.context === "report" && key(d) > key(TODAY)) || (o.context === "booking" && key(d) < key(TODAY));
+  function announce(t){ liveEl.textContent = t; if(o.onAnnounce) o.onAnnounce(t); }
+  function emit(){ listeners.forEach(f => f(api.get())); }
+  function fitView(s, e){
+    const t = e || s || TODAY;
+    if(n === 1){ st.view = som(t); return; }
+    if(!s){ st.view = o.context === "report" ? addMonths(TODAY,-1) : som(TODAY); return; }
+    if(!e){ st.view = som(s); return; }
+    const gap = (e.getFullYear()-s.getFullYear())*12 + e.getMonth() - s.getMonth();
+    st.view = gap === 0 ? (o.context === "report" ? addMonths(e,-1) : som(s)) : gap === 1 ? som(s) : addMonths(e,-1);
+  }
+
+  function buildPresets(){
+    if(!presetsEl) return;
+    presetsEl.innerHTML = "";
+    presets(o.context).forEach(([label,a,b]) => {
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.textContent = label;
+      btn.dataset.a = key(a); btn.dataset.b = key(b);
+      btn.addEventListener("click", () => { api.set(a, b, {silent:false}); announce(`${label}: ${fmtRange(a,b)}, ${duration(a,b,o.context)}.`); });
+      presetsEl.appendChild(btn);
+    });
+  }
+
+  function measure(){
+    const w = root.clientWidth || 700;
+    root.classList.toggle("narrow", w < 640);
+    const want = o.months === 2 && w >= 600 ? 2 : 1;
+    if(want !== n){ n = want; fitView(st.s, st.e); render(); }
+  }
+
+  function render(){
+    monthsEl.style.setProperty("--n", n);
+    monthsEl.innerHTML = ""; cells = new Map();
+    for(let i = 0; i < n; i++){
+      const m0 = addMonths(st.view, i), y = m0.getFullYear(), mo = m0.getMonth(), off = m0.getDay(), last = dim(y,mo);
+      const block = document.createElement("div");
+      block.className = "pk-month";
+      let html = `<div class="pk-title">${MF[mo]} ${y}</div><div class="pk-wd" aria-hidden="true">${["S","M","T","W","T","F","S"].map(x=>`<span>${x}</span>`).join("")}</div><div class="pk-grid">`;
+      for(let p = 0; p < off; p++) html += `<span></span>`;
+      for(let d = 1; d <= last; d++) html += `<button type="button" class="day" data-k="${key(D(y,mo,d))}" data-col="${(off+d-1)%7}" data-last="${d===last?1:0}"><span class="n">${d}</span></button>`;
+      html += `</div>`;
+      block.innerHTML = html;
+      monthsEl.appendChild(block);
+    }
+    monthsEl.querySelectorAll(".day").forEach(b => cells.set(+b.dataset.k, b));
+    paint();
+  }
+
+  function paint(){
+    const s = st.s; let hi = st.e, pv = false;
+    if(s && !st.e && o.preview && st.h && key(st.h) >= key(s)){ hi = st.h; pv = true; }
+    const ks = s ? key(s) : 0, kh = hi ? key(hi) : 0;
+    cells.forEach((btn, k) => {
+      const d = fromKey(k), col = +btn.dataset.col;
+      const inR = s && hi && k >= ks && k <= kh;
+      const dis = disabled(d);
+      const cls = ["day"];
+      if(inR && ks !== kh) cls.push("in");
+      if(inR && pv) cls.push("pv");
+      if(s && k === ks) cls.push("s");
+      if(st.e && k === key(st.e)) cls.push("e");
+      if(pv && k === kh && kh !== ks) cls.push("hv");
+      if(inR && k === ks) cls.push("bs");
+      if(inR && k === kh) cls.push("be");
+      if(col === 0 || d.getDate() === 1) cls.push("rl");
+      if(col === 6 || btn.dataset.last === "1") cls.push("rr");
+      if(k === key(TODAY)) cls.push("today");
+      if(dis) cls.push("dis");
+      if(st.flash === k) cls.push("flash");
+      btn.className = cls.join(" ");
+      btn.tabIndex = same(d, st.focus) ? 0 : -1;
+      btn.setAttribute("aria-disabled", dis ? "true" : "false");
+      let label = `${fmtFull(d)}, ${d.getFullYear()}`;
+      if(s && k === ks) label += ", start date";
+      else if(st.e && k === key(st.e)) label += ", end date";
+      else if(inR && !pv) label += ", in range";
+      if(dis) label += ", unavailable";
+      btn.setAttribute("aria-label", label);
+    });
+    if(!Array.from(cells.values()).some(b => b.tabIndex === 0)){ const first = cells.values().next().value; if(first) first.tabIndex = 0; }
+    if(sumEl){
+      if(st.s && st.e) sumEl.innerHTML = `${fmtRange(st.s, st.e)} <span class="muted">· ${duration(st.s, st.e, o.context)}</span>`;
+      else if(st.s) sumEl.innerHTML = `${fmt(st.s)} – <span class="muted">choose ${o.context==="booking"?"check-out":"end date"}</span>`;
+      else sumEl.innerHTML = `<span class="muted">${o.context==="booking"?"Choose check-in":"Choose a start date"}</span>`;
+    }
+    if(msgEl){ msgEl.textContent = st.msg; msgEl.classList.toggle("err", st.err); }
+    if(presetsEl) presetsEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(!!(st.s && st.e && +b.dataset.a === key(st.s) && +b.dataset.b === key(st.e)))));
+  }
+
+  function choose(d){
+    st.focus = d; st.msg = ""; st.err = false; st.flash = null;
+    if(disabled(d)){ st.msg = o.context === "booking" ? "Past dates can’t be booked." : "Reports can’t include future dates."; st.err = true; announce(st.msg); paint(); return; }
+    if(!st.s || st.e){
+      st.s = d; st.e = null; st.h = null;
+      announce(`Start date, ${fmtFull(d)}. Now choose an end date.`);
+    } else if(key(d) < key(st.s)){
+      if(o.strategy === "restart"){
+        st.s = d; st.h = null; st.msg = "The earlier date became the new start.";
+        announce(`Start date moved to ${fmtFull(d)}. Now choose an end date.`);
+      } else if(o.strategy === "swap"){
+        st.e = st.s; st.s = d; st.h = null; st.msg = "Swapped: your first click is now the end date.";
+        announce(`Selected ${fmtRange(st.s, st.e)}, ${duration(st.s, st.e, o.context)}.`);
+      } else {
+        st.msg = "End date can’t be before the start date."; st.err = true; st.flash = key(d);
+        announce(st.msg);
+        setTimeout(() => { if(st.flash === key(d)){ st.flash = null; paint(); } }, 700);
+      }
+    } else if(o.context === "booking" && same(d, st.s)){
+      st.msg = "Check-out has to be at least one night after check-in."; st.err = true; announce(st.msg);
+    } else {
+      st.e = d; st.h = null;
+      announce(`Selected ${fmtRange(st.s, st.e)}, ${duration(st.s, st.e, o.context)}.`);
+    }
+    paint(); emit();
+  }
+
+  function move(nd){
+    st.focus = nd;
+    if(st.s && !st.e && o.preview) st.h = nd;
+    const first = st.view, lastM = eom(addMonths(st.view, n-1));
+    let rerender = false;
+    if(key(nd) < key(first)){ st.view = som(nd); rerender = true; }
+    else if(key(nd) > key(lastM)){ st.view = addMonths(nd, -(n-1)); rerender = true; }
+    rerender ? render() : paint();
+    const btn = cells.get(key(nd)); if(btn) btn.focus();
+    let t = fmtFull(nd);
+    if(st.s && !st.e && key(nd) > key(st.s)) t += `, would select ${duration(st.s, nd, o.context)}`;
+    if(disabled(nd)) t += ", unavailable";
+    announce(t);
+  }
+
+  monthsEl.addEventListener("click", e => { const b = e.target.closest(".day"); if(b) choose(fromKey(+b.dataset.k)); });
+  monthsEl.addEventListener("mouseover", e => {
+    const b = e.target.closest(".day"); if(!b || !st.s || st.e) return;
+    const k = +b.dataset.k; if(st.h && key(st.h) === k) return;
+    const d = fromKey(k);
+    st.h = disabled(d) ? null : d; paint();
+  });
+  monthsEl.addEventListener("mouseleave", () => { if(st.h){ st.h = null; paint(); } });
+  monthsEl.addEventListener("keydown", e => {
+    const f = st.focus; let nd = null;
+    const step = {ArrowLeft:-1, ArrowRight:1, ArrowUp:-7, ArrowDown:7}[e.key];
+    if(step) nd = addDays(f, step);
+    else if(e.key === "PageUp") nd = sameMonthDay(f,-1);
+    else if(e.key === "PageDown") nd = sameMonthDay(f,1);
+    else if(e.key === "Home") nd = addDays(f, -f.getDay());
+    else if(e.key === "End") nd = addDays(f, 6 - f.getDay());
+    else if(e.key === "Escape" && st.s && !st.e){ st.s = null; st.h = null; st.msg = ""; announce("Selection cleared. Choose a start date."); paint(); emit(); e.preventDefault(); return; }
+    if(nd){ e.preventDefault(); move(nd); }
+  });
+  monthsEl.addEventListener("focusin", e => { const b = e.target.closest(".day"); if(b) st.focus = fromKey(+b.dataset.k); });
+  $(".pk-prev").addEventListener("click", () => { st.view = addMonths(st.view,-1); render(); });
+  $(".pk-next").addEventListener("click", () => { st.view = addMonths(st.view,1); render(); });
+
+  const api = {
+    get: () => ({s:st.s, e:st.e, context:o.context}),
+    on: f => listeners.push(f),
+    set(a, b, opt={}){
+      st.s = a; st.e = b; st.h = null; st.msg = ""; st.err = false;
+      if(a) st.focus = b || a;
+      if(a){ const before = key(st.view); fitView(a,b); if(key(st.view) !== before) render(); else paint(); } else paint();
+      emit();
+    },
+    option(k, v){
+      o[k] = v;
+      if(k === "band") root.classList.toggle("mode-cells", v === "cells");
+      if(k === "context"){ buildPresets(); }
+      st.msg = ""; st.err = false; paint();
+    },
+    announce
+  };
+
+  fitView(st.s, st.e);
+  buildPresets();
+  render();
+  measure();
+  if("ResizeObserver" in window) new ResizeObserver(measure).observe(root);
+  return api;
+}
+
+/* ---------- typed field glue ---------- */
+function connectField(input, readout, durEl, picker){
+  function show(r){
+    readout.classList.toggle("err", !!r.error);
+    if(r.empty){ readout.innerHTML = `<span class="note">Try “oct 3 - 17”, “last 30 days” or “12/24 - 1/2”.</span>`; return; }
+    if(r.error){ readout.textContent = r.error + " Try “Oct 3 – 17” or “last 30 days”."; return; }
+    if(r.partial){ readout.textContent = r.text; return; }
+    readout.innerHTML = `<span>Read as <b>${fmtRange(r.s, r.e, {wd:true})}</b> · ${duration(r.s, r.e, picker.get().context)}</span>` + r.notes.map(x => `<span class="note">${x}</span>`).join("");
+  }
+  function syncDur(){ const g = picker.get(); durEl.textContent = g.s && g.e ? duration(g.s, g.e, g.context) : ""; durEl.hidden = !durEl.textContent; }
+  input.addEventListener("input", () => {
+    const r = parse(input.value, picker.get().context);
+    show(r);
+    if(r.ok) picker.set(r.s, r.e);
+    else if(r.partial && r.start) picker.set(r.start, null);
+  });
+  input.addEventListener("keydown", e => {
+    if(e.key === "Enter"){ const g = picker.get(); if(g.s && g.e){ input.value = fmtRange(g.s, g.e); } }
+  });
+  input.addEventListener("blur", () => { const g = picker.get(); if(g.s && g.e) input.value = fmtRange(g.s, g.e); });
+  picker.on(g => {
+    syncDur();
+    if(document.activeElement !== input){
+      input.value = g.s && g.e ? fmtRange(g.s, g.e) : (g.s ? fmtRange(g.s, null) : "");
+      readout.classList.remove("err");
+      readout.innerHTML = g.s && g.e ? `<span class="note">Click the field to type a different range.</span>` : `<span class="note">Try “oct 3 - 17”, “last 30 days” or “12/24 - 1/2”.</span>`;
+    }
+  });
+  return {show, syncDur, refresh(){ const r = parse(input.value, picker.get().context); if(r.ok) picker.set(r.s, r.e); show(r); }};
+}
+function seg(el, cb){
+  el.addEventListener("click", e => {
+    const b = e.target.closest("button"); if(!b) return;
+    el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    cb(b.dataset.v);
+  });
+}
+
+/* ---------- hero ---------- */
+const hp = presets("report")[3];
+const hero = Picker(document.getElementById("hero-picker"), {context:"report", start:hp[1], end:hp[2]});
+const heroField = connectField(document.getElementById("hero-input"), document.getElementById("hero-readout"), document.getElementById("hero-dur"), hero);
+hero.set(hp[1], hp[2]);
+seg(document.getElementById("hero-ctx"), v => {
+  hero.option("context", v);
+  const p = presets(v)[v === "booking" ? 1 : 3];
+  hero.set(p[1], p[2]);
+});
+
+/* ---------- 01 native ---------- */
+(function(){
+  const a = document.getElementById("nat-a"), b = document.getElementById("nat-b"), st = document.getElementById("nat-status");
+  const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  a.value = iso(addDays(TODAY,-14)); b.value = iso(TODAY);
+  function upd(){
+    if(!a.value || !b.value){ st.className = "native-status"; st.textContent = "Two fields, two pop-ups, no idea of the span."; return; }
+    const da = new Date(a.value+"T00:00"), db = new Date(b.value+"T00:00");
+    if(db < da){ st.className = "native-status err"; st.textContent = "The end is before the start, and nothing stopped you."; }
+    else { st.className = "native-status"; st.textContent = `Valid. How many days is that? The inputs don’t say. (It’s ${span(da,db)}.)`; }
+  }
+  a.addEventListener("input", upd); b.addEventListener("input", upd); upd();
+})();
+
+/* ---------- 03 preview ---------- */
+const pvStart = D(TODAY.getFullYear(), TODAY.getMonth(), 6);
+const pv = Picker(document.getElementById("pv-picker"), {months:2, presets:false, context:"free", start:pvStart});
+document.getElementById("pv-toggle").addEventListener("change", e => { pv.option("preview", e.target.checked); });
+document.getElementById("pv-reset").addEventListener("click", () => pv.set(pvStart, null));
+
+/* ---------- 04 strategy ---------- */
+const stStart = D(TODAY.getFullYear(), TODAY.getMonth(), 18);
+const sp = Picker(document.getElementById("strat-picker"), {months:1, presets:false, context:"free", start:stStart});
+seg(document.getElementById("strat"), v => { sp.option("strategy", v); sp.set(stStart, null); });
+document.getElementById("strat-reset").addEventListener("click", () => sp.set(stStart, null));
+
+/* ---------- 05 typing ---------- */
+const tp = Picker(document.getElementById("type-picker"), {months:2, presets:false, context:"free"});
+const tInput = document.getElementById("type-input");
+const tField = connectField(tInput, document.getElementById("type-readout"), document.getElementById("type-dur"), tp);
+document.getElementById("type-chips").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if(!c) return;
+  tInput.value = c.textContent; tInput.focus();
+  tInput.dispatchEvent(new Event("input"));
+});
+tInput.value = "oct 3 - 17"; tField.refresh();
+
+/* ---------- 06 context ---------- */
+const cp0 = presets("report")[2];
+const cp = Picker(document.getElementById("ctx-picker"), {context:"report", start:cp0[1], end:cp0[2]});
+seg(document.getElementById("ctx"), v => {
+  cp.option("context", v);
+  const p = presets(v)[v === "booking" ? 1 : 2];
+  cp.set(p[1], p[2]);
+});
+
+/* ---------- 07 band ---------- */
+const bs = D(TODAY.getFullYear(), TODAY.getMonth(), 20), be = addDays(bs, 17);
+const bp = Picker(document.getElementById("band-picker"), {presets:false, context:"free", start:bs, end:be});
+bp.set(bs, be);
+seg(document.getElementById("band"), v => bp.option("band", v));
+
+/* ---------- 08 keyboard ---------- */
+const log = document.getElementById("kb-log");
+let logStarted = false;
+Picker(document.getElementById("kb-picker"), {months:1, presets:false, context:"free", onAnnounce: t => {
+  if(!logStarted){ log.innerHTML = ""; logStarted = true; }
+  const li = document.createElement("li"); li.textContent = "“" + t + "”";
+  log.prepend(li);
+  while(log.children.length > 6) log.lastChild.remove();
+}});
+
+// expose for a quick check
+window.__parse = parse;
+})();
+</script>
+
+</body></html>

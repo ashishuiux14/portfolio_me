@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PageHead, Sheet, CompareTable, PrevNext } from '../components/Bits';
-import { Toggle, Stepper, Rotary, SubmitButton, DateRange } from '../components/Controls';
+import Icon from '../components/Icon';
+import { ClayToggle, AluToggle, SubmitButton, Stepper, Rotary, Calendar, SoundSwitch } from '../lab/Art';
 
 const T = {
   toggle: {
@@ -12,6 +13,7 @@ const T = {
       ['Arrival', 'Overshoots 7 px, squashes, wobbles', 'Stops dead, no overshoot'],
       ['State colour', 'Fills gradually as the knob moves', 'Lights the instant contact is made'],
     ],
+    shared: 'Tap or drag · past the middle commits · Space and Enter press on key-down and switch on key-up · announced as a switch',
   },
   submit: {
     head: ['Moment', 'Clay', 'Aluminium'],
@@ -59,63 +61,83 @@ const T = {
   },
 };
 
-function Demo({ label, children }) {
+function Demo({ label, children, metal }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-      <div className="in" style={{ borderRadius: 28, padding: '30px 26px', minHeight: 150, width: '100%', display: 'grid', placeItems: 'center' }}>{children}</div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, minWidth: 0 }}>
+      <div className={metal ? '' : 'in'} style={{ borderRadius: 28, padding: '34px 22px', minHeight: 170, width: '100%', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 24, overflowX: 'auto', ...(metal ? { background: 'linear-gradient(180deg, #E8E8EA, #D6D6D9)', boxShadow: 'inset 0 2px 5px rgba(0,0,0,.14), 0 1px 0 var(--hi)' } : {}) }}>{children}</div>
       <span className="cap">{label}</span>
     </div>
   );
 }
 
+function StudyLink({ href, children }) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className="pill up-sm press" style={{ alignSelf: 'flex-start', marginTop: 24 }}>
+      {children} <Icon name="link" size={16} />
+    </a>
+  );
+}
+
 export default function LabControls() {
-  const [t1, setT1] = useState(true);
-  const [t2, setT2] = useState(true);
-  const [s1, setS1] = useState(2);
-  const [s2, setS2] = useState(7);
-  const [r1, setR1] = useState(false);
-  const [r2, setR2] = useState(true);
+  const [c1, setC1] = useState(true);
+  const [a1, setA1] = useState(true);
 
   return (
     <div className="page">
       <PageHead eyebrow="Interaction Lab · 02" title="Controls, in two materials."
-        lede="The same five controls built twice. Clay gives, stretches and settles. Aluminium resists, commits and stops dead. The outcome never changes, only how it feels to get there." />
+        lede="The same five controls built twice. Clay gives, stretches and settles. Aluminium resists, commits and stops dead. The outcome never changes, only how it feels to get there. Press, hold and drag them.">
+        <div><SoundSwitch /></div>
+      </PageHead>
 
-      <Sheet label="Toggle switch" note="Clay: stiffness 300, damping 0.38, 7 px of overshoot room. Aluminium: accelerates into the end in 120 ms. Both are role=switch and toggle with a tap, Space or Enter.">
+      <Sheet label="Toggle switch" note="Clay: stiffness 300, damping 0.38, 7 px of overshoot room, 16% press stretch. Aluminium: accelerates into the end in 120 ms and clicks on contact.">
         <div className="grid-2" style={{ marginBottom: 30 }}>
-          <Demo label="Clay · soft"><Toggle checked={t1} onChange={setT1} label="Clay toggle" /></Demo>
-          <Demo label="Aluminium · hard"><Toggle checked={t2} onChange={setT2} material="alu" label="Aluminium toggle" /></Demo>
+          <Demo label="Clay · soft"><ClayToggle checked={c1} onChange={setC1} label="Clay toggle" /></Demo>
+          <Demo label="Aluminium · hard" metal><AluToggle checked={a1} onChange={setA1} label="Aluminium toggle" /></Demo>
         </div>
         <CompareTable {...T.toggle} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+          <StudyLink href="/studies/clay-toggle.html">Full study · clay toggle</StudyLink>
+          <StudyLink href="/studies/aluminium-toggle.html">Full study · aluminium toggle</StudyLink>
+        </div>
       </Sheet>
 
-      <Sheet label="Submit button" note="In each pair the left button saves and the right one fails, so both outcomes can be tried.">
+      <Sheet label="Submit button" note="In each pair the left button saves and the right one fails, so both outcomes can be tried. Double-press while it’s busy: nothing is sent twice.">
         <div className="grid-2" style={{ marginBottom: 30 }}>
-          <Demo label="Clay · saves / fails"><div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center' }}><SubmitButton material="clay" outcome="ok" /><SubmitButton material="clay" outcome="err" /></div></Demo>
-          <Demo label="Aluminium · saves / fails"><div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center' }}><SubmitButton material="alu" outcome="ok" /><SubmitButton material="alu" outcome="err" /></div></Demo>
+          <Demo label="Clay · saves / fails"><SubmitButton material="clay" outcome="ok" zoom={0.85} /><SubmitButton material="clay" outcome="err" zoom={0.85} /></Demo>
+          <Demo label="Aluminium · saves / fails" metal><SubmitButton material="alu" outcome="ok" zoom={0.85} /><SubmitButton material="alu" outcome="err" zoom={0.85} /></Demo>
         </div>
         <CompareTable {...T.submit} />
+        <StudyLink href="/studies/submit-button.html">Full study · submit button</StudyLink>
       </Sheet>
 
-      <Sheet label="Plus / minus stepper" note="Hold a key to repeat. Click the number and use the arrow keys; Shift steps by 10.">
+      <Sheet label="Plus / minus stepper" note="Hold a key to repeat; it speeds up the longer you hold. Focus the number and use the arrow keys; Shift steps by 10.">
         <div className="grid-2" style={{ marginBottom: 30 }}>
-          <Demo label="Clay · 0 to 10"><Stepper value={s1} onChange={setS1} min={0} max={10} label="Clay count" /></Demo>
-          <Demo label="Aluminium · 0 to 10"><Stepper value={s2} onChange={setS2} min={0} max={10} material="alu" label="Aluminium count" /></Demo>
+          <Demo label="Clay · 0 to 20"><Stepper material="clay" value={3} min={0} max={20} label="Clay count" zoom={0.85} /></Demo>
+          <Demo label="Aluminium · 0 to 99" metal><Stepper material="alu" value={7} min={0} max={99} label="Aluminium count" zoom={0.85} /></Demo>
         </div>
         <CompareTable {...T.stepper} />
+        <StudyLink href="/studies/stepper.html">Full study · stepper</StudyLink>
       </Sheet>
 
-      <Sheet label="Rotary switch" note="A replacement for the toggle where it matters: a half turn reads as a deliberate act.">
+      <Sheet label="Rotary switch" note="Tap to turn, or drag the knob around. A half turn reads as a deliberate act, so it replaces the toggle where a change should feel considered.">
         <div className="grid-2" style={{ marginBottom: 30 }}>
-          <Demo label="Plastic"><Rotary on={r1} onChange={setR1} size={130} label="Plastic rotary switch" /></Demo>
-          <Demo label="Aluminium"><Rotary on={r2} onChange={setR2} size={130} material="alu" label="Aluminium rotary switch" /></Demo>
+          <Demo label="Plastic"><Rotary material="plastic" label="Plastic rotary switch" zoom={0.8} /></Demo>
+          <Demo label="Aluminium" metal><Rotary material="alu" on label="Aluminium rotary switch" zoom={0.8} /></Demo>
         </div>
         <CompareTable {...T.rotary} />
+        <StudyLink href="/studies/rotary-switch.html">Full study · rotary switch</StudyLink>
       </Sheet>
 
-      <Sheet label="Date range picker" note="Built on the date range study: preview the span before the second click, and treat a click before the start as a new start.">
-        <div style={{ display: 'grid', placeItems: 'center', marginBottom: 30 }}><DateRange /></div>
+      <Sheet label="Date range picker" note="Pick a start, then an end. Hover previews the range before the second click, and a click before the start becomes the new start.">
+        <div className="grid-2" style={{ marginBottom: 30, alignItems: 'start' }}>
+          <Demo label="Clay"><Calendar material="clay" /></Demo>
+          <Demo label="Aluminium" metal><Calendar material="alu" /></Demo>
+        </div>
         <CompareTable {...T.date} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+          <StudyLink href="/studies/date-picker.html">Full study · date picker</StudyLink>
+          <StudyLink href="/studies/date-range-picker.html">Full study · date range decisions</StudyLink>
+        </div>
       </Sheet>
 
       <PrevNext prev={{ to: '/lab/soft-ui', label: '01 · Soft UI language' }} next={{ to: '/lab/seat-picker', label: '03 · Seat picker' }} />

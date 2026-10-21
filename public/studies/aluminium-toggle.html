@@ -1,0 +1,568 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Aluminium Toggle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the same 960px column as the clay study, on machined panels with tighter radii. One light theme on purpose: the metal is lit from above. */
+:root{
+  --surface:#DADADC; --panel-1:#EEEEEF; --panel-2:#DFDFE1;
+  --ink:#2F3136; --ink-2:#5D6068; --ink-3:#8C8F96;
+  --green:#2BB556; --green-ink:#1F8A40;
+  --display:"Fraunces", "Iowan Old Style", Georgia, serif;
+  --sans:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--surface)}
+body{background:radial-gradient(ellipse at 50% 0%,#E8E8E9 0%,var(--surface) 60%) fixed,var(--surface);color:var(--ink);font:400 16px/1.65 var(--sans);padding-inline:16px;padding-block:48px 120px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:104px}
+h1,h2,h3{margin:0;text-wrap:balance;font-family:var(--display);font-variation-settings:"SOFT" 0,"opsz" 96;font-weight:500;color:var(--ink)}
+p{margin:0}
+.label{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+code{font:400 .88em var(--mono);color:var(--ink)}
+
+.hero{display:flex;flex-direction:column;gap:22px}
+.hero h1{font-size:clamp(44px,8vw,84px);line-height:1;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--green-ink)}
+.lede{font-size:18.5px;color:var(--ink-2);max-width:620px}
+.meta{display:flex;gap:8px 20px;flex-wrap:wrap}
+
+.plate{border-radius:18px;padding:28px;background:linear-gradient(180deg,var(--panel-1),var(--panel-2));
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 14px 30px rgba(40,42,48,.13),0 2px 4px rgba(40,42,48,.12);
+  display:flex;flex-direction:column;gap:22px;min-width:0}
+.plate-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.live{display:inline-flex;gap:8px;align-items:center}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(43,181,86,.7)}
+.stage{display:flex;justify-content:space-around;align-items:flex-start;flex-wrap:wrap;gap:36px 24px;padding:26px 8px 8px}
+.slot{display:flex;flex-direction:column;align-items:center;gap:66px;min-width:190px}
+
+section{display:flex;flex-direction:column;gap:26px}
+.head{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:baseline}
+.num{font:400 64px/1 var(--display);font-variation-settings:"SOFT" 0,"opsz" 144;color:#B4B6BC;grid-row:span 2}
+.head h2{font-size:32px;line-height:1.15;letter-spacing:-.015em}
+.head p{color:var(--ink-2);max-width:600px}
+@media (max-width:560px){.head{grid-template-columns:1fr}.num{grid-row:auto;font-size:48px}}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.notes>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.notes p{font-size:15px;color:var(--ink-2)}
+@media (max-width:680px){.notes{grid-template-columns:1fr}}
+.detail{font-size:15px;color:var(--ink-2);max-width:740px;padding-top:18px;border-top:1px solid rgba(0,0,0,.1)}
+.detail b{color:var(--ink);font-weight:600}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center}
+.ctl{display:flex;align-items:center;gap:12px;font:500 13px var(--sans);color:var(--ink-2)}
+.ctl output{font:500 12px var(--mono);color:var(--ink);min-width:56px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:8px;border-radius:4px;background:linear-gradient(180deg,#1b1b1d,#38383b);box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 1px 0 #fff;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;cursor:pointer;
+  background:repeating-conic-gradient(rgba(255,255,255,.2) 0 1deg,rgba(0,0,0,.05) 1deg 2deg),radial-gradient(circle,#e3e4e6,#a9abaf);box-shadow:inset 0 1px 0 #fff,0 3px 5px rgba(0,0,0,.4)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;cursor:pointer;background:radial-gradient(circle,#e3e4e6,#a9abaf);box-shadow:inset 0 1px 0 #fff,0 3px 5px rgba(0,0,0,.4)}
+input[type=range]:focus-visible{box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 0 0 3px rgba(43,181,86,.5)}
+.check{display:inline-flex;align-items:center;gap:10px;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.check input{accent-color:var(--green);width:16px;height:16px}
+.seg{display:inline-flex;gap:3px;padding:4px;border-radius:10px;background:linear-gradient(180deg,#cfcfd2,#dedee0);box-shadow:inset 0 2px 3px rgba(0,0,0,.18),0 1px 0 #fff}
+.seg button{border:0;background:none;font:500 13px var(--sans);color:var(--ink-2);padding:7px 13px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(180deg,#fbfbfb,#e3e3e5);box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,0,0,.25)}
+.seg button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+/* textures */
+.tex-dark{background:
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.16 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+  linear-gradient(180deg,#141416,#2a2a2d)}
+.tex-green{background:
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.14 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+  radial-gradient(ellipse at 35% 60%,#54d97c 0%,#2bb556 45%,#178a3c 100%)}
+
+/* the aluminium toggle */
+.hk{position:relative;width:184px;height:88px;border-radius:44px;border:0;padding:0;cursor:pointer;flex:none;outline:none;
+  background:linear-gradient(180deg,#f7f7f7 0%,#e4e4e5 60%,#d3d3d4 100%);
+  box-shadow:inset 0 1.5px 0 #fff,inset 0 -2px 3px rgba(0,0,0,.12),0 10px 18px rgba(0,0,0,.14),0 2px 3px rgba(0,0,0,.18);
+  touch-action:none;-webkit-tap-highlight-color:transparent}
+.hk.sq{border-radius:26px}
+.hk:focus-visible{box-shadow:inset 0 1.5px 0 #fff,0 10px 18px rgba(0,0,0,.14),0 0 0 4px var(--surface),0 0 0 7px rgba(43,181,86,.6)}
+.hk-well{position:absolute;inset:11px;border-radius:33px;overflow:hidden;pointer-events:none;
+  box-shadow:inset 0 6px 10px rgba(0,0,0,.85),0 1.5px 0 rgba(255,255,255,.95),0 -1px 0 rgba(0,0,0,.25)}
+.hk.sq .hk-well{border-radius:16px}
+.hk-lit{position:absolute;inset:0;opacity:0;box-shadow:inset 0 6px 10px rgba(0,40,10,.6),inset 0 -4px 8px rgba(190,255,205,.35)}
+.hk.is-on .hk-lit{opacity:1}
+.hk-sh{position:absolute;left:14px;top:40px;width:60px;height:92px;border-radius:50%;pointer-events:none;filter:blur(6px);transform-origin:50% 0;
+  background:radial-gradient(ellipse at 50% 22%,rgba(0,0,0,.62) 0%,rgba(0,0,0,.30) 42%,rgba(0,0,0,0) 72%)}
+/* knob seen from directly above: one machined face, no side wall */
+.hk-knob{position:absolute;left:8px;top:8px;width:72px;height:72px;border-radius:50%;pointer-events:none;will-change:transform;
+  background:
+    repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.13) 0 .6px,rgba(0,0,0,.07) .6px 1.3px),
+    conic-gradient(from 0deg,#a6a8ac 0deg,#77797e 55deg,#d6d8db 108deg,#ffffff 135deg,#d2d4d7 162deg,#76787d 225deg,#c4c6c9 288deg,#ffffff 315deg,#b5b7bb 342deg,#a6a8ac 360deg);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 2px rgba(0,0,0,.35),0 0 0 1px rgba(40,42,46,.35),0 2px 3px rgba(0,0,0,.35)}
+.hk-knob::before{content:"";position:absolute;inset:4px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.12)}
+.hk-knob::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0) 55%,rgba(0,0,0,.10) 100%)}
+.hk-side,.hk-cap{display:none}
+.hk.sq .hk-knob{border-radius:18px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.004 0.9' numOctaves='3' seed='7'/><feColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(125deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.7) 44%,rgba(255,255,255,0) 58%,rgba(255,255,255,0) 72%,rgba(255,255,255,.35) 84%,rgba(255,255,255,0) 94%),
+    linear-gradient(180deg,#d8dadd 0%,#b9bcc0 50%,#cfd2d5 100%);
+  background-blend-mode:overlay,normal,normal}
+.hk.sq .hk-knob::before{inset:4px;border-radius:14px}
+.hk.sq .hk-knob::after{background:none}
+.hk.sq .hk-sh{border-radius:35%}
+
+/* clay toggle, for the comparison */
+.ct{position:relative;width:172px;height:84px;border-radius:42px;border:0;padding:0;cursor:grab;flex:none;outline:none;
+  background:linear-gradient(145deg,#d4d4d8,#e6e6e9);box-shadow:inset 7px 7px 14px rgba(150,155,168,.6),inset -7px -7px 14px #fff;touch-action:none}
+.ct:focus-visible{box-shadow:inset 7px 7px 14px rgba(150,155,168,.6),inset -7px -7px 14px #fff,0 0 0 4px var(--surface),0 0 0 7px rgba(124,203,147,.7)}
+.ct-floor{position:absolute;inset:0;border-radius:inherit;opacity:0;pointer-events:none;background:linear-gradient(145deg,#C6EAD0,#DCF5E3);box-shadow:inset 7px 7px 14px rgba(112,160,126,.45),inset -7px -7px 14px rgba(255,255,255,.85)}
+.ct-knob{position:absolute;left:10px;top:10px;width:64px;height:64px;border-radius:50%;pointer-events:none;will-change:transform;
+  background:radial-gradient(circle at 36% 30%,#ffffff 0%,#f6f6f8 50%,#e3e3e7 100%);box-shadow:6px 8px 14px rgba(130,135,150,.45),-3px -3px 8px rgba(255,255,255,.7),inset -5px -6px 10px rgba(0,0,0,.07),inset 4px 5px 8px #fff}
+.clay-pad{border-radius:28px;padding:30px 34px;background:linear-gradient(145deg,#e9e9ec,#dedee2);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+
+/* readouts, graph, tables */
+.readout{font:400 13px/1.5 var(--mono);color:var(--ink-2);min-height:20px;text-align:center;max-width:260px}
+.log{display:flex;flex-direction:column;gap:6px;min-width:0;padding:16px 18px;border-radius:12px;background:linear-gradient(180deg,#1a1a1c,#2a2a2d);box-shadow:inset 0 2px 5px rgba(0,0,0,.6),0 1px 0 #fff}
+.log .label{color:#8c8f96}
+.log ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.log li{font:400 13px/1.5 var(--mono);color:#7d8087}
+.log li:first-child{color:#7fe39c}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:720px){.split{grid-template-columns:1fr}}
+.graph{width:100%;height:auto;display:block}
+.g-grid{stroke:rgba(0,0,0,.14);stroke-width:1}
+.g-rest{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:4 5}
+.g-clay{fill:none;stroke:#8FC9A0;stroke-width:2;stroke-dasharray:5 5}
+.g-alu{fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linejoin:round}
+.g-dot{fill:var(--green)}
+.g-t{fill:var(--ink-3);font:500 11px var(--mono)}
+.g-t1{fill:var(--ink);font:500 11px var(--mono)}
+.g-t2{fill:#5FA874;font:500 11px var(--mono)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{padding:14px 16px;border-radius:12px;background:linear-gradient(180deg,#d6d6d8,#e4e4e6);box-shadow:inset 0 2px 4px rgba(0,0,0,.12),0 1px 0 #fff;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat b{font:500 20px var(--mono);color:var(--ink)}
+@media (max-width:520px){.stats{grid-template-columns:1fr}}
+.scroll{overflow-x:auto}
+.spec{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.spec th,.spec td{text-align:left;padding:11px 10px;border-bottom:1px solid rgba(0,0,0,.1);vertical-align:top}
+.spec th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.spec td:first-child{font-weight:600;color:var(--ink)}
+.spec td{color:var(--ink-2)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:720px){.vs{grid-template-columns:1fr}}
+.vs .slot{gap:60px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid rgba(0,0,0,.1)}
+
+/* sound switch */
+.sound{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom, 0px));z-index:10;display:flex;align-items:center;gap:10px;
+  border:0;cursor:pointer;padding:8px 16px 8px 8px;border-radius:999px;font:500 13px var(--sans);color:var(--ink);
+  background:linear-gradient(180deg,#fafafa,#e1e1e3);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.25)}
+.sound:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.sound .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#1b1b1d,#333336);box-shadow:inset 0 2px 3px rgba(0,0,0,.6);color:#8c8f96}
+.sound[aria-pressed="true"] .ic{color:#7fe39c;box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 0 10px rgba(43,181,86,.45)}
+.sound .on-ic{display:none}
+.sound[aria-pressed="true"] .on-ic{display:block}
+.sound[aria-pressed="true"] .off-ic{display:none}
+</style>
+
+<main class="sheet">
+  <header class="hero">
+    <span class="label">Material study 02 · Toggle · Hard</span>
+    <h1>A toggle made of <em>aluminium</em></h1>
+    <p class="lede">The clay toggle gives, stretches and wobbles. Machined metal does none of that. It resists, commits, stops dead and makes a sound when contact is made. Same toggle, same job, different material. Turn the sound on at the bottom right, then try it.</p>
+    <div class="meta"><span class="label">Ashish Dixit</span><span class="label">4 behaviours</span><span class="label">Sound is synthesised, no audio files</span></div>
+    <div class="plate" style="margin-top:14px">
+      <div class="plate-top"><span class="label live">The finished toggle</span></div>
+      <div class="stage">
+        <div class="slot"><button class="hk" id="h1" role="switch" aria-checked="false" aria-label="Round aluminium toggle"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">Turned knob · radial grain</span></div>
+        <div class="slot"><button class="hk sq" id="h2" role="switch" aria-checked="true" aria-label="Square aluminium toggle"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">Milled knob · brushed grain</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="head"><span class="num">01</span><h2>A snap, then a material</h2><p>The usual toggle slides across in a fixed time, which is closer to metal than to clay but still not quite right. A real switch starts slowly against its spring, speeds up and stops at full speed against the end.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Compare</span><label class="check"><input type="checkbox" id="slow1"> Slow motion</label></div>
+      <div class="stage">
+        <div class="slot"><button class="hk" id="s1a" role="switch" aria-checked="false" aria-label="Usual toggle"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">The usual · 150 ms ease</span></div>
+        <div class="slot"><button class="hk" id="s1b" role="switch" aria-checked="false" aria-label="Aluminium toggle"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">Aluminium · snap and stop</span></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>A metal knob has no give, so all of its character is in timing. Accelerating into the end and stopping dead is what makes it read as heavy and precise rather than floaty.</p></div>
+      <div><span class="label">Why the green doesn’t fade in</span><p>On the clay toggle the green floor fills as the knob moves. Here it lights the instant the knob hits the end, like a circuit closing. Halfway is still off.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">02</span><h2>It sinks when you press</h2><p>Clay stretches under a finger. Metal can’t, so it travels down instead. Press and hold: the knob drops into its housing, its face catches a little less light and its shadow tightens.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Press and hold</span>
+        <div class="ctl"><label for="depth">Press travel</label><input type="range" id="depth" min="0" max="4" step="0.5" value="2.5"><output id="depth-o">2.5 px</output></div>
+      </div>
+      <div class="stage">
+        <div class="slot"><button class="hk" id="s2a" role="switch" aria-checked="false" aria-label="Aluminium toggle, off"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">Off</span></div>
+        <div class="slot"><button class="hk sq" id="s2b" role="switch" aria-checked="true" aria-label="Square aluminium toggle, on"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">On</span></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>The press is answered before anything slides, just like the clay knob, but in the language of the material. A small drop, a slightly darker face and a tighter shadow are enough to feel the mechanism engage.</p></div>
+      <div><span class="label">Why it doesn’t change shape</span><p>The knob keeps its exact outline at every moment. Any stretch, however small, would make it read as plastic or rubber instead of machined metal.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">03</span><h2>It resists, then commits</h2><p>Inside a real switch, a spring holds the knob at each end. You push against it, it gives way past the middle and the knob snaps to the end. The curve below is that motion over time, next to the clay knob’s.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Tune the mechanism</span>
+        <div class="controls">
+          <div class="ctl"><label for="det">Detent</label><input type="range" id="det" min="1" max="4" step="0.1" value="2.4"><output id="det-o">2.4</output></div>
+          <div class="ctl"><label for="snap">Snap time</label><input type="range" id="snap" min="60" max="240" step="10" value="120"><output id="snap-o">120 ms</output></div>
+          <label class="check"><input type="checkbox" id="slow3" checked> Slow motion</label>
+        </div>
+      </div>
+      <div class="split">
+        <div class="stage" style="padding:10px 0"><div class="slot"><button class="hk" id="s3" role="switch" aria-checked="false" aria-label="Aluminium toggle with tunable detent"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">Click it, back and forth</span></div></div>
+        <svg class="graph" id="graph" viewBox="0 0 440 220" role="img" aria-label="Knob position over time, aluminium compared with clay"></svg>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="label">Overshoot</span><b>0 px</b></div>
+        <div class="stat"><span class="label">Settles in</span><b id="st-settle">120 ms</b></div>
+        <div class="stat"><span class="label">Reads as</span><b id="st-reads">switch</b></div>
+      </div>
+    </div>
+    <p class="detail"><b>In detail.</b> The aluminium curve is a power curve that ends at full speed: position = time<sup>detent</sup>. At a detent of 1 it’s a straight line, a loose slider with no spring behind it. Higher values hold the knob back longer and release it faster, which is what makes a switch feel firm. The curve hits the end and goes flat with no overshoot, and the click is timed to that exact frame. The clay curve takes almost six times as long to come to rest.</p>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">04</span><h2>Drag it and it fights back</h2><p>Hold the knob and drag. It moves less than your finger, because the spring is pushing back. Get it past the middle and the spring takes over: it snaps to the end on its own, before you let go. Release short of the middle and it returns.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Press, drag, release</span>
+        <div class="seg" id="mode" role="group" aria-label="What a tap does">
+          <button type="button" data-v="tap" aria-pressed="true">Tap or drag</button>
+          <button type="button" data-v="drag" aria-pressed="false">Drag only</button>
+        </div>
+      </div>
+      <div class="split">
+        <div class="stage" style="padding:10px 0"><div class="slot"><button class="hk" id="s4" role="switch" aria-checked="false" aria-label="Aluminium toggle you can drag"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="readout" id="s4-read">Press and hold, then drag.</span></div></div>
+        <div class="log"><span class="label">What just happened</span><ol id="s4-log"><li>Nothing yet.</li></ol></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why it moves on its own</span><p>Clay goes wherever the finger takes it. A switch has a point of no return, and once you cross it the outcome is decided. Showing that moment is what makes the drag feel mechanical.</p></div>
+      <div><span class="label">Why there’s no stretch past the ends</span><p>Clay squashes against the wall. Metal simply stops. Dragging beyond the end does nothing at all, which is exactly what a hard material should do.</p></div>
+    </div>
+    <p class="detail"><b>In detail.</b> While dragging, the knob covers 60% of the distance your pointer does. At 50% of its travel it commits: the click plays, the light switches and the knob finishes the trip by itself. Released before that point, it slides home in 90 ms with a dull tap instead of a click, because no contact was made.</p>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">05</span><h2>Clay and aluminium, side by side</h2><p>The same control in two materials. Use both and notice what changes: never the outcome, only how it feels to get there.</p></div>
+    <div class="plate">
+      <div class="vs">
+        <div class="slot clay-pad"><button class="ct" id="vc" role="switch" aria-checked="false" aria-label="Clay toggle"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">Clay · soft</span></div>
+        <div class="slot" style="padding:30px 34px"><button class="hk" id="va" role="switch" aria-checked="false" aria-label="Aluminium toggle"><span class="hk-well tex-dark"><span class="hk-lit tex-green"></span></span><span class="hk-sh"></span><span class="hk-knob"><span class="hk-side"></span><span class="hk-cap"></span></span></button><span class="label">Aluminium · hard</span></div>
+      </div>
+      <div class="scroll">
+      <table class="spec">
+        <thead><tr><th>Moment</th><th>Clay</th><th>Aluminium</th></tr></thead>
+        <tbody>
+          <tr><td>Press</td><td>Stretches 16% toward where it will go</td><td>Sinks 2.5 px into its housing</td></tr>
+          <tr><td>Travel</td><td>Stretches with speed, up to 25%</td><td>Keeps its exact shape</td></tr>
+          <tr><td>Timing</td><td>Spring, about 700 ms to rest</td><td>Accelerates into the end, 120 ms</td></tr>
+          <tr><td>Arrival</td><td>Overshoots 7 px, squashes, wobbles</td><td>Stops dead, no overshoot</td></tr>
+          <tr><td>State colour</td><td>Fills gradually as the knob moves</td><td>Lights the instant contact is made</td></tr>
+          <tr><td>Drag</td><td>Follows the finger, rubber-bands at the ends</td><td>Resists, then commits on its own at the middle</td></tr>
+          <tr><td>Sound</td><td>None</td><td>A click at contact, a dull tap if it returns</td></tr>
+          <tr><td>Use it for</td><td>Playful, personal, consumer moments</td><td>Settings, tools, anything that should feel exact</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <footer><span class="label">Material study 02 · Ashish Dixit</span><span class="label">Previous: the same toggle in clay</span></footer>
+</main>
+
+<button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound">
+  <span class="ic" aria-hidden="true">
+    <svg class="off-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+    <svg class="on-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+  </span>
+  <span id="sound-t">Sound off</span>
+</button>
+
+<script>
+(function(){
+"use strict";
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const engines = [];
+
+/* ---------- sound, synthesised ---------- */
+const Snd = {
+  ctx:null, on:false, buf:null,
+  ensure(){
+    if(!this.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return null; this.ctx = new AC(); }
+    if(this.ctx.state === "suspended") this.ctx.resume();
+    if(!this.buf){
+      const len = Math.floor(this.ctx.sampleRate * 0.08), b = this.ctx.createBuffer(1, len, this.ctx.sampleRate), d = b.getChannelData(0);
+      for(let i = 0; i < len; i++) d[i] = Math.random()*2 - 1;
+      this.buf = b;
+    }
+    return this.ctx;
+  },
+  hit(t, f, q, g, dur, type){
+    const c = this.ctx, src = c.createBufferSource(), flt = c.createBiquadFilter(), amp = c.createGain();
+    src.buffer = this.buf; flt.type = type || "bandpass"; flt.frequency.value = f; flt.Q.value = q;
+    amp.gain.setValueAtTime(0.0001, t); amp.gain.linearRampToValueAtTime(g, t + 0.0008); amp.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(flt); flt.connect(amp); amp.connect(c.destination); src.start(t); src.stop(t + dur + 0.02);
+  },
+  ring(t, f, g, dur){
+    const c = this.ctx, o = c.createOscillator(), amp = c.createGain();
+    o.type = "sine"; o.frequency.value = f;
+    amp.gain.setValueAtTime(0.0001, t); amp.gain.linearRampToValueAtTime(g, t + 0.001); amp.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(amp); amp.connect(c.destination); o.start(t); o.stop(t + dur + 0.02);
+  },
+  play(kind){
+    if(!this.on) return;
+    const c = this.ensure(); if(!c) return;
+    const t = c.currentTime + 0.002;
+    if(kind === "snap"){          // contact: body thump, sharp tick, short metallic ring
+      this.hit(t, 420, 0.9, 0.35, 0.035, "lowpass");
+      this.hit(t, 2600, 3, 0.55, 0.018);
+      this.hit(t + 0.008, 4300, 6, 0.35, 0.02);
+      this.ring(t + 0.008, 6200, 0.03, 0.08);
+    } else if(kind === "press"){  // mechanism engaging
+      this.hit(t, 1700, 2, 0.12, 0.012);
+    } else if(kind === "back"){   // returns without contact
+      this.hit(t, 800, 1.2, 0.22, 0.025);
+    }
+  }
+};
+const soundBtn = document.getElementById("sound"), soundT = document.getElementById("sound-t");
+function setSound(v){ Snd.on = v; soundBtn.setAttribute("aria-pressed", String(v)); soundT.textContent = v ? "Sound on" : "Sound off"; try{ localStorage.setItem("alu-sound", v ? "1" : "0"); }catch(e){} }
+soundBtn.addEventListener("click", () => { const v = !Snd.on; setSound(v); if(v){ Snd.ensure(); Snd.play("snap"); } });
+try{ if(localStorage.getItem("alu-sound") === "1"){ soundBtn.setAttribute("aria-pressed","true"); soundT.textContent = "Sound on (tap to resume)"; } }catch(e){}
+// Browsers only allow audio after a gesture, so a remembered "on" resumes on the first interaction.
+document.addEventListener("pointerdown", function once(e){
+  try{ if(localStorage.getItem("alu-sound") === "1" && !Snd.on && e.target.closest(".sound") === null){ setSound(true); Snd.ensure(); } }catch(_){}
+  document.removeEventListener("pointerdown", once, true);
+}, true);
+
+/* ---------- aluminium engine ---------- */
+function Alu(el, opts){
+  const o = Object.assign({mode:"alu", depth:2.5, snap:0.12, detent:2.4, tap:true, slow:false, onEvent:null}, opts);
+  const knob = el.querySelector(".hk-knob"), side = el.querySelector(".hk-side"), sh = el.querySelector(".hk-sh");
+  const on0 = el.getAttribute("aria-checked") === "true";
+  const s = {x:on0?1:0, on:on0, p:0, pressed:false, anim:null, drag:null};
+  const PAD = 8, KW = 72; let T = 96;
+  function measure(){ T = el.clientWidth - 2*PAD - KW; }
+  measure();
+  el.classList.toggle("is-on", on0);
+  const emit = (t, i) => o.onEvent && o.onEvent(t, i);
+
+  function contact(on){ s.on = on; el.classList.toggle("is-on", on); Snd.play("snap"); }
+  function run(to, kind, done){
+    const dist = Math.abs(to - s.x);
+    if(dist < 1e-4){ s.x = to; done && done(); return; }
+    const dur = kind === "snap" ? o.snap * (0.35 + 0.65*dist) : kind === "ease" ? 0.15 * dist : 0.09 * dist + 0.03;
+    s.anim = {x0:s.x, x1:to, t:0, dur, kind, done};
+  }
+  function commit(){
+    const to = s.on ? 0 : 1;
+    el.setAttribute("aria-checked", String(to === 1));
+    if(o.mode === "usual") run(to, "ease", () => contact(to === 1));
+    else run(to, "snap", () => contact(to === 1));
+    return to === 1;
+  }
+
+  function step(dt){
+    if(o.slow) dt *= 0.25;
+    const target = s.pressed ? 1 : 0;
+    const rate = dt / 0.05;
+    s.p = s.p < target ? Math.min(target, s.p + rate) : Math.max(target, s.p - rate);
+    const a = s.anim;
+    if(a){
+      a.t += dt; const u = Math.min(a.t / a.dur, 1);
+      let e;
+      if(a.kind === "snap") e = reduce ? 1 - Math.pow(1-u, 2) : Math.pow(u, o.detent);
+      else if(a.kind === "ease") e = 1 - Math.pow(1-u, 3);
+      else e = 1 - Math.pow(1-u, 2);
+      s.x = a.x0 + (a.x1 - a.x0) * e;
+      if(u >= 1){ s.x = a.x1; s.anim = null; a.done && a.done(); }
+    }
+    render();
+  }
+  function render(){
+    const pos = s.x * T, dep = (o.mode === "usual" ? 0 : o.depth) * s.p;
+    knob.style.transform = `translate3d(${pos.toFixed(2)}px,${(dep*0.3).toFixed(2)}px,0) scale(${(1 - dep*0.012).toFixed(4)})`;
+    knob.style.filter = dep > 0 ? `brightness(${(1 - dep*0.025).toFixed(3)})` : "";
+    sh.style.transform = `translate3d(${pos.toFixed(2)}px,0,0) scale(${(1 - dep*0.05).toFixed(3)},${(1 - 0.14*dep).toFixed(3)})`;
+  }
+
+  el.addEventListener("pointerdown", e => {
+    if(e.button !== 0) return;
+    el.setPointerCapture(e.pointerId); el.focus({preventScroll:true}); measure();
+    s.pressed = true; Snd.play("press");
+    s.drag = {x0:e.clientX, from:s.on ? 1 : 0, startX:s.x, active:false, committed:false};
+    emit("press");
+  });
+  el.addEventListener("pointermove", e => {
+    const d = s.drag; if(!d || !s.pressed || d.committed || o.mode === "usual" || s.anim) return;
+    const dx = e.clientX - d.x0;
+    if(!d.active && Math.abs(dx) > 4) d.active = true;
+    if(!d.active) return;
+    let nx = d.startX + (dx / T) * 0.6;
+    nx = Math.min(1, Math.max(0, nx));             // metal stops dead at the ends
+    s.x = nx;
+    const travelled = d.from === 0 ? nx : 1 - nx;
+    if(travelled >= 0.5){ d.committed = true; const on = commit(); emit("commit", {on}); }
+  });
+  function release(cancel){
+    const d = s.drag; if(!d) return;
+    s.pressed = false; s.drag = null;
+    if(d.committed) return;
+    if(cancel){ run(d.from, "back"); return; }
+    if(!d.active){
+      if(o.tap || o.mode === "usual"){ const on = commit(); emit("tap", {toggled:true, on}); }
+      else { emit("tap", {toggled:false, on:s.on}); }
+    } else {
+      run(d.from, "back", () => Snd.play("back"));
+      emit("back", {px:Math.round(Math.abs(s.x - d.from) * T)});
+    }
+  }
+  el.addEventListener("pointerup", () => release(false));
+  el.addEventListener("pointercancel", () => release(true));
+  el.addEventListener("lostpointercapture", () => { if(s.drag) release(true); });
+  el.addEventListener("click", e => e.preventDefault());
+  el.addEventListener("keydown", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(!e.repeat && !s.pressed){ s.pressed = true; Snd.play("press"); emit("press"); } } });
+  el.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(s.pressed && !s.drag){ s.pressed = false; const on = commit(); emit("key", {on}); } } });
+  el.addEventListener("blur", () => { if(s.pressed && !s.drag) s.pressed = false; });
+
+  const api = {step, o, measure};
+  engines.push(api); render();
+  return api;
+}
+
+/* ---------- clay engine (from material study 01) ---------- */
+function Clay(el, opts){
+  const o = Object.assign({k:300, zeta:0.38, press:0.16}, opts);
+  const knob = el.querySelector(".ct-knob"), floor = el.querySelector(".ct-floor");
+  const s = {x:0, v:0, target:0, p:0, pv:0, pressed:false, drag:null, anchor:1};
+  const PAD = 10; let W = 64, T = 88;
+  function measure(){ W = knob.offsetWidth || 64; T = el.clientWidth - 2*PAD - W; }
+  measure();
+  function setTarget(t){ s.target = t; el.setAttribute("aria-checked", String(t === 1)); }
+  function step(dt){
+    const zeta = reduce ? 1 : o.zeta, k = o.k, c = 2*zeta*Math.sqrt(k);
+    if(!(s.drag && s.drag.active)){
+      for(let i=0;i<4;i++){ const h = dt/4, a = k*(s.target - s.x) - c*s.v; s.v += a*h; s.x += s.v*h; }
+      if(Math.abs(s.target - s.x) < 1e-4 && Math.abs(s.v) < 1e-3){ s.x = s.target; s.v = 0; }
+    }
+    const pt = s.pressed && !reduce ? 1 : 0, pk = 700, pc = 2*0.5*Math.sqrt(pk);
+    for(let i=0;i<3;i++){ const h = dt/3, a = pk*(pt - s.p) - pc*s.pv; s.pv += a*h; s.p += s.pv*h; }
+    const ROOM = 7; let pos = s.x*T, over = 0;
+    if(pos > T){ over = pos - T; pos = T + Math.min(over, ROOM); } else if(pos < 0){ over = -pos; pos = -Math.min(over, ROOM); }
+    let sx = 1, shift = 0;
+    if(!reduce){
+      const ps = o.press*Math.max(0, s.p), vs = Math.min(Math.abs(s.v)*T/5000, 0.25);
+      const squash = Math.min(Math.max(over - ROOM, 0)/W*1.4 + over/W*0.25, 0.18);
+      sx = Math.max(1 + ps + vs - squash, 0.6); shift = s.anchor*ps*W/2;
+      if(over > 0) shift += (s.x > 1 ? 1 : -1)*squash*W/2;
+    }
+    knob.style.transform = `translate3d(${(pos+shift).toFixed(2)}px,0,0) scale(${sx.toFixed(4)},${(1/sx).toFixed(4)})`;
+    floor.style.opacity = Math.min(Math.max(s.x,0),1).toFixed(3);
+  }
+  el.addEventListener("pointerdown", e => { if(e.button !== 0) return; el.setPointerCapture(e.pointerId); el.focus({preventScroll:true}); measure(); s.pressed = true; s.anchor = s.target === 0 ? 1 : -1; s.drag = {x0:e.clientX, from:s.target, startX:s.x, active:false, t:performance.now()}; });
+  el.addEventListener("pointermove", e => {
+    const d = s.drag; if(!d) return; const dx = e.clientX - d.x0;
+    if(!d.active && Math.abs(dx) > 4) d.active = true;
+    if(d.active){ let nx = d.startX + dx/T; if(nx > 1) nx = 1 + (nx-1)*0.25; if(nx < 0) nx *= 0.25; const now = performance.now(), ddt = Math.max((now - d.t)/1000, 1/240); s.v = s.v*0.5 + ((nx - s.x)/ddt)*0.5; s.x = nx; d.t = now; }
+  });
+  function release(cancel){ const d = s.drag; if(!d) return; s.pressed = false; s.drag = null; if(cancel) return;
+    if(!d.active) setTarget(1 - s.target); else if((d.from === 0 ? s.x : 1 - s.x) >= 0.3) setTarget(1 - d.from); }
+  el.addEventListener("pointerup", () => release(false));
+  el.addEventListener("pointercancel", () => release(true));
+  el.addEventListener("click", e => e.preventDefault());
+  el.addEventListener("keydown", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(!e.repeat){ s.pressed = true; s.anchor = s.target === 0 ? 1 : -1; } } });
+  el.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(s.pressed){ s.pressed = false; setTarget(1 - s.target); } } });
+  const api = {step, o, measure}; engines.push(api); return api;
+}
+
+let last = performance.now();
+(function frame(now){
+  const dt = Math.min((now - last)/1000, 1/30); last = now;
+  for(const e of engines) e.step(dt);
+  requestAnimationFrame(frame);
+})(last);
+window.addEventListener("resize", () => engines.forEach(e => e.measure()));
+
+/* hero */
+Alu(document.getElementById("h1")); Alu(document.getElementById("h2"));
+
+/* 01 */
+const s1a = Alu(document.getElementById("s1a"), {mode:"usual"}), s1b = Alu(document.getElementById("s1b"));
+document.getElementById("slow1").addEventListener("change", e => { s1a.o.slow = s1b.o.slow = e.target.checked; });
+
+/* 02 */
+const s2a = Alu(document.getElementById("s2a")), s2b = Alu(document.getElementById("s2b"));
+const depth = document.getElementById("depth"), depthO = document.getElementById("depth-o");
+depth.addEventListener("input", () => { s2a.o.depth = s2b.o.depth = +depth.value; depthO.textContent = `${(+depth.value).toFixed(1)} px`; });
+
+/* 03 */
+const s3 = Alu(document.getElementById("s3"), {slow:true});
+const det = document.getElementById("det"), snap = document.getElementById("snap"), graph = document.getElementById("graph");
+function readsAs(d){ return d < 1.5 ? "loose slider" : d < 3.2 ? "switch" : "heavy switch"; }
+function drawGraph(){
+  const d = +det.value, sn = +snap.value/1000;
+  const L = 44, R = 424, TOP = 30, BOT = 182, DUR = 0.8;
+  const X = t => L + (t/DUR)*(R - L), Y = v => BOT - (v/1.25)*(BOT - TOP);
+  const alu = [], clay = [];
+  for(let t = 0; t <= DUR + 1e-9; t += 0.004){ const u = Math.min(t/sn, 1); alu.push(`${X(t).toFixed(1)},${Y(Math.pow(u, d)).toFixed(1)}`); }
+  let x = 0, v = 0; const k = 300, c = 2*0.38*Math.sqrt(k), h = 1/600;
+  for(let t = 0; t <= DUR; t += h){ const a = k*(1-x) - c*v; v += a*h; x += v*h; if(Math.round(t/h) % 4 === 0) clay.push(`${X(t).toFixed(1)},${Y(Math.min(x, 1 + 7/88)).toFixed(1)}`); }
+  graph.innerHTML = `
+    <line class="g-grid" x1="${L}" y1="${BOT}" x2="${R}" y2="${BOT}"/>
+    <line class="g-rest" x1="${L}" y1="${Y(1)}" x2="${R}" y2="${Y(1)}"/>
+    <text class="g-t" x="${L-8}" y="${Y(1)+4}" text-anchor="end">end</text>
+    <text class="g-t" x="${L-8}" y="${BOT+4}" text-anchor="end">start</text>
+    <polyline class="g-clay" points="${clay.join(" ")}"/>
+    <polyline class="g-alu" points="${alu.join(" ")}"/>
+    <circle class="g-dot" cx="${X(sn)}" cy="${Y(1)}" r="5"/>
+    <text class="g-t1" x="${X(sn)+10}" y="${Y(1)+20}">click · ${Math.round(sn*1000)} ms</text>
+    <text class="g-t2" x="${R}" y="${TOP - 10}" text-anchor="end">clay, for comparison</text>
+    <text class="g-t" x="${L}" y="${BOT+22}">press</text>
+    <text class="g-t" x="${R}" y="${BOT+22}" text-anchor="end">800 ms</text>`;
+  document.getElementById("st-settle").textContent = `${Math.round(sn*1000)} ms`;
+  document.getElementById("st-reads").textContent = readsAs(d);
+  document.getElementById("det-o").textContent = d.toFixed(1);
+  document.getElementById("snap-o").textContent = `${Math.round(sn*1000)} ms`;
+}
+det.addEventListener("input", () => { s3.o.detent = +det.value; drawGraph(); });
+snap.addEventListener("input", () => { s3.o.snap = +snap.value/1000; drawGraph(); });
+document.getElementById("slow3").addEventListener("change", e => { s3.o.slow = e.target.checked; });
+drawGraph();
+
+/* 04 */
+const log = document.getElementById("s4-log"), read = document.getElementById("s4-read");
+let logged = false;
+function addLog(t){ if(!logged){ log.innerHTML = ""; logged = true; } const li = document.createElement("li"); li.textContent = t; log.prepend(li); while(log.children.length > 5) log.lastChild.remove(); }
+const s4 = Alu(document.getElementById("s4"), {onEvent:(type, i) => {
+  if(type === "press"){ read.textContent = "Held. Sunk into the housing, waiting."; return; }
+  let m = "";
+  if(type === "tap") m = i.toggled ? `Tap: snapped ${i.on ? "on" : "off"}.` : "Tap: pressed in, nothing switched.";
+  if(type === "commit") m = `Dragged past the middle: snapped ${i.on ? "on" : "off"} by itself.`;
+  if(type === "back") m = `Dragged ${i.px} px, short of the middle: slid back.`;
+  if(type === "key") m = `Keyboard: snapped ${i.on ? "on" : "off"}.`;
+  if(m){ read.textContent = m; addLog(m); }
+}});
+document.getElementById("mode").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  e.currentTarget.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  s4.o.tap = b.dataset.v === "tap";
+  read.textContent = s4.o.tap ? "Tap or drag to switch." : "Only a drag switches it now. Try a tap.";
+});
+
+/* 05 */
+Clay(document.getElementById("vc")); Alu(document.getElementById("va"));
+})();
+</script>
+
+</body></html>

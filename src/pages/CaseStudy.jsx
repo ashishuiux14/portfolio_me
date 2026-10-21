@@ -21,7 +21,7 @@ export default function CaseStudy() {
         <a href={item.src} target="_blank" rel="noreferrer" className="pill press" style={{ minHeight: 44, color: 'var(--ink-2)' }}>Full screen <Icon name="link" size={16} /></a>
       </div>
       <div className="in" style={{ flex: 1, borderRadius: 30, padding: 8, minHeight: 0 }}>
-        <iframe src={item.src} title={`${item.name} case study`} style={{ width: '100%', height: '100%', border: 0, borderRadius: 24, display: 'block', background: '#0a0908' }} />
+        <iframe src={item.src} title={`${item.name} case study`} style={{ width: '100%', height: '100%', border: 0, borderRadius: 24, display: 'block', background: 'var(--bg)' }} />
       </div>
     </div>
   );

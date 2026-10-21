@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { PageHead, PrevNext } from '../components/Bits';
-import { Toggle, Rotary } from '../components/Controls';
+import { ClayToggle, AluToggle, Rotary } from '../lab/Art';
 import SeatMap from '../components/SeatMap';
 import { LAB } from '../data/site';
 
@@ -18,9 +18,9 @@ function Preview({ slug }) {
   );
   if (slug === 'controls') return (
     <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-      <Toggle checked={a} onChange={setA} label="Clay toggle preview" />
-      <Toggle checked={b} onChange={setB} material="alu" label="Aluminium toggle preview" />
-      <Rotary on={b} onChange={setB} size={70} material="alu" label="Rotary preview" />
+      <ClayToggle checked={a} onChange={setA} zoom={0.5} label="Clay toggle preview" />
+      <AluToggle checked={b} onChange={setB} zoom={0.48} label="Aluminium toggle preview" />
+      <Rotary material="alu" on zoom={0.36} label="Rotary preview" />
     </div>
   );
   return <SeatMap seatSize={18} cols={8} rows={['A', 'B', 'C']} booked={['A2', 'A3', 'B6', 'C1']} initial={['B3', 'B4']} interactive={false} />;

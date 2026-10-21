@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { PrevNext } from '../components/Bits';
-import { Toggle, Rotary } from '../components/Controls';
+import { ClayToggle, AluToggle, Rotary } from '../lab/Art';
 
 const PRINCIPLES = [
   ['01', 'One light source', 'Every shadow falls down and to the right, so depth reads the same everywhere.'],
@@ -48,8 +48,8 @@ export default function LabSoftUI() {
             <p className="muted" style={{ maxWidth: 440 }}>A small visual system for physical-feeling controls: one light source, three materials, and a rule that depth always means something.</p>
           </div>
           <div style={{ flex: '1 1 340px', minHeight: 420, position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: 34, paddingRight: 'clamp(0px, 3vw, 40px)' }}>
-            <Rotary on={rot} onChange={setRot} material="alu" size={170} label="Aluminium rotary switch" />
-            <Toggle checked={alu} onChange={setAlu} material="alu" label="Aluminium toggle" />
+            <Rotary material="alu" on={rot} onChange={setRot} zoom={0.78} label="Aluminium rotary switch" />
+            <AluToggle checked={alu} onChange={setAlu} zoom={0.7} label="Aluminium toggle" />
             <div className="glass" style={{ borderRadius: 26, padding: '18px 22px', color: '#F4F0EC', display: 'flex', flexDirection: 'column', gap: 6, minWidth: 220, position: 'relative' }}>
               <span aria-hidden="true" style={{ position: 'absolute', left: -30, top: -20, width: 110, height: 110, borderRadius: '50%', background: '#D9572B', filter: 'blur(30px)', opacity: .65, zIndex: -1 }} />
               <span className="cap" style={{ color: '#E6DFD8' }}>Glass · seat summary</span>
@@ -90,13 +90,13 @@ export default function LabSoftUI() {
         <span className="cap">Three materials, one light source</span>
         <div className="grid-3">
           <article className="up" style={{ borderRadius: 40, padding: 30, display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <div className="in" style={{ height: 170, borderRadius: 28, display: 'grid', placeItems: 'center' }}><Toggle checked={clay} onChange={setClay} label="Clay toggle" /></div>
+            <div className="in" style={{ height: 170, borderRadius: 28, display: 'grid', placeItems: 'center' }}><ClayToggle checked={clay} onChange={setClay} zoom={0.75} label="Clay toggle" /></div>
             <span className="cap">Clay · neumorphism</span>
             <h3 className="h3">Soft and forgiving</h3>
             <p className="muted">Moulded from the page itself. Springy motion that overshoots and settles. For everyday, low-stakes controls.</p>
           </article>
           <article className="up" style={{ borderRadius: 40, padding: 30, display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <div className="in" style={{ height: 170, borderRadius: 28, display: 'grid', placeItems: 'center' }}><Toggle checked={alu} onChange={setAlu} material="alu" label="Aluminium toggle" /></div>
+            <div style={{ height: 170, borderRadius: 28, display: 'grid', placeItems: 'center', background: 'linear-gradient(180deg, #E8E8EA, #D6D6D9)', boxShadow: 'inset 0 2px 5px rgba(0,0,0,.14), 0 1px 0 var(--hi)' }}><AluToggle checked={alu} onChange={setAlu} zoom={0.72} label="Aluminium toggle" /></div>
             <span className="cap">Aluminium · skeuomorphism</span>
             <h3 className="h3">Precise and decisive</h3>
             <p className="muted">Machined edges, hard stops, a sharp click. Linear motion with no bounce. For settings that should feel deliberate.</p>
@@ -164,7 +164,7 @@ export default function LabSoftUI() {
       <section style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 56 }}>
         <div style={{ flex: '1 1 360px', display: 'grid', placeItems: 'center', minWidth: 0 }}>
           <div className="up" style={{ width: 'min(420px, 100%)', aspectRatio: '1', borderRadius: '50%', display: 'grid', placeItems: 'center' }}>
-            <Rotary on={rot} onChange={setRot} size={300} material="plastic" label="Large rotary switch" />
+            <Rotary material="plastic" on={rot} onChange={setRot} zoom={1.3} label="Large rotary switch" />
           </div>
         </div>
         <div style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -197,12 +197,12 @@ export default function LabSoftUI() {
             </div>
             <Row label="Lights"><span className="lcd" style={{ fontSize: 13, padding: '3px 8px' }}>32%</span></Row>
             <div className="in-sm" style={{ position: 'relative', height: 12, borderRadius: 6 }} aria-hidden="true"><span style={{ position: 'absolute', left: 3, top: 3, width: '32%', height: 6, borderRadius: 3, background: 'var(--accent)' }} /><span className="up-sm" style={{ position: 'absolute', left: '28%', top: -9, width: 30, height: 30, borderRadius: '50%' }} /></div>
-            <Row label="Blinds"><Toggle checked={clay} onChange={setClay} label="Blinds" /></Row>
+            <Row label="Blinds"><ClayToggle checked={clay} onChange={setClay} zoom={0.4} label="Blinds" /></Row>
           </Phone>
           <Phone title="Site hours" dark>
             <span style={{ fontWeight: 200, fontSize: 30, lineHeight: 1.15 }}>Atelier<br />site visit</span>
             <div style={{ display: 'grid', placeItems: 'center', padding: '8px 0' }}><span className="lcd" style={{ fontSize: 42, padding: '12px 18px', letterSpacing: '.04em' }}>02:45</span></div>
-            <Row label="Billable"><Toggle checked={alu} onChange={setAlu} material="alu" label="Billable" /></Row>
+            <Row label="Billable"><AluToggle checked={alu} onChange={setAlu} zoom={0.38} label="Billable" /></Row>
             <span aria-hidden="true" style={{ position: 'absolute', left: 30, bottom: 50, width: 120, height: 70, borderRadius: '50%', background: '#D9572B', filter: 'blur(30px)', opacity: .5 }} />
             <span className="glass" style={{ position: 'relative', marginTop: 'auto', minHeight: 54, borderRadius: 27, display: 'grid', placeItems: 'center', fontWeight: 500 }}>Log time</span>
           </Phone>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
-import { Toggle, Stepper, Rotary } from '../components/Controls';
+import { ClayToggle, Stepper, Rotary } from '../lab/Art';
 import SeatMap from '../components/SeatMap';
 import { CASE_STUDIES, LAB, PRINTS, CONTACT } from '../data/site';
 
@@ -32,8 +32,6 @@ function MiniCard({ to, name, tag, sub, cover }) {
 export default function Home() {
   const [tab, setTab] = useState('work');
   const [on, setOn] = useState(true);
-  const [count, setCount] = useState(3);
-  const [rot, setRot] = useState(false);
 
   const items = tab === 'work'
     ? CASE_STUDIES.map((c) => ({ to: `/projects/${c.slug}`, name: c.name, tag: c.tag, sub: c.sub, cover: c.cover }))
@@ -70,9 +68,9 @@ export default function Home() {
             <Link to="/lab/controls" className="cap accent" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>Open <Icon name="arrow" size={14} /></Link>
           </div>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: 18 }}>
-            <Toggle checked={on} onChange={setOn} label="Example toggle" />
-            <Stepper value={count} onChange={setCount} min={0} max={20} label="Example count" />
-            <Rotary on={rot} onChange={setRot} size={84} label="Example rotary switch" />
+            <ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" />
+            <Stepper material="clay" value={3} min={0} max={20} zoom={0.52} label="Example count" />
+            <Rotary material="alu" zoom={0.42} label="Example rotary switch" />
           </div>
         </section>
 
@@ -103,7 +101,7 @@ export default function Home() {
           <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12, fontSize: 15, lineHeight: 1.35 }}>
             <li style={{ display: 'flex', flexDirection: 'column' }}><b style={{ fontWeight: 500 }}>Pune</b><span className="muted">B.Arch, University of Pune</span></li>
             <li style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}><b style={{ fontWeight: 500 }}>DePaul</b><span className="muted">MS in HCI</span></li>
-            <li style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}><b style={{ fontWeight: 500 }}>Chicago</b><span className="muted">Dell · Liberty Mutual · Epsilon</span></li>
+            <li style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}><b style={{ fontWeight: 500 }}>Chicago</b><span className="muted">UI/UX · Product design</span></li>
           </ol>
         </section>
 

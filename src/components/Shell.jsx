@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import Icon from './Icon';
-import { Toggle } from './Controls';
+import { ClayToggle } from '../lab/Art';
 import { CONTACT } from '../data/site';
 
 const NAV = [
@@ -13,26 +14,57 @@ const NAV = [
   { to: '/contact', label: 'Contact', icon: 'mail' },
 ];
 
-/* Theme lives on <html data-theme>; the head script sets it before first paint. */
+/* Theme lives on <html data-theme>; the head script sets it before first paint.
+   Switching runs a circular reveal from the switch: dark grows out of it,
+   light shrinks back into it. Falls back to an instant swap where unsupported. */
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  try { localStorage.setItem('theme', t); } catch (e) { /* storage unavailable */ }
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', t === 'dark' ? '#2A2725' : '#EBE6E2');
+  // case studies are same-origin frames: switch them in the same frame
+  document.querySelectorAll('iframe').forEach((f) => {
+    try { f.contentDocument && f.contentDocument.documentElement.setAttribute('data-theme', t); } catch (e) { /* cross-origin */ }
+  });
+}
+
 export function useTheme() {
-  const [theme, setTheme] = useState(() => document.documentElement.getAttribute('data-theme') || 'light');
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('theme', theme); } catch (e) { /* storage unavailable */ }
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#2A2725' : '#EBE6E2');
-  }, [theme]);
+  const [theme, setThemeState] = useState(() => document.documentElement.getAttribute('data-theme') || 'light');
+  const setTheme = (next, origin) => {
+    if (next === theme) return;
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || reduce || !origin) {
+      applyTheme(next); setThemeState(next); return;
+    }
+    const r = origin.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const toDark = next === 'dark';
+    document.documentElement.classList.add(toDark ? 'vt-grow' : 'vt-shrink');
+    const vt = document.startViewTransition(() => { applyTheme(next); flushSync(() => setThemeState(next)); });
+    vt.ready.then(() => {
+      const small = `circle(0px at ${x}px ${y}px)`, big = `circle(${radius}px at ${x}px ${y}px)`;
+      document.documentElement.animate(
+        { clipPath: toDark ? [small, big] : [big, small] },
+        { duration: 760, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: toDark ? '::view-transition-new(root)' : '::view-transition-old(root)', fill: 'both' },
+      );
+    }).catch(() => {});
+    vt.finished.finally(() => document.documentElement.classList.remove('vt-grow', 'vt-shrink'));
+  };
   return [theme, setTheme];
 }
 
 function ThemeSwitch({ theme, setTheme }) {
   const dark = theme === 'dark';
+  const ref = useRef(null);
   return (
     <div className="theme-row">
       <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
         <Icon name={dark ? 'moon' : 'sun'} size={16} /> {dark ? 'Dark' : 'Light'}
       </span>
-      <Toggle material="clay" checked={dark} onChange={(v) => setTheme(v ? 'dark' : 'light')} label="Dark theme" />
+      <span ref={ref} style={{ display: 'inline-flex' }}>
+        <ClayToggle checked={dark} zoom={0.44} label="Dark theme" onChange={(v) => setTheme(v ? 'dark' : 'light', ref.current)} />
+      </span>
     </div>
   );
 }
@@ -63,7 +95,7 @@ export function Rail({ theme, setTheme }) {
         <Link to="/" className="monogram" aria-label="Ashish Dixit, home"><span aria-hidden="true">AD</span></Link>
         <div className="who"><b>Ashish Dixit</b><span>Senior Product Designer · Chicago</span></div>
         <NavLinks />
-        <a className="btn-dark" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
+        <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
     </aside>
@@ -72,6 +104,7 @@ export function Rail({ theme, setTheme }) {
 
 export function Topbar({ theme, setTheme }) {
   const [open, setOpen] = useState(false);
+  const tref = useRef(null);
   const { pathname } = useLocation();
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
@@ -88,7 +121,9 @@ export function Topbar({ theme, setTheme }) {
           <span style={{ fontSize: 13, color: 'var(--ink-2)' }}>Senior Product Designer</span>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Toggle material="clay" checked={theme === 'dark'} onChange={(v) => setTheme(v ? 'dark' : 'light')} label="Dark theme" />
+          <span ref={tref} style={{ display: 'inline-flex' }}>
+            <ClayToggle checked={theme === 'dark'} zoom={0.42} label="Dark theme" onChange={(v) => setTheme(v ? 'dark' : 'light', tref.current)} />
+          </span>
           <button type="button" className="icon-btn up-sm" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}>
             <Icon name="menu" size={20} />
           </button>
@@ -105,7 +140,7 @@ export function Topbar({ theme, setTheme }) {
               </button>
             </div>
             <NavLinks onNavigate={() => setOpen(false)} />
-            <a className="btn-dark" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
+            <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
           </div>
         </>
       )}
