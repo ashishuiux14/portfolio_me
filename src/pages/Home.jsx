@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
-import { ClayToggle, Stepper, Rotary } from '../lab/Art';
+import { ClayToggle, Stepper, Rotary, SubmitButton } from '../lab/Art';
 import SeatMap from '../components/SeatMap';
 import { CASE_STUDIES, LAB, PRINTS, CONTACT } from '../data/site';
 
@@ -67,10 +67,11 @@ export default function Home() {
             <span className="cap">Interaction Lab · try me</span>
             <Link to="/lab/controls" className="cap accent" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>Open <Icon name="arrow" size={14} /></Link>
           </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: 18 }}>
-            <ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" />
-            <Stepper material="clay" value={3} min={0} max={20} zoom={0.52} label="Example count" />
-            <Rotary material="alu" zoom={0.42} label="Example rotary switch" />
+          <div className="lab-quad">
+            <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" /></div>
+            <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.5} label="Example count" /></div>
+            <div className="lab-cell"><Rotary material="alu" zoom={0.42} label="Example rotary switch" /></div>
+            <div className="lab-cell"><SubmitButton material="alu" zoom={0.5} /></div>
           </div>
         </section>
 
