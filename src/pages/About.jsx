@@ -71,7 +71,7 @@ const About = () => {
 
           <div className="bio-cta">
             <a href="/contact" className="btn btn-red">Get in Touch</a>
-            <a href="https://drive.google.com/file/d/1j09Exkfpj39EFfeW4WUMBc1JWhgPBrNa/view" target="_blank" rel="noreferrer" className="btn btn-ghost">Download CV</a>
+            <a href="/Ashish_UX_UI_Resume.pdf" target="_blank" rel="noreferrer" className="btn btn-ghost">Download CV</a>
           </div>
         </div>
       </div>
