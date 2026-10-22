@@ -252,3 +252,45 @@ html.vt-grow::view-transition-new(root) { z-index: 2; }
 .shell { zoom: var(--z); }
 
 .lab-prev [role="status"] { display: none; }
+
+/* ---------- lab tile previews ---------- */
+.sui-prev { position: absolute; inset: 8px; display: flex; align-items: center; gap: 4%; pointer-events: none; }
+.sui-prev-card { position: relative; flex: 1.5; align-self: stretch; }
+.sui-prev-card .cyber.compact { inset: 0; }
+.mini-watch { flex: 1; max-width: 150px; border-radius: 22px; padding: 9px; background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, rgba(0,0,0,.035) 1px 3px), linear-gradient(180deg, #ECEDEF, #C3C6CA 55%, #A9ACB1); box-shadow: 5px 8px 14px rgba(0,0,0,.28), inset 0 1.5px 0 #fff, inset 0 -2px 4px rgba(0,0,0,.2); }
+html[data-theme="dark"] .mini-watch { background: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.05) 1px 3px), linear-gradient(180deg, #5A5D62, #36383C 55%, #24262A); box-shadow: 5px 8px 14px rgba(0,0,0,.5), inset 0 1.5px 0 rgba(255,255,255,.25); }
+.mw-face { border-radius: 14px; padding: 7px; background: radial-gradient(120% 140% at 30% 0%, #2c2e31, #151617 70%); box-shadow: inset 0 2px 5px rgba(0,0,0,.7); }
+.mw-lcd { position: relative; border-radius: 8px; overflow: hidden; background: linear-gradient(176deg, #C3C8B6, #A6AD9A); box-shadow: inset 2px 3px 6px rgba(20,24,16,.5); }
+.mw-lcd::after { content: ""; position: absolute; inset: 0; background: linear-gradient(118deg, rgba(255,255,255,.3), rgba(255,255,255,0) 30%); }
+.mw-lcd svg { display: block; width: 100%; height: auto; }
+
+/* the seat gag: 7 s loop */
+.gag { display: block; width: 100%; height: 100%; }
+.gag .g-q, .gag .g-bang { font: 700 22px Jost, sans-serif; }
+.gag .g-move { animation: g-move 7s linear infinite; }
+.gag .g-walkA { animation: g-walkA 7s step-end infinite; }
+.gag .g-walkB { animation: g-walkB 7s step-end infinite; }
+.gag .g-stand { animation: g-stand 7s step-end infinite; }
+.gag .g-sit { animation: g-sit 7s step-end infinite; }
+.gag .g-lower { animation: g-lower 7s ease-in infinite; }
+.gag .g-shock { animation: g-shock 7s step-end infinite; }
+.gag .g-jump { animation: g-jump 7s ease-out infinite; }
+.gag .g-runA { animation: g-runA 7s step-end infinite; }
+.gag .g-runB { animation: g-runB 7s step-end infinite; }
+.gag .g-q { animation: g-q 7s step-end infinite; }
+@keyframes g-move { 0% { transform: translateX(170px); } 25% { transform: translateX(0); } 68% { transform: translateX(0); animation-timing-function: ease-in; } 90%, 100% { transform: translateX(210px); } }
+@keyframes g-walkA { 0% { opacity: 1; } 5% { opacity: 0; } 10% { opacity: 1; } 15% { opacity: 0; } 20% { opacity: 1; } 25%, 100% { opacity: 0; } }
+@keyframes g-walkB { 0% { opacity: 0; } 5% { opacity: 1; } 10% { opacity: 0; } 15% { opacity: 1; } 20%, 100% { opacity: 0; } }
+@keyframes g-stand { 0% { opacity: 0; } 25% { opacity: 1; } 32%, 100% { opacity: 0; } }
+@keyframes g-sit { 0% { opacity: 0; } 32% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes g-lower { 0%, 32% { transform: translate(10px, -14px); } 45%, 100% { transform: translate(0, 0); } }
+@keyframes g-shock { 0% { opacity: 0; } 50% { opacity: 1; } 68%, 100% { opacity: 0; } }
+@keyframes g-jump { 0%, 50% { transform: translate(-6px, 10px); } 53% { transform: translate(0, -16px); } 56% { transform: translate(3px, -10px); } 59% { transform: translate(-3px, -12px); } 62% { transform: translate(3px, -10px); } 65%, 100% { transform: translate(0, -8px); } }
+@keyframes g-runA { 0% { opacity: 0; } 68% { opacity: 1; } 72% { opacity: 0; } 76% { opacity: 1; } 80% { opacity: 0; } 84% { opacity: 1; } 88%, 100% { opacity: 0; } }
+@keyframes g-runB { 0% { opacity: 0; } 72% { opacity: 1; } 76% { opacity: 0; } 80% { opacity: 1; } 84% { opacity: 0; } 88% { opacity: 1; } 90%, 100% { opacity: 0; } }
+@keyframes g-q { 0% { opacity: 0; } 56% { opacity: 1; } 86%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .gag * { animation: none !important; }
+  .gag .g-walkA, .gag .g-walkB, .gag .g-stand, .gag .g-sit, .gag .g-runA, .gag .g-runB { opacity: 0; }
+  .gag .g-shock { opacity: 1; } .gag .g-jump { transform: translateY(-8px); }
+}

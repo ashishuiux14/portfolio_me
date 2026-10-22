@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { ClayToggle, Stepper, Rotary, SubmitButton } from '../lab/Art';
-import CyberCard from '../lab/CyberCard';
-import { ControlsPreview, SeatPreview } from '../components/LabPreviews';
+import { ControlsPreview, SeatPreview, SoftUiPreview } from '../components/LabPreviews';
 import SeatMap from '../components/SeatMap';
 import { CASE_STUDIES, LAB, PRINTS, CONTACT } from '../data/site';
 
@@ -38,7 +37,7 @@ export default function Home() {
   const items = tab === 'work'
     ? CASE_STUDIES.map((c) => ({ to: `/projects/${c.slug}`, name: c.name, tag: c.tag, sub: c.sub, cover: c.cover }))
     : tab === 'lab'
-      ? LAB.map((l) => ({ to: `/lab/${l.slug}`, name: l.name, tag: `Interaction Lab · ${l.n}`, sub: l.sub, cover: null, preview: l.slug === 'soft-ui' ? <CyberCard compact /> : l.slug === 'controls' ? <ControlsPreview /> : <SeatPreview /> }))
+      ? LAB.map((l) => ({ to: `/lab/${l.slug}`, name: l.name, tag: `Interaction Lab · ${l.n}`, sub: l.sub, cover: null, preview: l.slug === 'soft-ui' ? <SoftUiPreview /> : l.slug === 'controls' ? <ControlsPreview /> : <SeatPreview /> }))
       : PRINTS.map((p) => ({ to: `/projects/${p.slug}`, name: p.name, tag: p.tag, sub: p.sub, cover: p.cover }));
 
   return (
