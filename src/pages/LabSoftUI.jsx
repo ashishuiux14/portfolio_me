@@ -3,7 +3,7 @@ import { PrevNext } from '../components/Bits';
 import { ClayToggle, AluToggle, SoundSwitch } from '../lab/Art';
 import Watch from '../lab/Watch';
 import LightLab from '../lab/LightLab';
-import GlassAlu from '../lab/GlassAlu';
+import CyberCard from '../lab/CyberCard';
 import { Thermostat, PetFeeder, MATERIALS, MaterialPuck } from '../lab/Devices';
 import { Seg } from '../lab/Seg';
 import '../lab/softui.css';
@@ -43,13 +43,15 @@ export default function LabSoftUI() {
           </div>
           <p className="lede" style={{ maxWidth: 560 }}>Soft clay, plastic, polished metal, brushed aluminium and glass: what each material looks like on screen, how it handles light, and where it belongs on real devices.</p>
         </div>
-        <GlassAlu />
-        <div className="ga-notes">
-          <div className="note up-sm"><span className="n">01 · THE BODY</span><b>Thick glass is a weak lens</b><p>Through the middle of the slab the aluminium is slightly magnified and softened, so the grille and the spun rings look closer than the metal around them.</p></div>
-          <div className="note up-sm"><span className="n">02 · THE EDGE</span><b>The bevel bends light hardest</b><p>At the rim the metal behind is pulled sideways and split into faint colour fringes. That fringe is what tells the eye this is real glass, not a blurred panel.</p></div>
-          <div className="note up-sm"><span className="n">03 · THE SHADOW</span><b>Pale, with a bright line</b><p>Glass blocks little light, so its shadow on the metal is soft and light. The slab focuses some of it into a thin bright caustic beyond its far edge.</p></div>
+        <div className="cyber-wrap">
+          <CyberCard />
+          <div className="cyber-notes">
+            <div className="note up-sm"><span className="n">01 · THE METAL</span><b>Punched, blasted, lit</b><p>A titanium plate cut from a chamfered silhouette. Every edge, hole and screw is lit by the same top-left light, so the plate reads as a machined part, not a flat shape.</p></div>
+            <div className="note up-sm"><span className="n">02 · THE GLASS</span><b>It bends only what is behind it</b><p>At the bevel the plate’s edges, holes and glow strip are pulled sideways and split into faint colour; through the middle they are just softened. The type sits on the glass, so it stays perfectly sharp.</p></div>
+            <div className="note up-sm"><span className="n">03 · THE LIGHT</span><b>Two kinds of light</b><p>Reflected light on the metal follows the light source. Emitted light from the strips ignores it, and still bends when it passes under the glass. Ember in light mode, white in dark.</p></div>
+          </div>
         </div>
-        <p className="cap" style={{ textAlign: 'center' }}>Drag the glass across the aluminium, or focus it and use the arrow keys</p>
+        <p className="cap" style={{ textAlign: 'center' }}>Move your pointer over the card: the glass shifts and the refraction follows</p>
       </section>
 
       {/* ---------- five materials ---------- */}

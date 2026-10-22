@@ -291,3 +291,36 @@ html[data-theme="dark"] .page-softui {
 .scen h3 { font-size: clamp(24px, 2.2vw, 30px); font-weight: 300; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .scen p { margin: 0; color: var(--ink-2); line-height: 1.55; }
+
+/* ===== cyber card: metal + glass ===== */
+.page-softui {
+  --cb-stage: #141517; --cb-m1: #F1F2F4; --cb-m2: #BFC3C8; --cb-m3: #8E9399;
+  --cb-eng: #5B6067; --cb-lip: rgba(255,255,255,.75);
+  --cb-acc: #FF5A1F; --cb-acc-core: #FFE3D4; --cb-caustic: rgba(255,236,220,.85);
+  --cb-g1: .2; --cb-g2: .04; --cb-g3: .1; --cb-dot: .45;
+  --cb-ink: #15171A; --cb-ink2: #3A3F46;
+}
+html[data-theme="dark"] .page-softui {
+  --cb-stage: #0B0B0C; --cb-m1: #7C8188; --cb-m2: #4B4F55; --cb-m3: #2C2F33;
+  --cb-eng: #1A1C1F; --cb-lip: rgba(255,255,255,.22);
+  --cb-acc: #EEF2F6; --cb-acc-core: #FFFFFF; --cb-caustic: rgba(255,255,255,.5);
+  --cb-g1: .2; --cb-g2: .05; --cb-g3: .12; --cb-dot: .35;
+  --cb-ink: #F6F8FA; --cb-ink2: #C9CFD6;
+}
+.cyber-wrap { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 1fr); gap: var(--gap); align-items: stretch; }
+@container (max-width: 980px) { .cyber-wrap { grid-template-columns: minmax(0, 1fr); } }
+.cyber { border-radius: 40px; overflow: hidden; background: var(--cb-stage); box-shadow: var(--sh-up); }
+.cyber svg { display: block; width: 100%; height: auto; }
+.cb-eng text { font: 600 13px var(--mono); letter-spacing: .2em; fill: var(--cb-eng); }
+.cb-eng text.lip, .cb-big.lip { fill: var(--cb-lip); }
+.cb-trace path { fill: none; stroke: var(--cb-eng); stroke-width: 2; }
+.cb-trace path.lip { stroke: var(--cb-lip); }
+.cb-big { font: 400 92px Michroma, Jost, sans-serif; letter-spacing: .04em; fill: var(--cb-eng); fill-opacity: .55; }
+.cb-ink .cap { font: 600 13px var(--mono); letter-spacing: .22em; fill: var(--cb-ink2); }
+.cb-ink .cap.small { font-size: 11px; }
+.cb-ink .disp { font: 400 52px Michroma, Jost, sans-serif; fill: var(--cb-ink); }
+.cb-ink .num { font: 400 64px Michroma, Jost, sans-serif; fill: var(--cb-ink); }
+.cb-ink .mid { font: 500 22px var(--mono); letter-spacing: .06em; fill: var(--cb-ink); }
+.cb-ink .arrow { fill: none; stroke: var(--cb-acc); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.cb-ink .led { fill: var(--cb-acc); filter: drop-shadow(0 0 6px var(--cb-acc)); }
+.cyber-notes { display: flex; flex-direction: column; gap: 14px; }
