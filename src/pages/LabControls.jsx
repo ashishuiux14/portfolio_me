@@ -64,7 +64,7 @@ const T = {
 function Demo({ label, children, metal }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, minWidth: 0 }}>
-      <div className={metal ? '' : 'in'} style={{ borderRadius: 28, padding: '34px 22px', minHeight: 170, width: '100%', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 24, overflowX: 'auto', ...(metal ? { background: 'linear-gradient(180deg, #E8E8EA, #D6D6D9)', boxShadow: 'inset 0 2px 5px rgba(0,0,0,.14), 0 1px 0 var(--hi)' } : {}) }}>{children}</div>
+      <div className={metal ? '' : 'in'} style={{ borderRadius: 28, padding: '34px clamp(8px, 3vw, 22px)', minHeight: 170, width: '100%', containerType: 'inline-size', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 24, overflowX: 'auto', ...(metal ? { background: 'linear-gradient(180deg, #E8E8EA, #D6D6D9)', boxShadow: 'inset 0 2px 5px rgba(0,0,0,.14), 0 1px 0 var(--hi)' } : {}) }}>{children}</div>
       <span className="cap">{label}</span>
     </div>
   );

@@ -166,8 +166,8 @@
 .rs.alu.is-on .rs-line{background:#4BEA7C;box-shadow:0 0 8px 2px rgba(60,230,110,.55)}
 
 /* ---------- calendar ---------- */
-.cal{--cw:48px;display:flex;flex-direction:column;gap:10px;padding:18px 18px 14px;width:max-content;max-width:100%;line-height:1.4}
-@media (max-width:420px){.cal{--cw:40px;padding:14px 10px 12px}}
+.cal{--cw:min(48px,calc((100cqw - 36px) / 7));display:flex;flex-direction:column;gap:10px;padding:18px 18px 14px;width:max-content;max-width:100%;line-height:1.4}
+@container (max-width:400px){.cal{--cw:min(48px,calc((100cqw - 20px) / 7));padding:14px 10px 12px}.cal .mwin{width:84px}.cal .mdrum{gap:6px;padding:5px 8px}.cal .myear{font-size:13px}.cal.clay .nav,.cal.alu .nav{width:34px;height:34px}.cal.clay .title{font-size:18px}.cal .cal-head{gap:6px}}
 .cal .cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;height:44px}
 .cal .cal-wd,.cal .cal-grid{display:grid;grid-template-columns:repeat(7,var(--cw))}
 .cal .cal-wd span{text-align:center;font:500 10.5px/22px var(--mono);letter-spacing:.06em;color:var(--ink-3)}
@@ -195,8 +195,8 @@
 .cal.clay .day:active .tile{transform:scale(1.1,.82);transition-duration:.07s}
 .cal.clay .day:hover .tile{color:var(--ink)}
 .cal.clay .day.today .tile{box-shadow:3px 3px 7px var(--clay-lo),-3px -3px 7px var(--hi),inset 0 -3px 0 rgba(124,203,147,.55)}
-.cal.clay .day.in .tile{background:transparent;box-shadow:none;color:#2F6B45}
-:root[data-theme="dark"] .cal.clay .day.in .tile{color:#C9F0D4}
+.cal.clay .day.inr .tile{background:transparent;box-shadow:none;color:#2F6B45}
+:root[data-theme="dark"] .cal.clay .day.inr .tile{color:#C9F0D4}
 .cal.clay .day.s .tile,.cal.clay .day.e .tile{background:linear-gradient(145deg,#dff5e6,#bfe6cc);color:#245A37;font-weight:600;
   box-shadow:4px 4px 9px rgba(112,160,126,.45),-3px -3px 7px var(--hi),inset 2px 2px 3px rgba(255,255,255,.8),inset -2px -2px 4px rgba(60,120,80,.12)}
 .cal.clay .day:focus-visible .tile{outline:2px solid #7CCB93;outline-offset:2px}

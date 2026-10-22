@@ -640,7 +640,7 @@ export function calendar(host, m, opts) {
       const inR = s && hi && k > ks && k < kh;
       c.classList.toggle('s', !!s && k === ks);
       c.classList.toggle('e', !!e && k === key(e));
-      c.classList.toggle('in', !!inR && !pv);
+      c.classList.toggle('inr', !!inR && !pv);
       c.classList.toggle('pv', !!inR && pv);
       c.classList.toggle('today', k === key(TODAY));
       if (m === 'alu') {
