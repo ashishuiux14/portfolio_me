@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { PageHead, Sheet, PrevNext } from '../components/Bits';
+import Icon from '../components/Icon';
 import SeatMap, { SeatLegend } from '../components/SeatMap';
 
 export default function LabSeatPicker() {
@@ -88,7 +89,7 @@ export default function LabSeatPicker() {
         </div>
       </Sheet>
 
-      <a href="/studies/seat-map.html" target="_blank" rel="noreferrer" className="pill up-sm press" style={{ alignSelf: 'flex-start' }}>Read the full seat map study ↗</a>
+      <a href="/studies/seat-map.html" target="_blank" rel="noreferrer" className="pill up-sm press" style={{ alignSelf: 'flex-start' }}>Read the full seat map study <Icon name="ext" size={16} /></a>
 
       <PrevNext prev={{ to: '/lab/controls', label: '02 · Controls' }} next={{ to: '/work', label: 'Case studies' }} />
     </div>

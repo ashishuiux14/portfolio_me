@@ -8,6 +8,7 @@ const PATHS = {
   mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>,
   download: <><path d="M12 4v12" /><path d="M6 10l6 6 6-6" /><path d="M5 20h14" /></>,
   arrow: <><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></>,
+  ext: <><path d="M7 17L17 7" /><path d="M9 7h8v8" /></>,
   back: <><path d="M19 12H5" /><path d="M11 6l-6 6 6 6" /></>,
   sun: <><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>,
   moon: <><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" /></>,

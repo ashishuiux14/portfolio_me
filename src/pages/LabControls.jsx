@@ -73,7 +73,7 @@ function Demo({ label, children, metal }) {
 function StudyLink({ href, children }) {
   return (
     <a href={href} target="_blank" rel="noreferrer" className="pill up-sm press" style={{ alignSelf: 'flex-start', marginTop: 24 }}>
-      {children} <Icon name="link" size={16} />
+      {children} <Icon name="ext" size={16} />
     </a>
   );
 }

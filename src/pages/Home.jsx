@@ -89,7 +89,7 @@ export default function Home() {
         {/* route */}
         <section className="b-route up" style={{ padding: '24px 30px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }} aria-label="The route">
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-            <span className="cap">The route</span><span className="cap">Physical space → digital space</span>
+            <span className="cap">The route</span><span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>Physical space <Icon name="arrow" size={13} /> digital space</span>
           </div>
           <div style={{ position: 'relative', padding: '10px 0' }} aria-hidden="true">
             <div className="in-sm" style={{ position: 'absolute', left: 14, right: 14, top: '50%', height: 10, marginTop: -5, borderRadius: 5 }} />

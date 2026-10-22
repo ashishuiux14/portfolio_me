@@ -40,12 +40,12 @@ export function PrevNext({ prev, next }) {
     <nav className="grid-2" aria-label="More pages">
       {prev ? (
         <Link to={prev.to} className="up-sm press" style={{ borderRadius: 30, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span className="cap">← {prev.eyebrow || 'Previous'}</span><span style={{ fontSize: 24, fontWeight: 300 }}>{prev.label}</span>
+          <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><Icon name="back" size={14} />{prev.eyebrow || 'Previous'}</span><span style={{ fontSize: 24, fontWeight: 300 }}>{prev.label}</span>
         </Link>
       ) : <span />}
       {next ? (
         <Link to={next.to} className="up-sm press" style={{ borderRadius: 30, padding: '24px 28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, textAlign: 'right' }}>
-          <span className="cap">{next.eyebrow || 'Next'} →</span><span style={{ fontSize: 24, fontWeight: 300 }}>{next.label}</span>
+          <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{next.eyebrow || 'Next'}<Icon name="arrow" size={14} /></span><span style={{ fontSize: 24, fontWeight: 300 }}>{next.label}</span>
         </Link>
       ) : <span />}
     </nav>
