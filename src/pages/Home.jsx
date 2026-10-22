@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { ClayToggle, Stepper, Rotary, SubmitButton } from '../lab/Art';
+import CyberCard from '../lab/CyberCard';
 import SeatMap from '../components/SeatMap';
 import { CASE_STUDIES, LAB, PRINTS, CONTACT } from '../data/site';
 
@@ -11,11 +12,11 @@ const TABS = [
   { id: 'print', label: '3D printing' },
 ];
 
-function MiniCard({ to, name, tag, sub, cover }) {
+function MiniCard({ to, name, tag, sub, cover, preview }) {
   return (
     <Link to={to} className="card up-sm" style={{ borderRadius: 26, padding: 14, gap: 14 }}>
-      <div className="cover in" style={{ height: 150, borderRadius: 20 }}>
-        {cover ? <img src={cover} alt="" loading="lazy" /> : <span className="carved" style={{ fontSize: 34, fontWeight: 500 }}>{name}</span>}
+      <div className="cover in" style={{ height: 150, borderRadius: 20, position: 'relative' }}>
+        {preview || (cover ? <img src={cover} alt="" loading="lazy" /> : <span className="carved" style={{ fontSize: 34, fontWeight: 500 }}>{name}</span>)}
       </div>
       <div className="meta" style={{ padding: '0 4px 4px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
@@ -36,7 +37,7 @@ export default function Home() {
   const items = tab === 'work'
     ? CASE_STUDIES.map((c) => ({ to: `/projects/${c.slug}`, name: c.name, tag: c.tag, sub: c.sub, cover: c.cover }))
     : tab === 'lab'
-      ? LAB.map((l) => ({ to: `/lab/${l.slug}`, name: l.name, tag: `Interaction Lab · ${l.n}`, sub: l.sub, cover: null }))
+      ? LAB.map((l) => ({ to: `/lab/${l.slug}`, name: l.name, tag: `Interaction Lab · ${l.n}`, sub: l.sub, cover: null, preview: l.slug === 'soft-ui' ? <CyberCard compact /> : null }))
       : PRINTS.map((p) => ({ to: `/projects/${p.slug}`, name: p.name, tag: p.tag, sub: p.sub, cover: p.cover }));
 
   return (

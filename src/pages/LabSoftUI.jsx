@@ -34,24 +34,15 @@ export default function LabSoftUI() {
 
   return (
     <div className="page page-softui" style={{ gap: 110 }}>
-      {/* ---------- cover: glass over aluminium ---------- */}
+      {/* ---------- cover ---------- */}
       <section className="section" style={{ gap: 36 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '20px 48px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <span className="cap">Interaction Lab · 01</span>
             <h1 className="display">Soft UI Language</h1>
           </div>
-          <p className="lede" style={{ maxWidth: 560 }}>Soft clay, plastic, polished metal, brushed aluminium and glass: what each material looks like on screen, how it handles light, and where it belongs on real devices.</p>
+          <p className="lede" style={{ maxWidth: 560 }}>One material at a time first: soft clay, plastic, polished metal, brushed aluminium and glass. Then how they combine, and how the combinations work on real devices.</p>
         </div>
-        <div className="cyber-wrap">
-          <CyberCard />
-          <div className="cyber-notes">
-            <div className="note up-sm"><span className="n">01 · THE METAL</span><b>Punched, blasted, lit</b><p>A titanium plate cut from a chamfered silhouette. Every edge, hole and screw is lit by the same top-left light, so the plate reads as a machined part, not a flat shape.</p></div>
-            <div className="note up-sm"><span className="n">02 · THE GLASS</span><b>It bends only what is behind it</b><p>At the bevel the plate’s edges, holes and glow strip are pulled sideways and split into faint colour; through the middle they are just softened. The type sits on the glass, so it stays perfectly sharp.</p></div>
-            <div className="note up-sm"><span className="n">03 · THE LIGHT</span><b>Two kinds of light</b><p>Reflected light on the metal follows the light source. Emitted light from the strips ignores it, and still bends when it passes under the glass. Ember in light mode, white in dark.</p></div>
-          </div>
-        </div>
-        <p className="cap" style={{ textAlign: 'center' }}>Move your pointer over the card: the glass shifts and the refraction follows</p>
       </section>
 
       {/* ---------- five materials ---------- */}
@@ -68,6 +59,26 @@ export default function LabSoftUI() {
             </figure>
           ))}
         </div>
+      </section>
+
+      {/* ---------- combinations ---------- */}
+      <section className="section" style={{ gap: 30 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: 20 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <span className="cap">Combinations · metal + glass</span>
+            <h2 className="h2">Glass reads. Metal holds.</h2>
+          </div>
+          <p className="muted" style={{ maxWidth: 460 }}>A transit pass for 2071. The metal carries the structure; the glass carries the information and bends only what is behind it.</p>
+        </div>
+        <div className="cyber-wrap">
+          <CyberCard />
+          <div className="cyber-notes">
+            <div className="note up-sm"><span className="n">01 · THE METAL</span><b>Punched, blasted, lit</b><p>A titanium plate cut from a chamfered silhouette. Every edge, hole and screw is lit by the same top-left light, so the plate reads as a machined part, not a flat shape.</p></div>
+            <div className="note up-sm"><span className="n">02 · THE GLASS</span><b>It bends only what is behind it</b><p>At the bevel the plate’s edges, holes and glow strip are pulled sideways and split into faint colour; through the middle they are just softened. The type sits on the glass, so it stays perfectly sharp.</p></div>
+            <div className="note up-sm"><span className="n">03 · THE LIGHT</span><b>Two kinds of light</b><p>Reflected light on the metal follows the light source. Emitted light from the strips ignores it, and still bends when it passes under the glass. Ember in light mode, white in dark.</p></div>
+          </div>
+        </div>
+        <p className="cap" style={{ textAlign: 'center' }}>Move your pointer over the card: the glass shifts and the refraction follows</p>
       </section>
 
       {/* ---------- light lab ---------- */}
@@ -113,33 +124,6 @@ export default function LabSoftUI() {
         </Scenario>
       </section>
 
-      {/* ---------- principles ---------- */}
-      <section className="up" style={{ borderRadius: 50, padding: 'clamp(24px, 4vw, 56px)' }} aria-label="Principles">
-        <div className="grid-3" style={{ gap: 0 }}>
-          {PRINCIPLES.map(([n, t, d]) => (
-            <div key={n} style={{ padding: '24px clamp(12px, 2vw, 30px)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 10 }}>
-              <span className="carved" style={{ fontSize: 40, fontWeight: 500, lineHeight: 1 }} aria-hidden="true">{n}</span>
-              <h2 style={{ fontWeight: 400, fontSize: 24, lineHeight: 1.15 }}>{t}</h2>
-              <p className="muted" style={{ fontSize: 16, maxWidth: 300 }}>{d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ---------- colour ---------- */}
-      <section className="section" style={{ gap: 18 }}>
-        <span className="cap">Colour on #EBE6E2 · contrast checked</span>
-        <div className="up colors" style={{ borderRadius: 40, padding: '26px 30px' }}>
-          {COLORS.map(([n, hex, r, use, ok]) => (
-            <div key={n} style={{ display: 'grid', gridTemplateColumns: '44px 1fr auto', alignItems: 'center', gap: 14 }}>
-              <span style={{ width: 44, height: 44, borderRadius: 14, background: hex, boxShadow: 'inset 2px 2px 4px rgba(0,0,0,.18), var(--sh-up-sm)' }} />
-              <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.25 }}><span>{n}</span><span className="cap">{hex}</span></span>
-              <span className="tag" style={{ color: ok ? 'var(--ok)' : 'var(--accent-ink)', textTransform: 'none', letterSpacing: 0, fontSize: 13 }}>{r}:1 · {use}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ---------- in context ---------- */}
       <section style={{ borderRadius: 44, padding: 'clamp(24px, 4vw, 60px)', background: 'linear-gradient(115deg, color-mix(in srgb, var(--accent-2) 16%, var(--bg)) 0 52%, color-mix(in srgb, var(--ok) 14%, var(--bg)) 52% 100%)', display: 'flex', flexDirection: 'column', gap: 40 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: 20 }}>
@@ -173,6 +157,33 @@ export default function LabSoftUI() {
             </div>
             <div className="up-sm" style={{ marginTop: 'auto', minHeight: 54, borderRadius: 27, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px' }}><span>D4 · D5</span><b className="accent" style={{ fontWeight: 500 }}>Continue</b></div>
           </Phone>
+        </div>
+      </section>
+
+      {/* ---------- principles ---------- */}
+      <section className="up" style={{ borderRadius: 50, padding: 'clamp(24px, 4vw, 56px)' }} aria-label="Principles">
+        <div className="grid-3" style={{ gap: 0 }}>
+          {PRINCIPLES.map(([n, t, d]) => (
+            <div key={n} style={{ padding: '24px clamp(12px, 2vw, 30px)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 10 }}>
+              <span className="carved" style={{ fontSize: 40, fontWeight: 500, lineHeight: 1 }} aria-hidden="true">{n}</span>
+              <h2 style={{ fontWeight: 400, fontSize: 24, lineHeight: 1.15 }}>{t}</h2>
+              <p className="muted" style={{ fontSize: 16, maxWidth: 300 }}>{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------- colour ---------- */}
+      <section className="section" style={{ gap: 18 }}>
+        <span className="cap">Colour on #EBE6E2 · contrast checked</span>
+        <div className="up colors" style={{ borderRadius: 40, padding: '26px 30px' }}>
+          {COLORS.map(([n, hex, r, use, ok]) => (
+            <div key={n} style={{ display: 'grid', gridTemplateColumns: '44px 1fr auto', alignItems: 'center', gap: 14 }}>
+              <span style={{ width: 44, height: 44, borderRadius: 14, background: hex, boxShadow: 'inset 2px 2px 4px rgba(0,0,0,.18), var(--sh-up-sm)' }} />
+              <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.25 }}><span>{n}</span><span className="cap">{hex}</span></span>
+              <span className="tag" style={{ color: ok ? 'var(--ok)' : 'var(--accent-ink)', textTransform: 'none', letterSpacing: 0, fontSize: 13 }}>{r}:1 · {use}</span>
+            </div>
+          ))}
         </div>
       </section>
 

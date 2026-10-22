@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import './softui.css';
 
 /* Metal + glass, cyberpunk.
    The metal is a punched, bead-blasted plate whose edges are lit by an actual
@@ -45,11 +46,11 @@ const GB = { x: 500, y: 180, w: 470, h: 550 }; // map bounds (glass bbox + margi
 
 const SCREWS = [[156, 96], [866, 136], [156, 624], [826, 668], [470, 96]];
 
-function Screw({ x, y }) {
+function Screw({ x, y, P }) {
   return (
     <g transform={`translate(${x},${y})`}>
       <circle r="13" fill="#000" fillOpacity=".35" transform="translate(1.5,2)" />
-      <circle r="12" fill="url(#cb-screw)" />
+      <circle r="12" fill={`url(#${P}screw)`} />
       <circle r="12" fill="none" stroke="#000" strokeOpacity=".35" />
       <polygon points={hexPts(0, 0, 5).join(' ')} fill="#2a2c30" />
       <polygon points={hexPts(0, 0, 5).join(' ')} fill="none" stroke="#fff" strokeOpacity=".35" transform="translate(.6,.8)" />
@@ -90,7 +91,8 @@ function buildMap() {
   return b.toDataURL();
 }
 
-export default function CyberCard() {
+export default function CyberCard({ stage = 'transparent', under, compact = false }) {
+  const P = `cb${useId().replace(/[^a-zA-Z0-9]/g, '')}-`;
   const [map, setMap] = useState('');
   const [off, setOff] = useState({ x: 0, y: 0 });
   const [sheen, setSheen] = useState({ x: 260, y: 140 });
@@ -115,36 +117,36 @@ export default function CyberCard() {
   const gx = GB.x + off.x, gy = GB.y + off.y;
 
   return (
-    <div className="cyber" ref={box} onPointerMove={move} onPointerLeave={leave}>
+    <div className={`cyber${compact ? ' compact' : ''}`} ref={box} onPointerMove={move} onPointerLeave={leave}>
       <svg viewBox={`0 0 ${VW} ${VH}`} role="img" aria-label="Transit pass: a frosted glass card resting on a punched titanium plate. Chicago to Pune, gate 14, 18 March 2071.">
         <defs>
-          <linearGradient id="cb-metal" x1="0" y1="0" x2=".55" y2="1">
+          <linearGradient id={P + "metal"} x1="0" y1="0" x2=".55" y2="1">
             <stop offset="0" style={{ stopColor: 'var(--cb-m1)' }} /><stop offset=".55" style={{ stopColor: 'var(--cb-m2)' }} /><stop offset="1" style={{ stopColor: 'var(--cb-m3)' }} />
           </linearGradient>
-          <radialGradient id="cb-screw" cx=".35" cy=".3" r=".85">
+          <radialGradient id={P + "screw"} cx=".35" cy=".3" r=".85">
             <stop offset="0" stopColor="#fff" /><stop offset=".5" stopColor="#b9bdc2" /><stop offset="1" stopColor="#5d6167" />
           </radialGradient>
-          <radialGradient id="cb-sheen" gradientUnits="userSpaceOnUse" cx={sheen.x} cy={sheen.y} r="460">
+          <radialGradient id={P + "sheen"} gradientUnits="userSpaceOnUse" cx={sheen.x} cy={sheen.y} r="460">
             <stop offset="0" stopColor="#fff" stopOpacity=".5" /><stop offset=".5" stopColor="#fff" stopOpacity=".1" /><stop offset="1" stopColor="#fff" stopOpacity="0" />
           </radialGradient>
-          <linearGradient id="cb-glassbody" x1="0" y1="0" x2=".6" y2="1">
+          <linearGradient id={P + "glassbody"} x1="0" y1="0" x2=".6" y2="1">
             <stop offset="0" style={{ stopColor: '#fff', stopOpacity: 'var(--cb-g1)' }} /><stop offset=".55" style={{ stopColor: '#fff', stopOpacity: 'var(--cb-g2)' }} /><stop offset="1" style={{ stopColor: '#fff', stopOpacity: 'var(--cb-g3)' }} />
           </linearGradient>
-          <linearGradient id="cb-halfmask" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={P + "halfmask"} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="#fff" stopOpacity=".9" /><stop offset=".35" stopColor="#fff" stopOpacity=".15" /><stop offset=".75" stopColor="#fff" stopOpacity="0" /><stop offset="1" stopColor="#fff" stopOpacity=".5" />
           </linearGradient>
-          <pattern id="cb-dots" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".85" fill="#fff" /></pattern>
-          <mask id="cb-halftone" maskUnits="userSpaceOnUse" x="0" y="0" width={VW} height={VH}><path d={GLASS} transform={`translate(${off.x},${off.y})`} fill="url(#cb-halfmask)" /></mask>
-          <clipPath id="cb-glassclip"><path d={GLASS} /></clipPath>
-          <clipPath id="cb-plateclip"><path d={PLATE} /></clipPath>
+          <pattern id={P + "dots"} width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1.2" cy="1.2" r=".85" fill="#fff" /></pattern>
+          <mask id={P + "halftone"} maskUnits="userSpaceOnUse" x="0" y="0" width={VW} height={VH}><path d={GLASS} transform={`translate(${off.x},${off.y})`} fill={`url(#${P}halfmask)`} /></mask>
+          <clipPath id={P + "glassclip"}><path d={GLASS} /></clipPath>
+          <clipPath id={P + "plateclip"}><path d={PLATE} /></clipPath>
 
           {/* bead-blast grain */}
-          <filter id="cb-grain" x="0" y="0" width="100%" height="100%">
+          <filter id={P + "grain"} x="0" y="0" width="100%" height="100%">
             <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="7" stitchTiles="stitch" />
             <feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  .7 -.35 -.35 0 0" />
           </filter>
           {/* real lit bevel on every edge and hole */}
-          <filter id="cb-bevel" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+          <filter id={P + "bevel"} x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="b" />
             <feSpecularLighting in="b" surfaceScale="4" specularConstant="1.15" specularExponent="26" lightingColor="#ffffff" result="spec">
               <feDistantLight azimuth="225" elevation="40" />
@@ -157,23 +159,25 @@ export default function CyberCard() {
             <feComposite in="specIn" in2="shaded" operator="arithmetic" k2=".6" k3="1" result="lit" />
             <feComposite in="lit" in2="SourceAlpha" operator="in" />
           </filter>
-          <filter id="cb-rim" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+          <filter id={P + "rim"} x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="b" />
             <feSpecularLighting in="b" surfaceScale="5" specularConstant="1.3" specularExponent="34" lightingColor="#ffffff" result="spec">
               <feDistantLight azimuth="225" elevation="35" />
             </feSpecularLighting>
             <feComposite in="spec" in2="SourceAlpha" operator="in" />
           </filter>
-          <filter id="cb-drop" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="10" dy="18" stdDeviation="14" floodColor="#000" floodOpacity=".55" /></filter>
-          <filter id="cb-blur10" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="11" /></filter>
-          <filter id="cb-blur4" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" /></filter>
-          <filter id="cb-glow" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="960"><feGaussianBlur stdDeviation="7" /></filter>
+          <filter id={P + "drop"} x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="10" dy="18" stdDeviation="14" floodColor="#000" floodOpacity=".55" /></filter>
+          <filter id={P + "blur10"} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="11" /></filter>
+          <filter id={P + "blur4"} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" /></filter>
+          <filter id={P + "glow"} filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="960"><feGaussianBlur stdDeviation="7" /></filter>
           {/* refraction: three displacements, one per colour channel */}
-          <filter id="cb-refract" filterUnits="userSpaceOnUse" x="0" y="0" width={VW} height={VH} colorInterpolationFilters="sRGB">
+          <filter id={P + "refract"} filterUnits="userSpaceOnUse" x="0" y="0" width={VW} height={VH} colorInterpolationFilters="sRGB">
+            <feFlood style={{ floodColor: under || (compact ? 'var(--bg-in)' : 'var(--bg)') }} result="fl" />
+            <feMerge result="src"><feMergeNode in="fl" /><feMergeNode in="SourceGraphic" /></feMerge>
             {map && <feImage href={map} x={gx} y={gy} width={GB.w} height={GB.h} preserveAspectRatio="none" result="m" />}
-            <feDisplacementMap in="SourceGraphic" in2="m" scale="78" xChannelSelector="R" yChannelSelector="G" result="d1" />
-            <feDisplacementMap in="SourceGraphic" in2="m" scale="88" xChannelSelector="R" yChannelSelector="G" result="d2" />
-            <feDisplacementMap in="SourceGraphic" in2="m" scale="98" xChannelSelector="R" yChannelSelector="G" result="d3" />
+            <feDisplacementMap in="src" in2="m" scale="78" xChannelSelector="R" yChannelSelector="G" result="d1" />
+            <feDisplacementMap in="src" in2="m" scale="88" xChannelSelector="R" yChannelSelector="G" result="d2" />
+            <feDisplacementMap in="src" in2="m" scale="98" xChannelSelector="R" yChannelSelector="G" result="d3" />
             <feColorMatrix in="d1" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r" />
             <feColorMatrix in="d2" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g" />
             <feColorMatrix in="d3" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="bb" />
@@ -184,14 +188,14 @@ export default function CyberCard() {
           </filter>
 
           {/* the scene the glass looks at */}
-          <g id="cb-scene">
-            <rect width={VW} height={VH} fill="var(--cb-stage)" />
-            <g filter="url(#cb-drop)">
-              <path d={METAL_D} fillRule="evenodd" fill="url(#cb-metal)" filter="url(#cb-bevel)" />
+          <g id={P + "scene"}>
+            <rect width={VW} height={VH} fill={stage} />
+            <g filter={`url(#${P}drop)`}>
+              <path d={METAL_D} fillRule="evenodd" fill={`url(#${P}metal)`} filter={`url(#${P}bevel)`} />
             </g>
-            <g clipPath="url(#cb-plateclip)">
-              <rect width={VW} height={VH} filter="url(#cb-grain)" opacity=".55" style={{ mixBlendMode: 'overlay' }} mask="url(#cb-holesmask)" />
-              <rect width={VW} height={VH} fill="url(#cb-sheen)" style={{ mixBlendMode: 'soft-light' }} mask="url(#cb-holesmask)" />
+            <g clipPath={`url(#${P}plateclip)`}>
+              <rect width={VW} height={VH} filter={`url(#${P}grain)`} opacity=".55" style={{ mixBlendMode: 'overlay' }} mask={`url(#${P}holesmask)`} />
+              <rect width={VW} height={VH} fill={`url(#${P}sheen)`} style={{ mixBlendMode: 'soft-light' }} mask={`url(#${P}holesmask)`} />
               {/* engraving: dark cut, lit lower lip */}
               <g className="cb-eng">
                 <text x="196" y="122" transform="translate(0,1.2)" className="lip">SN 0447-2071 · Ti GRADE 5</text>
@@ -209,7 +213,7 @@ export default function CyberCard() {
               <text x="196" y="645" className="cb-big">2071</text>
               {/* emissive groove in the metal */}
               <rect x="876" y="176" width="10" height="150" rx="5" fill="#111" />
-              <rect x="877" y="180" width="8" height="142" rx="4" fill="var(--cb-acc)" filter="url(#cb-glow)" />
+              <rect x="877" y="180" width="8" height="142" rx="4" fill="var(--cb-acc)" filter={`url(#${P}glow)`} />
               <rect x="879" y="184" width="4" height="134" rx="2" fill="var(--cb-acc-core)" />
               {[0, 1, 2].map((i) => (
                 <g key={i} transform={`translate(${206 + i * 34},512) skewX(-30)`}>
@@ -218,31 +222,31 @@ export default function CyberCard() {
                 </g>
               ))}
             </g>
-            {SCREWS.map(([x, y]) => <Screw key={`${x}-${y}`} x={x} y={y} />)}
+            {SCREWS.map(([x, y]) => <Screw key={`${x}-${y}`} x={x} y={y} P={P} />)}
           </g>
-          <mask id="cb-holesmask" maskUnits="userSpaceOnUse" x="0" y="0" width={VW} height={VH}>
+          <mask id={P + "holesmask"} maskUnits="userSpaceOnUse" x="0" y="0" width={VW} height={VH}>
             <path d={METAL_D} fillRule="evenodd" fill="#fff" />
           </mask>
         </defs>
 
-        <use href="#cb-scene" />
+        <use href={`#${P}scene`} />
 
         <g transform={`translate(${off.x},${off.y})`}>
           {/* glass shadow: pale, with a caustic line beyond the far edge */}
-          <path d={GLASS} transform="translate(14,22)" fill="#000" fillOpacity=".28" filter="url(#cb-blur10)" />
-          <path d={GLASS} transform="translate(18,28)" fill="none" stroke="var(--cb-caustic)" strokeWidth="4" strokeOpacity=".4" filter="url(#cb-blur10)" />
+          <path d={GLASS} transform="translate(14,22)" fill="#000" fillOpacity=".28" filter={`url(#${P}blur10)`} />
+          <path d={GLASS} transform="translate(18,28)" fill="none" stroke="var(--cb-caustic)" strokeWidth="4" strokeOpacity=".4" filter={`url(#${P}blur10)`} />
 
           {/* what you see through it: the metal, bent at the bevel */}
-          <g clipPath="url(#cb-glassclip)">
-            <use href="#cb-scene" transform={`translate(${-off.x},${-off.y})`} filter="url(#cb-refract)" />
-            <path d={GLASS} fill="url(#cb-glassbody)" />
+          <g clipPath={`url(#${P}glassclip)`}>
+            <use href={`#${P}scene`} transform={`translate(${-off.x},${-off.y})`} filter={`url(#${P}refract)`} />
+            <path d={GLASS} fill={`url(#${P}glassbody)`} />
           </g>
-          <rect width={VW} height={VH} fill="url(#cb-dots)" style={{ opacity: 'var(--cb-dot)' }} mask="url(#cb-halftone)" transform={`translate(${-off.x},${-off.y})`} />
-          <path d={GLASS} fill="#fff" filter="url(#cb-rim)" opacity=".9" />
+          <rect width={VW} height={VH} fill={`url(#${P}dots)`} style={{ opacity: 'var(--cb-dot)' }} mask={`url(#${P}halftone)`} transform={`translate(${-off.x},${-off.y})`} />
+          <path d={GLASS} fill="#fff" filter={`url(#${P}rim)`} opacity=".9" />
           <path d={GLASS} fill="none" stroke="#fff" strokeOpacity=".55" strokeWidth="1.2" />
 
           {/* emissive bar printed on the glass */}
-          <rect x="560" y="222" width="120" height="6" rx="3" fill="var(--cb-acc)" filter="url(#cb-glow)" />
+          <rect x="560" y="222" width="120" height="6" rx="3" fill="var(--cb-acc)" filter={`url(#${P}glow)`} />
           <rect x="560" y="222" width="120" height="6" rx="3" fill="var(--cb-acc-core)" />
 
           {/* content on the glass: never distorted */}

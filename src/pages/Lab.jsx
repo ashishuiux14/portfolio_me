@@ -5,17 +5,12 @@ import { PageHead, PrevNext } from '../components/Bits';
 import { ClayToggle, AluToggle, Rotary } from '../lab/Art';
 import SeatMap from '../components/SeatMap';
 import { LAB } from '../data/site';
+import CyberCard from '../lab/CyberCard';
 
 function Preview({ slug }) {
   const [a, setA] = useState(true);
   const [b, setB] = useState(true);
-  if (slug === 'soft-ui') return (
-    <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
-      <span className="up" style={{ width: 70, height: 70, borderRadius: 22 }} />
-      <span className="in" style={{ width: 70, height: 70, borderRadius: 22 }} />
-      <span className="lcd" style={{ fontSize: 22 }}>21°C</span>
-    </div>
-  );
+  if (slug === 'soft-ui') return <CyberCard compact />;
   if (slug === 'controls') return (
     <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
       <ClayToggle checked={a} onChange={setA} zoom={0.5} label="Clay toggle preview" />
@@ -34,7 +29,7 @@ export default function Lab() {
       <div className="grid-3">
         {LAB.map((l) => (
           <article key={l.slug} className="up" style={{ borderRadius: 34, padding: 18, display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <div className="in" style={{ height: 190, borderRadius: 24, display: 'grid', placeItems: 'center', padding: 16 }}><Preview slug={l.slug} /></div>
+            <div className="in" style={{ position: 'relative', height: 190, borderRadius: 24, display: 'grid', placeItems: 'center', padding: 16 }}><Preview slug={l.slug} /></div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '0 6px', flex: 1 }}>
               <span className="cap accent">{l.n}</span>
               <h2 className="h3">{l.name}</h2>
