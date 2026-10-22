@@ -250,3 +250,5 @@ html.vt-grow::view-transition-new(root) { z-index: 2; }
 @media (min-width: 2900px) { :root { --z: 1.5; } }
 @media (min-width: 3400px) { :root { --z: 1.75; } }
 .shell { zoom: var(--z); }
+
+.lab-prev [role="status"] { display: none; }

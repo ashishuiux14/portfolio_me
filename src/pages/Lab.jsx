@@ -6,6 +6,7 @@ import { ClayToggle, AluToggle, Rotary } from '../lab/Art';
 import SeatMap from '../components/SeatMap';
 import { LAB } from '../data/site';
 import CyberCard from '../lab/CyberCard';
+import { SeatPreview } from '../components/LabPreviews';
 
 function Preview({ slug }) {
   const [a, setA] = useState(true);
@@ -18,7 +19,7 @@ function Preview({ slug }) {
       <Rotary material="alu" on zoom={0.36} label="Rotary preview" />
     </div>
   );
-  return <SeatMap seatSize={18} cols={8} rows={['A', 'B', 'C']} booked={['A2', 'A3', 'B6', 'C1']} initial={['B3', 'B4']} interactive={false} />;
+  return <SeatPreview seatSize={15} />;
 }
 
 export default function Lab() {
