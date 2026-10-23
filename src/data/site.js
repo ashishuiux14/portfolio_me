@@ -53,6 +53,10 @@ export const LAB = [
     slug: 'seat-picker', n: '03', name: 'Seat picker',
     sub: 'Draw what you can book boldest: a line-weight rule from architecture, applied to a seat map.',
   },
+  {
+    slug: 'crosshair', n: '04', name: 'Crosshair',
+    sub: 'AutoCAD’s tunable crosshair, pickbox and snap markers against Figma’s arrow, on the same canvas.',
+  },
 ];
 
 export const ALL_DETAIL_PAGES = [...CASE_STUDIES, ...PRINTS];

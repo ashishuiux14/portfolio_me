@@ -1,0 +1,47 @@
+/* ===== Crosshair study ===== */
+.cx-svg { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
+.cx-svg.is-cross { cursor: none; }
+.cx-svg.is-arrow { cursor: default; }
+.cx-obj { outline: none; }
+.cx-obj:focus-visible > g { filter: drop-shadow(0 0 0 #0D99FF) drop-shadow(0 0 3px #0D99FF); }
+.cx-t { font-family: Jost, sans-serif; }
+.cx-mono { font: 500 12px 'JetBrains Mono', monospace; letter-spacing: .06em; white-space: pre; }
+
+/* the window: a metal bezel and a dark face plate, like the watch display */
+.cx-frame {
+  border-radius: 34px; padding: 14px;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, rgba(0,0,0,.035) 1px 3px), linear-gradient(180deg, #F1F2F3, #CDCFD2 52%, #B4B7BB);
+  box-shadow: var(--sh-up), inset 0 2px 0 rgba(255,255,255,.9), inset 0 -4px 10px rgba(0,0,0,.2);
+}
+html[data-theme="dark"] .cx-frame { background: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.05) 1px 3px), linear-gradient(180deg, #55575B, #36383B 52%, #24262A); box-shadow: var(--sh-up), inset 0 2px 0 rgba(255,255,255,.22); }
+.cx-face { border-radius: 22px; padding: 10px 10px 12px; background: radial-gradient(120% 140% at 30% 0%, #2c2e31, #151617 70%); box-shadow: inset 0 3px 8px rgba(0,0,0,.7); display: flex; flex-direction: column; gap: 8px; }
+.cx-face-head { display: flex; justify-content: space-between; gap: 12px; padding: 2px 6px 0; font: 600 11px var(--mono); letter-spacing: .16em; color: #D7D3CE; text-transform: uppercase; }
+.cx-face-head .lit { color: #FF7A45; }
+.cx-screen { border-radius: 12px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.cx-readout { display: flex; justify-content: center; }
+.cx-readout .tag { text-transform: none; letter-spacing: .02em; font-size: 13px; }
+.cx-readout .tag.ok { color: var(--ok); }
+
+/* settings */
+.cx-panel { border-radius: 34px; padding: clamp(18px, 2.4vw, 28px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 32px; }
+@container (max-width: 900px) { .cx-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 560px) { .cx-panel { grid-template-columns: minmax(0, 1fr); } }
+.cx-field { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.cx-field .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.cx-field output { font: 500 13px var(--mono); color: var(--ink-2); }
+.cx-range { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; border-radius: 6px; background: var(--bg-in); box-shadow: var(--sh-in-sm); outline: none; margin: 8px 0; }
+.cx-range::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--bg); box-shadow: 3px 4px 8px var(--lo), -2px -2px 6px var(--hi); cursor: pointer; }
+.cx-range::-moz-range-thumb { width: 26px; height: 26px; border: 0; border-radius: 50%; background: var(--bg); box-shadow: 3px 4px 8px var(--lo), -2px -2px 6px var(--hi); cursor: pointer; }
+.cx-range:focus-visible { box-shadow: var(--sh-in-sm), 0 0 0 3px var(--accent-2); }
+.cx-swatches { display: flex; gap: 12px; flex-wrap: wrap; }
+.cx-sw { width: 34px; height: 34px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; box-shadow: 2px 3px 6px var(--lo), -2px -2px 5px var(--hi), inset 0 0 0 3px var(--bg); transition: transform .12s; }
+.cx-sw[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink), 2px 3px 6px var(--lo); }
+.cx-sw:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 4px; }
+.cx-seg { display: inline-flex; gap: 6px; padding: 5px; border-radius: 22px; background: var(--bg-in); box-shadow: var(--sh-in-sm); align-self: flex-start; }
+.cx-seg button { border: 0; min-height: 36px; padding: 0 16px; border-radius: 18px; background: transparent; color: var(--ink-2); font: 500 14px Jost, sans-serif; cursor: pointer; }
+.cx-seg button[aria-pressed="true"] { background: var(--bg); color: var(--ink); box-shadow: var(--sh-up-sm); }
+.cx-toggles { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; }
+.cx-toggle { display: inline-flex; align-items: center; gap: 10px; }
+.cx-windows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); align-items: start; }
+@container (max-width: 900px) { .cx-windows { grid-template-columns: minmax(0, 1fr); } }
+.cx-win { display: flex; flex-direction: column; gap: 12px; }

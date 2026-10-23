@@ -5,7 +5,7 @@ import { PageHead, PrevNext } from '../components/Bits';
 import { ClayToggle, AluToggle, Rotary } from '../lab/Art';
 import SeatMap from '../components/SeatMap';
 import { LAB } from '../data/site';
-import { SeatPreview, SoftUiPreview } from '../components/LabPreviews';
+import { SeatPreview, SoftUiPreview, CrosshairPreview } from '../components/LabPreviews';
 
 function Preview({ slug }) {
   const [a, setA] = useState(true);
@@ -18,6 +18,7 @@ function Preview({ slug }) {
       <Rotary material="alu" on zoom={0.36} label="Rotary preview" />
     </div>
   );
+  if (slug === 'crosshair') return <CrosshairPreview />;
   return <SeatPreview />;
 }
 
@@ -26,7 +27,7 @@ export default function Lab() {
     <div className="page">
       <PageHead eyebrow="Interaction Lab" title="Small controls, fully thought through."
         lede="Everyday components built as studies: every state, size and sound, and the reasoning behind each choice. Most of them twice, once in soft clay and once in machined aluminium." />
-      <div className="grid-3">
+      <div className="grid-2">
         {LAB.map((l) => (
           <article key={l.slug} className="up" style={{ borderRadius: 34, padding: 18, display: 'flex', flexDirection: 'column', gap: 18 }}>
             <div className="in" style={{ position: 'relative', height: 190, borderRadius: 24, display: 'grid', placeItems: 'center', padding: 16 }}><Preview slug={l.slug} /></div>

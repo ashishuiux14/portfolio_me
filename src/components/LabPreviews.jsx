@@ -94,3 +94,27 @@ export function SeatGag() {
 export function SeatPreview() {
   return <div aria-hidden="true" style={{ ...still, position: 'absolute', inset: 6, color: 'var(--ink)' }}><SeatGag /></div>;
 }
+
+/* Crosshair tile: a dark CAD canvas, a card, the crosshair snapped to its corner. */
+export function CrosshairPreview() {
+  const g = [];
+  for (let x = 0; x <= 300; x += 15) g.push(<path key={'v' + x} d={`M${x} 0V150`} stroke="#E9EEF2" strokeOpacity={x % 75 ? 0.06 : 0.14} />);
+  for (let y = 0; y <= 150; y += 15) g.push(<path key={'h' + y} d={`M0 ${y}H300`} stroke="#E9EEF2" strokeOpacity={y % 75 ? 0.06 : 0.14} />);
+  return (
+    <div aria-hidden="true" style={{ ...still, position: 'absolute', inset: 8, borderRadius: 14, overflow: 'hidden' }}>
+      <svg viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice" style={{ display: 'block', width: '100%', height: '100%' }}>
+        <rect width="300" height="150" fill="#1E2329" />
+        {g}
+        <rect x="60" y="45" width="105" height="64" rx="8" fill="#fff" />
+        <rect x="72" y="58" width="50" height="6" rx="3" fill="#2A2724" />
+        <rect x="72" y="70" width="34" height="5" rx="2.5" fill="#B9B2AB" />
+        <rect x="190" y="85" width="72" height="24" rx="12" fill="#D9572B" />
+        <path d="M60 109V130M60 109H190" stroke="#3BD16F" strokeWidth="1" strokeDasharray="2 4" />
+        <path d="M0 109H54M66 109H300M60 0V103M60 115V150" stroke="#E9EEF2" strokeWidth="1" />
+        <rect x="54" y="103" width="12" height="12" fill="none" stroke="#3D8BFF" strokeWidth="1.5" />
+        <rect x="55.5" y="104.5" width="9" height="9" fill="none" stroke="#3BD16F" strokeWidth="1.5" />
+        <text x="8" y="142" fill="#E9EEF2" fillOpacity=".7" style={{ font: "500 8px 'JetBrains Mono', monospace", letterSpacing: '.06em' }}>X 60.0  Y 41.0  ·  ENDPOINT</text>
+      </svg>
+    </div>
+  );
+}

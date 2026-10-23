@@ -8,6 +8,7 @@ const Lab = lazy(() => import('./pages/Lab'));
 const LabSoftUI = lazy(() => import('./pages/LabSoftUI'));
 const LabControls = lazy(() => import('./pages/LabControls'));
 const LabSeatPicker = lazy(() => import('./pages/LabSeatPicker'));
+const LabCrosshair = lazy(() => import('./pages/LabCrosshair'));
 const Printing = lazy(() => import('./pages/Printing'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
@@ -45,6 +46,8 @@ function Frame() {
             <Route path="/lab/soft-ui" element={<LabSoftUI />} />
             <Route path="/lab/controls" element={<LabControls />} />
             <Route path="/lab/seat-picker" element={<LabSeatPicker />} />
+
+            <Route path="/lab/crosshair" element={<LabCrosshair />} />
             <Route path="/3d-printing" element={<Printing />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
