@@ -204,20 +204,18 @@ button { font: inherit; color: inherit; }
 .card .meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 6px 6px; }
 
 /* ---------- bento ---------- */
-.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); }
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr; gap: var(--gap); }
 .bento > * { border-radius: var(--radius); min-width: 0; }
-.b-intro { grid-column: 1 / span 5; }
-.b-work { grid-column: 6 / span 7; }
+.b-intro { grid-column: 1 / span 5; grid-row: 1; }
+.b-route { grid-column: 1 / span 5; grid-row: 2; }
+.b-work { grid-column: 6 / span 7; grid-row: 1 / span 2; }
 .b-map { grid-column: 1 / -1; container: smap / inline-size; }
-.b-lab { grid-column: 1 / span 5; }
-.b-stats { grid-column: 6 / span 3; }
-.b-contact { grid-column: 9 / span 4; }
-.b-route { grid-column: 1 / -1; }
+.b-lab { grid-column: 1 / span 7; }
+.b-contact { grid-column: 8 / span 5; }
 /* the bento answers to the width it actually has (rail or no rail), not the window */
 @container (max-width: 1060px) {
-  .b-intro, .b-work, .b-map, .b-route { grid-column: 1 / -1; }
-  .b-lab { grid-column: 1 / span 7; } .b-stats { grid-column: 8 / span 5; }
-  .b-contact { grid-column: 1 / -1; }
+  .b-intro, .b-work, .b-map, .b-route { grid-column: 1 / -1; grid-row: auto; }
+  .b-lab { grid-column: 1 / span 7; } .b-contact { grid-column: 8 / span 5; }
 }
 @container (max-width: 640px) { .bento > * { grid-column: 1 / -1 !important; } }
 
