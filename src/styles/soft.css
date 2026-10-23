@@ -294,3 +294,28 @@ html[data-theme="dark"] .mini-watch { background: repeating-linear-gradient(0deg
   .gag .g-walkA, .gag .g-walkB, .gag .g-stand, .gag .g-sit, .gag .g-runA, .gag .g-runB { opacity: 0; }
   .gag .g-shock { opacity: 1; } .gag .g-jump { transform: translateY(-8px); }
 }
+
+/* crosshair tile clip: 6 s loop */
+.cxa .cxa-cur { animation: cxa-cur 6s cubic-bezier(.45,.05,.3,1) infinite; }
+.cxa .cxa-pb { transform-box: fill-box; transform-origin: center; animation: cxa-pb 6s linear infinite; }
+.cxa .cxa-m1 { animation: cxa-m1 6s step-end infinite; }
+.cxa .cxa-m2 { animation: cxa-m2 6s step-end infinite; }
+.cxa .cxa-m3 { animation: cxa-m3 6s step-end infinite; }
+.cxa .cxa-sel { animation: cxa-sel 6s step-end infinite; }
+.cxa .cxa-btn, .cxa .cxa-box { transform-box: view-box; transform-origin: 190px 97px; animation: cxa-grow 6s cubic-bezier(.45,.05,.3,1) infinite; }
+.cxa .cxa-gr { animation: cxa-gr 6s cubic-bezier(.45,.05,.3,1) infinite; }
+.cxa .cxa-gm { animation: cxa-gm 6s cubic-bezier(.45,.05,.3,1) infinite; }
+@keyframes cxa-cur { 0% { transform: translate(250px, 30px); } 15%, 25% { transform: translate(165px, 45px); } 38%, 52% { transform: translate(262px, 97px); } 72%, 88% { transform: translate(284px, 97px); } 100% { transform: translate(250px, 30px); } }
+@keyframes cxa-pb { 0%, 47% { transform: scale(1); } 49% { transform: scale(1.7); } 52%, 100% { transform: scale(1); } }
+@keyframes cxa-m1 { 0% { opacity: 0; } 15% { opacity: 1; } 25%, 100% { opacity: 0; } }
+@keyframes cxa-m2 { 0% { opacity: 0; } 38% { opacity: 1; } 52%, 100% { opacity: 0; } }
+@keyframes cxa-m3 { 0% { opacity: 0; } 72% { opacity: 1; } 88%, 100% { opacity: 0; } }
+@keyframes cxa-sel { 0% { opacity: 0; } 50% { opacity: 1; } 90%, 100% { opacity: 0; } }
+@keyframes cxa-grow { 0%, 52% { transform: scaleX(1); } 72%, 90% { transform: scaleX(1.3056); } 96%, 100% { transform: scaleX(1); } }
+@keyframes cxa-gr { 0%, 52% { transform: translateX(0); } 72%, 90% { transform: translateX(22px); } 96%, 100% { transform: translateX(0); } }
+@keyframes cxa-gm { 0%, 52% { transform: translateX(0); } 72%, 90% { transform: translateX(11px); } 96%, 100% { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .cxa * { animation: none !important; }
+  .cxa .cxa-cur { transform: translate(165px, 45px); }
+  .cxa .cxa-m2, .cxa .cxa-m3, .cxa .cxa-sel { opacity: 0; }
+}
