@@ -102,14 +102,6 @@ export default function Home() {
             {items.map((it) => <MiniCard key={it.to} {...it} />)}
           </div>
         </section>
-        {/* sitemap */}
-        <section className="b-map up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }} aria-label="Sitemap">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-            <span className="cap">Sitemap · what is where</span>
-            <span className="cap">{CASE_STUDIES.length + LAB.length + PRINTS.length + 6} pages</span>
-          </div>
-          <Sitemap />
-        </section>
         {/* live controls */}
         <section className="b-lab up" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }} aria-label="Try the controls">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -118,18 +110,26 @@ export default function Home() {
           </div>
           <p className="muted" style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>Working controls from my component studies, built in soft clay and machined aluminium. Flip the toggle, count with the stepper, turn the dial, press save.</p>
           <div className="lab-quad">
-            <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" /><span className="cap" aria-hidden="true">Toggle · clay</span></div>
-            <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.5} label="Example count" /><span className="cap" aria-hidden="true">Stepper · aluminium</span></div>
-            <div className="lab-cell"><Rotary material="alu" zoom={0.42} label="Example rotary switch" /><span className="cap" aria-hidden="true">Rotary switch</span></div>
-            <div className="lab-cell"><SubmitButton material="alu" zoom={0.74} /><span className="cap" aria-hidden="true">Submit button</span></div>
+            <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.85} label="Example clay toggle" /><span className="cap" aria-hidden="true">Toggle · clay</span></div>
+            <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.78} label="Example count" /><span className="cap" aria-hidden="true">Stepper · aluminium</span></div>
+            <div className="lab-cell"><Rotary material="alu" zoom={0.66} label="Example rotary switch" /><span className="cap" aria-hidden="true">Rotary switch</span></div>
+            <div className="lab-cell"><SubmitButton material="alu" zoom={1} /><span className="cap" aria-hidden="true">Submit button</span></div>
           </div>
         </section>
+        {/* sitemap */}
+        <section className="b-map up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }} aria-label="Sitemap">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+            <span className="cap">Sitemap · what is where</span>
+            <span className="cap">{CASE_STUDIES.length + LAB.length + PRINTS.length + 6} pages</span>
+          </div>
+          <Sitemap />
+        </section>
         {/* contact */}
-        <section className="b-contact up" style={{ padding: 26, display: 'flex', flexDirection: 'column', gap: 16 }} aria-label="Contact">
+        <section className="b-contact up" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 12, alignSelf: 'start' }} aria-label="Contact">
           <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, color: 'var(--ok)' }}><i className="led" />Available</span>
-          <p style={{ fontSize: 20, lineHeight: 1.35 }}>Open to Senior Product Designer and Design Engineer roles.</p>
+          <p style={{ fontSize: 18, lineHeight: 1.35, margin: 0 }}>Open to Senior Product Designer and Design Engineer roles.</p>
           <span className="muted" style={{ fontSize: 15, wordBreak: 'break-all' }}>{CONTACT.email}</span>
-          <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)', marginTop: 'auto' }}>Let’s talk</Link>
+          <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)' }}>Let’s talk</Link>
         </section>
 
 

@@ -209,13 +209,12 @@ button { font: inherit; color: inherit; }
 .b-intro { grid-column: 1 / span 5; grid-row: 1; }
 .b-route { grid-column: 1 / span 5; grid-row: 2; }
 .b-work { grid-column: 6 / span 7; grid-row: 1 / span 2; }
-.b-map { grid-column: 1 / -1; container: smap / inline-size; }
-.b-lab { grid-column: 1 / span 7; }
-.b-contact { grid-column: 8 / span 5; }
+.b-lab { grid-column: 1 / span 7; grid-row: 3 / span 2; }
+.b-map { grid-column: 8 / span 5; grid-row: 3; }
+.b-contact { grid-column: 8 / span 5; grid-row: 4; }
 /* the bento answers to the width it actually has (rail or no rail), not the window */
 @container (max-width: 1060px) {
-  .b-intro, .b-work, .b-map, .b-route { grid-column: 1 / -1; grid-row: auto; }
-  .b-lab { grid-column: 1 / span 7; } .b-contact { grid-column: 8 / span 5; }
+  .b-intro, .b-work, .b-map, .b-route, .b-lab, .b-contact { grid-column: 1 / -1; grid-row: auto; }
 }
 @container (max-width: 640px) { .bento > * { grid-column: 1 / -1 !important; } }
 
@@ -334,15 +333,4 @@ html[data-theme="dark"] .mini-watch { background: repeating-linear-gradient(0deg
 .smap-leaf:hover { color: var(--accent-ink); }
 .smap a:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
 
-/* sitemap laid out across the full-width tile */
-@container smap (min-width: 760px) {
-  .smap { flex-direction: row; align-items: flex-start; gap: 0; }
-  .smap-root { flex: none; margin-top: 14px; position: relative; z-index: 1; }
-  .smap-trunk { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin: 0 0 0 0; padding: 0 0 0 44px; flex: 1; width: auto; position: relative; }
-  .smap-trunk::before { content: ""; position: absolute; left: 0; right: 40px; top: 32px; border-top: 1.5px solid var(--line); }
-  .smap-branch { padding: 0; display: flex; flex-direction: column; align-items: flex-start; }
-  .smap-branch::before, .smap-branch:last-child::before { left: 22px; top: 32px; bottom: auto; height: 0; border: 0; }
-  .smap-branch::after { content: none; }
-  .smap-node { position: relative; z-index: 1; margin-top: 14px; }
-  .smap-kids { flex-direction: column; align-items: flex-start; margin-left: 20px; padding: 10px 0 2px 12px; }
-}
+@container (max-width: 640px) { .b-lab .lab-cell { zoom: .66; } .b-lab .lab-cell > .cap { zoom: 1.52; } }
