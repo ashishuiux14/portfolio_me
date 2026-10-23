@@ -122,3 +122,17 @@ html[data-case="cleanero"] .hero-meta-value { color: var(--s-ink) !important; }
 html[data-case="cleanero"] .hero-kicker { color: var(--blue) !important; }
 html[data-case] figure, html[data-case] [class*="img"], html[data-case] [class*="image"], html[data-case] [class*="photo"],
 html[data-case] [class*="shot"], html[data-case] [class*="gallery"], html[data-case] [class*="media"], html[data-case] [class*="visual"], html[data-case] [class*="frame"] { box-shadow: none !important; }
+
+/* ---------- one type system, one rhythm (matches the main site) ---------- */
+html[data-case] { --max: 1240px; --ff: var(--s-display); --fb: var(--s-display); --fc: var(--s-display); }
+html[data-case] body { font-family: var(--s-display); }
+html[data-case] h1, html[data-case] .hero-title, html[data-case] [class*="hero"] h1 { font-weight: 300 !important; letter-spacing: -.01em !important; }
+html[data-case] h2, html[data-case] h3, html[data-case] [class*="title"]:not(h1):not(.hero-title) { font-weight: 400 !important; letter-spacing: -.005em !important; }
+html[data-case] strong, html[data-case] b { font-weight: 500; }
+html[data-case] em, html[data-case] i, html[data-case] cite { font-style: normal; }
+html[data-case] q, html[data-case] blockquote, html[data-case] .review-text { font-style: italic; }
+/* vertical rhythm scales with the screen height, so laptops don't scroll through empty bands */
+html[data-case] .chapter { padding-top: clamp(56px, 3vw + 4vh, 100px) !important; }
+html[data-case] .split { padding-block: clamp(40px, 2vw + 3vh, 72px) !important; }
+html[data-case] .section { padding-block: clamp(48px, 3vw + 4vh, 96px) !important; }
+html[data-case] .hero-left { padding-top: clamp(64px, 3vw + 7vh, 144px) !important; padding-bottom: clamp(44px, 2vw + 5vh, 100px) !important; }

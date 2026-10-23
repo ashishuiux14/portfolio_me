@@ -107,10 +107,10 @@ button { font: inherit; color: inherit; }
 
 /* ---------- type ---------- */
 .cap { font: 500 12px/1.5 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-.display { font-weight: 200; font-size: clamp(48px, 6.4vw, 96px); line-height: 1.02; letter-spacing: -.01em; }
-.h2 { font-weight: 300; font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; }
+.display { font-weight: 200; font-size: clamp(42px, 3.2vw + 2.4vh, 92px); line-height: 1.02; letter-spacing: -.01em; }
+.h2 { font-weight: 300; font-size: clamp(30px, 2vw + 1.4vh, 50px); line-height: 1.1; }
 .h3 { font-weight: 400; font-size: clamp(22px, 2vw, 28px); line-height: 1.2; }
-.lede { font-weight: 300; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.55; color: var(--ink-2); max-width: 680px; }
+.lede { font-weight: 300; font-size: clamp(17px, 1vw + .6vh, 22px); line-height: 1.55; color: var(--ink-2); max-width: 820px; }
 .muted { color: var(--ink-2); }
 .accent { color: var(--accent-ink); }
 .tabular { font-variant-numeric: tabular-nums; }
@@ -157,9 +157,9 @@ button { font: inherit; color: inherit; }
 .theme-row { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 6px 0; }
 
 .main { flex: 1; min-width: 0; container-type: inline-size; padding: 24px max(24px, env(safe-area-inset-right, 0px)) 72px clamp(24px, 2vw, 40px); }
-.page { display: flex; flex-direction: column; gap: 100px; max-width: var(--page-max); margin: 0 auto; }
+.page { display: flex; flex-direction: column; gap: var(--sect); max-width: var(--page-max); margin: 0 auto; }
 .section { display: flex; flex-direction: column; gap: 28px; }
-.footer { margin-top: 110px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 22px 6px 0; border-top: 1px solid var(--rule); max-width: var(--page-max); margin-left: auto; margin-right: auto; }
+.footer { margin-top: var(--sect); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 22px 6px 0; border-top: 1px solid var(--rule); max-width: var(--page-max); margin-left: auto; margin-right: auto; }
 
 /* ---------- mobile bar ---------- */
 .topbar { display: none; }
@@ -171,7 +171,6 @@ button { font: inherit; color: inherit; }
     align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 18px; border-radius: 28px;
   }
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--bg); }
-  .page { gap: 72px; }
 }
 .icon-btn { width: 46px; height: 46px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; }
 .sheet-backdrop { position: fixed; inset: 0; z-index: 40; background: rgba(20,18,16,.35); backdrop-filter: blur(4px); }
@@ -243,7 +242,7 @@ html.vt-grow::view-transition-new(root) { z-index: 2; }
    Content runs wide (up to --page-max) and gaps grow with the window.
    On big monitors the whole layout scales up, so a 32" screen gets the same
    composition as a laptop, just larger, instead of a narrow column with empty sides. */
-:root { --page-max: 1680px; --gap: clamp(16px, 1.4vw, 28px); --z: 1; }
+:root { --sect: clamp(48px, 3vw + 3vh, 96px); --page-max: 1680px; --gap: clamp(16px, 1.4vw, 28px); --z: 1; }
 @media (min-width: 1900px) { :root { --z: 1.1; } }
 @media (min-width: 2200px) { :root { --z: 1.22; } }
 @media (min-width: 2500px) { :root { --z: 1.34; } }

@@ -4,7 +4,7 @@ import Icon from './Icon';
 /* Page header used by every inner page. */
 export function PageHead({ eyebrow, title, lede, children }) {
   return (
-    <header className="section" style={{ gap: 22, paddingTop: 36 }}>
+    <header className="section" style={{ gap: 'clamp(14px, 2vh, 22px)', paddingTop: 'clamp(4px, 2vh, 36px)' }}>
       {eyebrow && <span className="cap">{eyebrow}</span>}
       <h1 className="display">{title}</h1>
       {lede && <p className="lede">{lede}</p>}

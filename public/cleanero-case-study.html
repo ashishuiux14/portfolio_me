@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cleaneró — Case Study</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #f7f9fc;
@@ -24,8 +24,8 @@
   --cyan: #0891b2;
   --cyan-dim: rgba(8,145,178,0.08);
   --navy: #0c1a2e;
-  --ff: 'Syne', sans-serif;
-  --fb: 'DM Sans', sans-serif;
+  --ff: 'Jost', sans-serif;
+  --fb: 'Jost', sans-serif;
   --max: 1080px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -115,7 +115,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--fb); overfl
 .split-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
 .split-title { font-family: var(--ff); font-size: clamp(22px,2.8vw,34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
 .split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
-.split-quote { border-left: 2px solid var(--blue); padding: 14px 20px; background: var(--blue-dim); border-radius: 0 10px 10px 0; font-size: 15px; font-style: italic; color: var(--text); line-height: 1.6; }
+.split-quote { border-left: 2px solid var(--blue); padding: 14px 20px; background: var(--blue-dim); border-radius: 0 10px 10px 0; font-size: 15px; font-style: normal; color: var(--text); line-height: 1.6; }
 
 /* ── PULL QUOTE ── */
 .pull-quote {
@@ -231,6 +231,7 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
 </style>
 <link rel="stylesheet" href="/case-soft.css">
 <script src="/case-soft.js"></script>
+<style id="no-italic">em,i,cite{font-style:normal}q,blockquote,.review-text,.voice q{font-style:italic}</style>
 </head>
 <body>
 

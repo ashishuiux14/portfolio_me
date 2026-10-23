@@ -33,7 +33,7 @@ export default function LabSoftUI() {
   const [alu, setAlu] = useState(true);
 
   return (
-    <div className="page page-softui" style={{ gap: 110 }}>
+    <div className="page page-softui">
       {/* ---------- cover ---------- */}
       <section className="section" style={{ gap: 36 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '20px 48px' }}>
