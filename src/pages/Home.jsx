@@ -43,7 +43,6 @@ export default function Home() {
   return (
     <div className="page" style={{ gap: 0 }}>
       <div className="bento">
-
         {/* intro */}
         <section className="b-intro up" style={{ padding: 'clamp(28px, 3vw, 44px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 32 }}>
           <h1 style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 'clamp(22px, 2vw, 28px)', fontWeight: 300, lineHeight: 1.7, color: 'var(--ink-2)' }}>
@@ -61,21 +60,42 @@ export default function Home() {
             <Link to="/contact" className="pill up-sm press accent" style={{ flex: '1 1 160px', fontWeight: 500 }}>Let’s connect</Link>
           </div>
         </section>
-
+        {/* work with tabs */}
+        <section className="b-work up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 22 }} aria-label="Work">
+          <div role="tablist" aria-label="Work categories" style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+            {TABS.map((t) => (
+              <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
+                className={`pill ${tab === t.id ? 'in-sm accent' : 'up-sm press'}`} style={{ fontWeight: tab === t.id ? 500 : 400, cursor: 'pointer' }}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <div role="tabpanel" className="grid-2" style={{ gap: 20 }}>
+            {items.map((it) => <MiniCard key={it.to} {...it} />)}
+          </div>
+        </section>
+        {/* sitemap */}
+        <section className="b-map up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }} aria-label="Sitemap">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+            <span className="cap">Sitemap · what is where</span>
+            <span className="cap">{CASE_STUDIES.length + LAB.length + PRINTS.length + 6} pages</span>
+          </div>
+          <Sitemap />
+        </section>
         {/* live controls */}
         <section className="b-lab up" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }} aria-label="Try the controls">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="cap">Interaction Lab · try me</span>
             <Link to="/lab/controls" className="cap accent" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>Open <Icon name="arrow" size={14} /></Link>
           </div>
+          <p className="muted" style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>Working controls from my component studies, built in soft clay and machined aluminium. Flip the toggle, count with the stepper, turn the dial, press save.</p>
           <div className="lab-quad">
-            <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" /></div>
-            <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.5} label="Example count" /></div>
-            <div className="lab-cell"><Rotary material="alu" zoom={0.42} label="Example rotary switch" /></div>
-            <div className="lab-cell"><SubmitButton material="alu" zoom={0.74} /></div>
+            <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.55} label="Example clay toggle" /><span className="cap" aria-hidden="true">Toggle · clay</span></div>
+            <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.5} label="Example count" /><span className="cap" aria-hidden="true">Stepper · aluminium</span></div>
+            <div className="lab-cell"><Rotary material="alu" zoom={0.42} label="Example rotary switch" /><span className="cap" aria-hidden="true">Rotary switch</span></div>
+            <div className="lab-cell"><SubmitButton material="alu" zoom={0.74} /><span className="cap" aria-hidden="true">Submit button</span></div>
           </div>
         </section>
-
         {/* numbers */}
         <section className="b-stats up" style={{ padding: 10, display: 'flex', flexDirection: 'column', gap: 10 }} aria-label="In numbers">
           {[['7+', 'years in enterprise B2B'], ['5', 'years of architecture first']].map(([n, t]) => (
@@ -85,7 +105,13 @@ export default function Home() {
             </div>
           ))}
         </section>
-
+        {/* contact */}
+        <section className="b-contact up" style={{ padding: 26, display: 'flex', flexDirection: 'column', gap: 16 }} aria-label="Contact">
+          <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, color: 'var(--ok)' }}><i className="led" />Available</span>
+          <p style={{ fontSize: 20, lineHeight: 1.35 }}>Open to Senior Product Designer and Design Engineer roles.</p>
+          <span className="muted" style={{ fontSize: 15, wordBreak: 'break-all' }}>{CONTACT.email}</span>
+          <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)', marginTop: 'auto' }}>Let’s talk</Link>
+        </section>
         {/* route */}
         <section className="b-route up" style={{ padding: '24px 30px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }} aria-label="The route">
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
@@ -107,37 +133,12 @@ export default function Home() {
           </ol>
         </section>
 
-        {/* work with tabs */}
-        <section className="b-work up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 22 }} aria-label="Work">
-          <div role="tablist" aria-label="Work categories" style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-            {TABS.map((t) => (
-              <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
-                className={`pill ${tab === t.id ? 'in-sm accent' : 'up-sm press'}`} style={{ fontWeight: tab === t.id ? 500 : 400, cursor: 'pointer' }}>
-                {t.label}
-              </button>
-            ))}
-          </div>
-          <div role="tabpanel" className="grid-2" style={{ gap: 20 }}>
-            {items.map((it) => <MiniCard key={it.to} {...it} />)}
-          </div>
-        </section>
 
-        {/* contact */}
-        <section className="b-contact up" style={{ padding: 26, display: 'flex', flexDirection: 'column', gap: 16 }} aria-label="Contact">
-          <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, color: 'var(--ok)' }}><i className="led" />Available</span>
-          <p style={{ fontSize: 20, lineHeight: 1.35 }}>Open to Senior Product Designer and Design Engineer roles.</p>
-          <span className="muted" style={{ fontSize: 15, wordBreak: 'break-all' }}>{CONTACT.email}</span>
-          <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)', marginTop: 'auto' }}>Let’s talk</Link>
-        </section>
 
-        {/* sitemap */}
-        <section className="b-seats up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }} aria-label="Sitemap">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-            <span className="cap">Sitemap · what is where</span>
-            <span className="cap">{CASE_STUDIES.length + LAB.length + PRINTS.length + 6} pages</span>
-          </div>
-          <Sitemap />
-        </section>
+
+
+
+
       </div>
     </div>
   );
