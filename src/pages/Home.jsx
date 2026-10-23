@@ -110,10 +110,10 @@ export default function Home() {
           </div>
           <p className="muted" style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>Working controls from my component studies, built in soft clay and machined aluminium. Flip the toggle, count with the stepper, turn the dial, press save.</p>
           <div className="lab-quad">
-            <div className="lab-cell"><ClayToggle checked={on} onChange={setOn} zoom={0.85} label="Example clay toggle" /><span className="cap" aria-hidden="true">Toggle · clay</span></div>
-            <div className="lab-cell"><Stepper material="alu" value={3} min={0} max={20} zoom={0.78} label="Example count" /><span className="cap" aria-hidden="true">Stepper · aluminium</span></div>
-            <div className="lab-cell"><Rotary material="alu" zoom={0.66} label="Example rotary switch" /><span className="cap" aria-hidden="true">Rotary switch</span></div>
-            <div className="lab-cell"><SubmitButton material="alu" zoom={1} /><span className="cap" aria-hidden="true">Submit button</span></div>
+            <div className="lab-cell"><div className="lab-slot"><ClayToggle checked={on} onChange={setOn} zoom={0.85} label="Example clay toggle" /></div><span className="cap" aria-hidden="true">Toggle · clay</span></div>
+            <div className="lab-cell"><div className="lab-slot"><Stepper material="alu" value={3} min={0} max={20} zoom={0.78} label="Example count" /></div><span className="cap" aria-hidden="true">Stepper · aluminium</span></div>
+            <div className="lab-cell"><div className="lab-slot"><Rotary material="alu" zoom={0.66} label="Example rotary switch" /></div><span className="cap" aria-hidden="true">Rotary switch</span></div>
+            <div className="lab-cell"><div className="lab-slot"><SubmitButton material="alu" zoom={1} /></div><span className="cap" aria-hidden="true">Submit button</span></div>
           </div>
         </section>
         {/* sitemap */}

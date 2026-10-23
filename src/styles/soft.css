@@ -232,8 +232,9 @@ html.vt-grow::view-transition-new(root) { z-index: 2; }
 
 /* Home: Interaction Lab tile, four controls in a 2x2 grid */
 .lab-quad { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 14px; }
-.lab-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 120px; }
-.lab-cell > .cap { font-size: 10.5px; }
+.lab-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; min-height: 120px; min-width: 0; }
+.lab-slot { height: 140px; display: flex; align-items: center; justify-content: center; }
+.lab-cell > .cap { font-size: 10.5px; letter-spacing: .1em; white-space: nowrap; line-height: 1; }
 .lab-cell [role="status"] { display: none; }
 
 /* ---------- screen real estate ----------
