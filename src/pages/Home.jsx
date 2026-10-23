@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { ClayToggle, Stepper, Rotary, SubmitButton } from '../lab/Art';
 import { ControlsPreview, SeatPreview, SoftUiPreview, CrosshairPreview } from '../components/LabPreviews';
-import SeatMap from '../components/SeatMap';
+import Sitemap from '../components/Sitemap';
 import { CASE_STUDIES, LAB, PRINTS, CONTACT } from '../data/site';
 
 const TABS = [
@@ -130,13 +130,13 @@ export default function Home() {
           <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)', marginTop: 'auto' }}>Let’s talk</Link>
         </section>
 
-        {/* seats */}
-        <section className="b-seats up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'stretch' }} aria-label="Seat picker preview">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="cap">Seat picker · tap a seat</span>
-            <Link to="/lab/seat-picker" className="cap accent" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>Study <Icon name="arrow" size={14} /></Link>
+        {/* sitemap */}
+        <section className="b-seats up" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }} aria-label="Sitemap">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+            <span className="cap">Sitemap · what is where</span>
+            <span className="cap">{CASE_STUDIES.length + LAB.length + PRINTS.length + 6} pages</span>
           </div>
-          <SeatMap seatSize={22} cols={8} rows={['A', 'B', 'C', 'D']} booked={['A3', 'A4', 'B6', 'C1', 'D5', 'D6']} initial={['C4', 'C5']} max={2} label="Seat picker preview" />
+          <Sitemap />
         </section>
       </div>
     </div>
