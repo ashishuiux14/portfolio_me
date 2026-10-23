@@ -48,25 +48,16 @@ function SizePreview({ s }) {
   return <Mini s={s}><Cross len={`${s.size / 2}cqw`} gap={s.pickbox + 2} pick={s.pickbox} color={s.pickColor} /></Mini>;
 }
 function PickPreview({ s }) {
-  const picked = s.pickbox >= 10;
-  return (
-    <Mini s={s}>
-      <i className="cx-obj-line" style={picked ? { background: s.pickColor, boxShadow: `0 0 0 1px ${s.pickColor}` } : null} />
-      <Cross len="70px" gap={s.pickbox + 2} pick={s.pickbox} color={s.pickColor} />
-      <span className="cx-mini-tag">{picked ? 'Line picked' : 'Too small to reach the line'}</span>
-    </Mini>
-  );
+  return <Mini s={s}><Cross len="70px" gap={s.pickbox + 2} pick={s.pickbox} color={s.pickColor} /></Mini>;
 }
 function MarkerPreview({ s }) {
   const m = s.marker;
   return (
     <Mini s={s}>
-      <i className="cx-corner" />
       <svg className="cx-mk" width={m + 4} height={m + 4} viewBox={`0 0 ${m + 4} ${m + 4}`} style={{ marginLeft: -(m + 4) / 2, marginTop: -(m + 4) / 2 }}>
         <rect x="2" y="2" width={m} height={m} fill="none" stroke={s.snapColor} strokeWidth="2" />
       </svg>
       <Cross len="70px" gap={4} pick={3} color={s.pickColor} />
-      <span className="cx-mini-tag">Corner snap</span>
     </Mini>
   );
 }
