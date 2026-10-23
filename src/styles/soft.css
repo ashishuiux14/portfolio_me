@@ -323,13 +323,15 @@ html[data-theme="dark"] .mini-watch { background: repeating-linear-gradient(0deg
 .smap ul { list-style: none; margin: 0; padding: 0; }
 .smap-root { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border-radius: 19px; font-weight: 500; font-size: 15px; color: var(--ink); }
 .smap-trunk { position: relative; margin-left: 18px; padding-top: 6px; width: calc(100% - 18px); }
-.smap-branch { position: relative; padding: 8px 0 4px 22px; }
+.smap-branch { position: relative; padding: 10px 0 6px 22px; }
 .smap-branch::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; border-left: 1.5px solid var(--line); }
 .smap-branch:last-child::before { bottom: auto; height: 27px; }
 .smap-branch::after { content: ""; position: absolute; left: 0; top: 26px; width: 18px; border-top: 1.5px solid var(--line); }
 .smap-node { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 18px; font-size: 14.5px; color: var(--ink); }
 .smap-count { font: 500 11px var(--mono); color: var(--ink-3); margin-left: 2px; }
-.smap-kids { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 0 4px 14px; margin-left: 4px; border-left: 1.5px dashed var(--line); }
+.smap .smap-kids { position: relative; display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px 22px; padding: 2px 0 2px 16px; }
+.smap-kids::before { content: ""; position: absolute; left: 0; top: -12px; bottom: 14px; border-left: 1.5px solid var(--line); }
+.smap-kids::after { content: ""; position: absolute; left: 0; bottom: 14px; width: 10px; border-top: 1.5px solid var(--line); }
 .smap-leaf { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 14px; font-size: 13px; color: var(--ink-2); background: var(--bg-in); box-shadow: var(--sh-in-sm); transition: color .15s; }
 .smap-leaf:hover { color: var(--accent-ink); }
 .smap a:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
