@@ -17,13 +17,57 @@ function Swatches({ label, value, onChange }) {
   );
 }
 
-function Slider({ label, value, min, max, unit, onChange }) {
+function Slider({ label, value, min, max, unit, onChange, hint, children }) {
   const id = `cx-${label.replace(/\W/g, '')}`;
   return (
     <div className="cx-field">
       <div className="row"><label className="cap" htmlFor={id}>{label}</label><output htmlFor={id}>{value}{unit}</output></div>
-      <input id={id} className="cx-range" type="range" min={min} max={max} value={value} onChange={(e) => onChange(+e.target.value)} />
+      <input id={id} className="cx-range" type="range" min={min} max={max} value={value} onChange={(e) => onChange(+e.target.value)} aria-describedby={`${id}-hint`} />
+      {children}
+      <span id={`${id}-hint`} className="cx-hint">{hint}</span>
     </div>
+  );
+}
+
+/* Small live previews under each slider, at the same pixel scale as the canvas. */
+function Mini({ s, children }) {
+  return <div className={`cx-mini ${s.bg === 'dark' ? 'dark' : 'light'}${s.grid ? ' grid' : ''}`} aria-hidden="true">{children}</div>;
+}
+function Cross({ len, gap, pick, color }) {
+  return (
+    <>
+      <i className="cx-l h" style={{ width: `calc(${len} - ${gap}px)`, right: `calc(50% + ${gap}px)` }} />
+      <i className="cx-l h" style={{ width: `calc(${len} - ${gap}px)`, left: `calc(50% + ${gap}px)` }} />
+      <i className="cx-l v" style={{ height: `calc(${len} - ${gap}px)`, bottom: `calc(50% + ${gap}px)` }} />
+      <i className="cx-l v" style={{ height: `calc(${len} - ${gap}px)`, top: `calc(50% + ${gap}px)` }} />
+      <i className="cx-pb" style={{ width: pick * 2, height: pick * 2, borderColor: color }} />
+    </>
+  );
+}
+function SizePreview({ s }) {
+  return <Mini s={s}><Cross len={`${s.size / 2}cqw`} gap={s.pickbox + 2} pick={s.pickbox} color={s.pickColor} /></Mini>;
+}
+function PickPreview({ s }) {
+  const picked = s.pickbox >= 10;
+  return (
+    <Mini s={s}>
+      <i className="cx-obj-line" style={picked ? { background: s.pickColor, boxShadow: `0 0 0 1px ${s.pickColor}` } : null} />
+      <Cross len="70px" gap={s.pickbox + 2} pick={s.pickbox} color={s.pickColor} />
+      <span className="cx-mini-tag">{picked ? 'Line picked' : 'Too small to reach the line'}</span>
+    </Mini>
+  );
+}
+function MarkerPreview({ s }) {
+  const m = s.marker;
+  return (
+    <Mini s={s}>
+      <i className="cx-corner" />
+      <svg className="cx-mk" width={m + 4} height={m + 4} viewBox={`0 0 ${m + 4} ${m + 4}`} style={{ marginLeft: -(m + 4) / 2, marginTop: -(m + 4) / 2 }}>
+        <rect x="2" y="2" width={m} height={m} fill="none" stroke={s.snapColor} strokeWidth="2" />
+      </svg>
+      <Cross len="70px" gap={4} pick={3} color={s.pickColor} />
+      <span className="cx-mini-tag">Corner snap</span>
+    </Mini>
   );
 }
 
@@ -57,9 +101,9 @@ export default function LabCrosshair() {
       <Sheet label="01 · Same canvas, two cursors" note="Try the same task in both: line up the button’s left edge with the card’s. Drag to move, use the square handles to resize and the round one to rotate. Keyboard: Tab to an object, arrows to move, R to rotate.">
         <div className="section" style={{ gap: 28 }}>
           <div className="cx-panel up">
-            <Slider label="Crosshair size" value={s.size} min={5} max={100} unit="%" onChange={set('size')} />
-            <Slider label="Pickbox size" value={s.pickbox} min={2} max={16} unit=" px" onChange={set('pickbox')} />
-            <Slider label="Snap marker size" value={s.marker} min={6} max={22} unit=" px" onChange={set('marker')} />
+            <Slider label="Crosshair size" value={s.size} min={5} max={100} unit="%" onChange={set('size')} hint="How far the lines reach across the screen"><SizePreview s={s} /></Slider>
+            <Slider label="Pickbox size" value={s.pickbox} min={2} max={16} unit=" px" onChange={set('pickbox')} hint="How close you need to aim: anything the square touches gets picked"><PickPreview s={s} /></Slider>
+            <Slider label="Snap marker size" value={s.marker} min={6} max={22} unit=" px" onChange={set('marker')} hint="How big the symbol is when the cursor locks onto a point"><MarkerPreview s={s} /></Slider>
             <Swatches label="Pickbox colour" value={s.pickColor} onChange={set('pickColor')} />
             <Swatches label="Snap marker colour" value={s.snapColor} onChange={set('snapColor')} />
             <div className="cx-field">
