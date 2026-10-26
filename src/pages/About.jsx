@@ -45,7 +45,7 @@ export default function About() {
           <p>Based in <b style={{ color: 'var(--ink)', fontWeight: 500 }}>Chicago</b>, open to senior IC product design roles.</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
             <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)' }}>Get in touch</Link>
-            <a href={CONTACT.resume} target="_blank" rel="noreferrer" className="pill up-sm press">Download CV</a>
+            <a href={CONTACT.resume} target="_blank" rel="noreferrer" className="pill up-sm press">Download CV <Icon name="download" size={18} /></a>
           </div>
         </div>
       </section>
