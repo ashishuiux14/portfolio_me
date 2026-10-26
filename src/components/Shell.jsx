@@ -173,7 +173,7 @@ export function Rail({ theme, setTheme }) {
         <Link to="/" className="monogram" aria-label="Ashish Dixit, home"><Monogram title="AD" /></Link>
         <div className="who"><b>Ashish Dixit</b><span>Senior Product Designer · Chicago</span></div>
         <NavLinks />
-        <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
+        <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer"><Icon name="download" size={16} />Résumé</a>
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
     </aside>
@@ -218,7 +218,7 @@ export function Topbar({ theme, setTheme }) {
               </button>
             </div>
             <NavLinks onNavigate={() => setOpen(false)} />
-            <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer">Résumé <Icon name="download" size={16} /></a>
+            <a className="btn-resume" href={CONTACT.resume} target="_blank" rel="noreferrer"><Icon name="download" size={16} />Résumé</a>
           </div>
         </>
       )}

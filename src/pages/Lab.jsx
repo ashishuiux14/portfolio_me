@@ -36,7 +36,7 @@ export default function Lab() {
               <h2 className="h3">{l.name}</h2>
               <p className="muted" style={{ fontSize: 16 }}>{l.sub}</p>
             </div>
-            <Link to={`/lab/${l.slug}`} className="pill up-sm press" style={{ justifyContent: 'space-between' }}>Open study <Icon name="arrow" /></Link>
+            <Link to={`/lab/${l.slug}`} className="pill up-sm press" ><Icon name="arrow" />Open study</Link>
           </article>
         ))}
       </div>

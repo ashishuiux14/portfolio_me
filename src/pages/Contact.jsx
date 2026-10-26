@@ -38,7 +38,7 @@ export default function Contact() {
           })}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6 }}>
             <button type="button" className="pill up-sm press" onClick={copy} style={{ cursor: 'pointer' }}><Icon name="copy" />Copy email</button>
-            <a href={CONTACT.resume} target="_blank" rel="noreferrer" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)' }}>Download résumé <Icon name="download" size={18} /></a>
+            <a href={CONTACT.resume} target="_blank" rel="noreferrer" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)' }}><Icon name="download" size={18} />Download résumé</a>
           </div>
           <span role="status" className="cap" style={{ minHeight: 18 }}>{copied}</span>
         </div>
