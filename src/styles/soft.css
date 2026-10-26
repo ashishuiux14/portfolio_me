@@ -356,4 +356,4 @@ html[data-theme="dark"] .mini-watch:not([data-ink="light"] .mini-watch), [data-i
 }
 
 /* the Atelier cover is shown whole, never cropped */
-img[src="/atelier-cover.png"] { object-fit: contain !important; background: #FAFAFA; }
+img[src="/atelier-cover.png"] { object-fit: contain !important; object-position: center !important; background: transparent; }
