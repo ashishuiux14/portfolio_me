@@ -3,7 +3,7 @@
    Light: warm stone #EBE6E2. Dark: warm charcoal.
    One light source, top left. Raised = pressable, pressed = on/selected.
    ========================================================= */
-:root {
+:root, [data-ink="light"] {
   --bg: #EBE6E2;
   --bg-in: #E6E0DB;
   --hi: #FFFFFF;
@@ -36,7 +36,7 @@
   color-scheme: light;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme="dark"], [data-ink="dark"] {
   --bg: #2A2725;
   --bg-in: #252220;
   --hi: #36322F;
@@ -226,8 +226,17 @@ button { font: inherit; color: inherit; }
 
 /* theme switch: circular reveal (see useTheme) */
 /* theme switch: ink spill */
-.ink-spill { position: fixed; z-index: 9999; border-radius: 50%; pointer-events: none; transform: scale(0.002); will-change: transform, opacity;
-  background: radial-gradient(circle closest-side, var(--ink) 0 97%, color-mix(in srgb, var(--ink) 0%, transparent) 100%); }
+.ink-pool { position: fixed; z-index: 0; border-radius: 50%; pointer-events: none; transform: scale(0.002); will-change: transform;
+  background: radial-gradient(circle closest-side, var(--ink) 0 93%, color-mix(in srgb, var(--ink) 0%, transparent) 100%); }
+html.ink-wave .shell { position: relative; z-index: 1; }
+html.ink-wave body { background: transparent; }
+html.ink-wave [data-ink], html.ink-wave [data-ink] * , html.ink-wave [data-ink]::before, html.ink-wave [data-ink]::after {
+  transition-property: background-color, box-shadow, border-color, outline-color, color, fill, stroke !important;
+  /* the sheet darkens (or lightens) slowly; its print flips quickly once the sheet has passed mid-tone, so words never fade into the paper */
+  transition-duration: var(--soak, .7s), var(--soak, .7s), var(--soak, .7s), var(--soak, .7s), calc(var(--soak, .7s) * .28), calc(var(--soak, .7s) * .28), calc(var(--soak, .7s) * .28) !important;
+  transition-delay: 0s, 0s, 0s, 0s, calc(var(--soak, .7s) * .4), calc(var(--soak, .7s) * .4), calc(var(--soak, .7s) * .4) !important;
+  transition-timing-function: cubic-bezier(.45,.05,.4,1) !important;
+}
 html.theme-flip *, html.theme-flip *::before, html.theme-flip *::after { transition: none !important; }
 
 /* Home: Interaction Lab tile, four controls in a 2x2 grid */
@@ -256,7 +265,7 @@ html.theme-flip *, html.theme-flip *::before, html.theme-flip *::after { transit
 .sui-prev-card { position: relative; flex: 1.5; align-self: stretch; }
 .sui-prev-card .cyber.compact { inset: 0; }
 .mini-watch { flex: 1; max-width: 150px; border-radius: 22px; padding: 9px; background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, rgba(0,0,0,.035) 1px 3px), linear-gradient(180deg, #ECEDEF, #C3C6CA 55%, #A9ACB1); box-shadow: 5px 8px 14px rgba(0,0,0,.28), inset 0 1.5px 0 #fff, inset 0 -2px 4px rgba(0,0,0,.2); }
-html[data-theme="dark"] .mini-watch { background: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.05) 1px 3px), linear-gradient(180deg, #5A5D62, #36383C 55%, #24262A); box-shadow: 5px 8px 14px rgba(0,0,0,.5), inset 0 1.5px 0 rgba(255,255,255,.25); }
+html[data-theme="dark"] .mini-watch:not([data-ink="light"] .mini-watch), [data-ink="dark"] .mini-watch { background: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.05) 1px 3px), linear-gradient(180deg, #5A5D62, #36383C 55%, #24262A); box-shadow: 5px 8px 14px rgba(0,0,0,.5), inset 0 1.5px 0 rgba(255,255,255,.25); }
 .mw-face { border-radius: 14px; padding: 7px; background: radial-gradient(120% 140% at 30% 0%, #2c2e31, #151617 70%); box-shadow: inset 0 2px 5px rgba(0,0,0,.7); }
 .mw-lcd { position: relative; border-radius: 8px; overflow: hidden; background: linear-gradient(176deg, #C3C8B6, #A6AD9A); box-shadow: inset 2px 3px 6px rgba(20,24,16,.5); }
 .mw-lcd::after { content: ""; position: absolute; inset: 0; background: linear-gradient(118deg, rgba(255,255,255,.3), rgba(255,255,255,0) 30%); }
@@ -337,3 +346,11 @@ html[data-theme="dark"] .mini-watch { background: repeating-linear-gradient(0deg
 .smap a:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
 
 @container (max-width: 640px) { .b-lab .lab-cell { zoom: .66; } .b-lab .lab-cell > .cap { zoom: 1.52; } }
+/* a tile being soaked recomputes its derived tokens and its text colour from its own (new) palette */
+[data-ink] {
+  --sh-up: 10px 10px 22px var(--lo), -10px -10px 22px var(--hi);
+  --sh-up-sm: 5px 5px 11px var(--lo), -5px -5px 11px var(--hi);
+  --sh-in: inset 6px 6px 12px var(--lo-in), inset -6px -6px 12px var(--hi);
+  --sh-in-sm: inset 3px 3px 6px var(--lo-in), inset -3px -3px 6px var(--hi);
+  color: var(--ink);
+}

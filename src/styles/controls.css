@@ -15,7 +15,7 @@
 .tg-clay[aria-checked="true"] .knob { left: 43px; }
 .tg-clay:active .knob { width: 42px; }
 .tg-clay[aria-checked="true"]:active .knob { left: 37px; }
-:root[data-theme="dark"] .tg-clay .knob { background: radial-gradient(circle at 36% 30%, #F3EFEB, #CFC8C1); box-shadow: 4px 5px 10px rgba(0,0,0,.5), -1px -1px 3px rgba(255,255,255,.08); }
+html[data-theme="dark"] .tg-clay .knob:not([data-ink="light"] .tg-clay .knob), [data-ink="dark"] .tg-clay .knob { background: radial-gradient(circle at 36% 30%, #F3EFEB, #CFC8C1); box-shadow: 4px 5px 10px rgba(0,0,0,.5), -1px -1px 3px rgba(255,255,255,.08); }
 
 .tg-alu { width: 84px; height: 40px; border-radius: 20px; background: linear-gradient(180deg, #1b1b1d, #38383b); box-shadow: inset 0 2px 4px rgba(0,0,0,.6), 0 1px 0 var(--hi); }
 .tg-alu[aria-checked="true"] { background: linear-gradient(180deg, #1E5B35, #2E7D4B); }

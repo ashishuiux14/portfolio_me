@@ -28,34 +28,90 @@ function applyTheme(t) {
   });
 }
 
-/* Ink spill: a disc of the new background grows out of the switch until it
-   covers the page (transform only, so it stays on the GPU and never stutters),
-   the theme flips underneath it in one frame with transitions paused, then
-   the ink fades away to reveal the page already in its new colours. */
+/* Ink spill. The new colour seeps out of the switch through the gaps between
+   tiles (a soft-edged pool that sits under the page content), and each tile,
+   like a folded sheet of paper, soaks the colour up as the pool reaches its
+   nearest edge. Tiles are themed one by one with data-ink, so nothing goes
+   blank; when the pool has covered the page the theme is committed for real. */
 const INK = { dark: '#2A2725', light: '#EBE6E2' };
+const SOAK = 620;      // how long a tile takes to soak up the colour
+const SPREAD = 1100;   // how long the pool takes to reach the farthest corner
+const TILE = '.up, .up-sm, .in, .in-sm, .glass, .card, .rail-inner, .topbar, iframe, .cx-frame, .lab-prev';
 let spilling = false;
-function spill(next, origin, done) {
-  const r = origin.getBoundingClientRect();
-  const x = r.left + r.width / 2, y = r.top + r.height / 2;
-  const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 40;
-  const ink = document.createElement('div');
-  ink.className = 'ink-spill';
-  ink.style.cssText = `left:${x - R}px;top:${y - R}px;width:${2 * R}px;height:${2 * R}px;--ink:${INK[next]}`;
-  document.body.appendChild(ink);
-  const grow = ink.animate(
-    [{ transform: 'scale(0.002)' }, { transform: 'scale(1)' }],
-    { duration: 820, easing: 'cubic-bezier(.62, 0, .28, 1)', fill: 'forwards' },
-  );
-  grow.finished.then(() => {
-    document.documentElement.classList.add('theme-flip');
-    done();
-    // two frames so the new colours are painted before the ink lifts
+
+function inkTargets() {
+  const out = [];
+  const walk = (el) => {
+    if (el.matches(TILE) || !el.querySelector(TILE)) { out.push(el); return; }
+    for (const c of el.children) walk(c);
+  };
+  document.querySelectorAll('.rail, .topbar, .main').forEach(walk);
+  return out;
+}
+
+function spill(next, origin, commit) {
+  const html = document.documentElement;
+  const o = origin.getBoundingClientRect();
+  const x = o.left + o.width / 2, y = o.top + o.height / 2;
+  const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 60;
+
+  // the pool, under the content: only shows in the gaps
+  const pool = document.createElement('div');
+  pool.className = 'ink-pool';
+  pool.style.cssText = `left:${x - R}px;top:${y - R}px;width:${2 * R}px;height:${2 * R}px;--ink:${INK[next]}`;
+  document.body.prepend(pool);
+  const grow = pool.animate([{ transform: 'scale(0.002)' }, { transform: 'scale(1)' }],
+    { duration: SPREAD, easing: 'cubic-bezier(.45, .05, .35, 1)', fill: 'forwards' });
+
+  // when the pool's edge reaches each tile, the tile soaks up the colour
+  const ease = (t) => 1 - Math.pow(1 - t, 1.35);
+  const when = (dist) => {
+    const d = Math.min(1, dist / R);
+    for (let i = 0; i <= 60; i++) if (ease(i / 60) >= d) return (i / 60) * SPREAD;
+    return SPREAD;
+  };
+  const queue = inkTargets().map((el) => {
+    const r = el.getBoundingClientRect();
+    const near = Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom));
+    const far = Math.hypot(Math.max(Math.abs(r.left - x), Math.abs(r.right - x)), Math.max(Math.abs(r.top - y), Math.abs(r.bottom - y)));
+    const a = when(near), b = when(far);
+    // the sheet starts to soak when the ink touches it and is saturated once the ink has passed it
+    return { el, at: a, soak: Math.max(SOAK, b - a + 240) };
+  }).sort((p, q) => p.at - q.at);
+
+  html.classList.add('ink-wave');
+  const start = performance.now();
+  let i = 0;
+  const step = (now) => {
+    const t = now - start;
+    while (i < queue.length && queue[i].at <= t) {
+      const { el, soak } = queue[i++];
+      el.style.setProperty('--soak', `${Math.round(soak)}ms`);
+      el.setAttribute('data-ink', next);
+      if (el.tagName === 'IFRAME') {
+        try {
+          const d = el.contentDocument.documentElement;
+          d.classList.add('theme-soak');
+          d.setAttribute('data-theme', next);
+          setTimeout(() => d.classList.remove('theme-soak'), 1100);
+        } catch (e) { /* cross-origin */ }
+      }
+    }
+    if (i < queue.length) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+
+  const lastAt = queue.reduce((m, q) => Math.max(m, q.at + q.soak), 0);
+  Promise.all([grow.finished, new Promise((r) => setTimeout(r, lastAt + 40))]).then(() => {
+    html.classList.add('theme-flip');
+    commit();
+    queue.forEach(({ el }) => { el.removeAttribute('data-ink'); el.style.removeProperty('--soak'); });
+    pool.remove();
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      document.documentElement.classList.remove('theme-flip');
-      const fade = ink.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 520, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
-      fade.finished.then(() => { ink.remove(); spilling = false; });
+      html.classList.remove('theme-flip', 'ink-wave');
+      spilling = false;
     }));
-  }).catch(() => { ink.remove(); spilling = false; done(); });
+  }).catch(() => { pool.remove(); html.classList.remove('ink-wave'); commit(); spilling = false; });
 }
 
 export function useTheme() {

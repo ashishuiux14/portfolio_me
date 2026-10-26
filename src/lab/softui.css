@@ -158,7 +158,7 @@
   --glow: #FF5A1F; --glow-core: #FFE2D2; --glass: rgba(255,170,140,.28); --glass-tile: rgba(255,255,255,.36);
   --glow-a: #FF7A45; --glow-b: #9BA3AD; --ll-glass-bg: linear-gradient(140deg, #E9E3DE, #D9D2CC);
 }
-html[data-theme="dark"] .page-softui {
+html[data-theme="dark"] .page-softui:not([data-ink="light"] .page-softui), [data-ink="dark"] .page-softui {
   --bz-a: #55575B; --bz-b: #36383B; --bz-c: #24262A; --bz-hi: rgba(255,255,255,.22); --bz-print: #A3A6AB;
   --pl-a: #45474B; --pl-b: #232427; --pl-a2: #505256; --pl-b2: #2C2D30; --pl-hi: rgba(255,255,255,.32); --pl-lo: #0B0C0D; --pl-cut: #141516; --pl-print: #8E9298;
   --glow: #F2F5F8; --glow-core: #FFFFFF; --glass: rgba(220,230,240,.16); --glass-tile: rgba(255,255,255,.1);
@@ -172,7 +172,7 @@ html[data-theme="dark"] .page-softui {
   --th-heat: #FF6A2B; --th-cool: #5AA0E6;
   --stripe: color-mix(in srgb, var(--ink) 30%, transparent);
 }
-html[data-theme="dark"] .page-softui {
+html[data-theme="dark"] .page-softui:not([data-ink="light"] .page-softui), [data-ink="dark"] .page-softui {
   --ga-a: #4A4D52; --ga-b: #1E2023; --ga-hi: rgba(255,255,255,.35); --ga-lo: #0C0D0E; --ga-hole: #08090A; --ga-boss: #3A3D41; --ga-led: #F2F5F8;
   --ga-ink: #F4F6F8; --ga-ink2: #C9CED4; --ga-caustic: rgba(255,255,255,.4); --ga-eng: #8D939B;
 }
@@ -293,14 +293,14 @@ html[data-theme="dark"] .page-softui {
 .scen p { margin: 0; color: var(--ink-2); line-height: 1.55; }
 
 /* ===== cyber card: metal + glass ===== */
-:root {
+:root, [data-ink="light"] {
   --cb-m1: #D9DCE0; --cb-m2: #A6ABB1; --cb-m3: #737880;
   --cb-eng: #4A4F56; --cb-lip: rgba(255,255,255,.6);
   --cb-acc: #FF5A1F; --cb-acc-core: #FFE3D4; --cb-caustic: rgba(255,236,220,.85);
   --cb-g1: .2; --cb-g2: .04; --cb-g3: .1; --cb-dot: .45;
   --cb-ink: #15171A; --cb-ink2: #3A3F46;
 }
-html[data-theme="dark"] {
+html[data-theme="dark"], [data-ink="dark"] {
   --cb-m1: #7C8188; --cb-m2: #4B4F55; --cb-m3: #2C2F33;
   --cb-eng: #1A1C1F; --cb-lip: rgba(255,255,255,.22);
   --cb-acc: #EEF2F6; --cb-acc-core: #FFFFFF; --cb-caustic: rgba(255,255,255,.5);

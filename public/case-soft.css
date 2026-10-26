@@ -136,3 +136,8 @@ html[data-case] .chapter { padding-top: clamp(56px, 3vw + 4vh, 100px) !important
 html[data-case] .split { padding-block: clamp(40px, 2vw + 3vh, 72px) !important; }
 html[data-case] .section { padding-block: clamp(48px, 3vw + 4vh, 96px) !important; }
 html[data-case] .hero-left { padding-top: clamp(64px, 3vw + 7vh, 144px) !important; padding-bottom: clamp(44px, 2vw + 5vh, 100px) !important; }
+
+/* theme change arriving from the site's ink spill: the page soaks rather than snapping */
+html[data-case].theme-soak *, html[data-case].theme-soak *::before, html[data-case].theme-soak *::after, html[data-case].theme-soak body {
+  transition: background-color .9s cubic-bezier(.45,.05,.4,1), border-color .9s ease, box-shadow .9s ease, color .28s ease .38s, fill .28s ease .38s !important;
+}
