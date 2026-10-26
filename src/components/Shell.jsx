@@ -19,7 +19,7 @@ const NAV = [
    light shrinks back into it. Falls back to an instant swap where unsupported. */
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
-  try { localStorage.setItem('theme', t); } catch (e) { /* storage unavailable */ }
+  try { sessionStorage.setItem('theme', t); } catch (e) { /* storage unavailable */ }
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', t === 'dark' ? '#2A2725' : '#EBE6E2');
   // case studies are same-origin frames: switch them in the same frame
