@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-case="3d-hub">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3D Hub — Case Study</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Comfortaa:wght@300;400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #e8ede8;
@@ -23,9 +23,9 @@
   --teal: #2a7a5e;
   --neu-light: rgba(255,255,255,0.75);
   --neu-dark: rgba(0,0,0,0.12);
-  --ff: 'Syne', sans-serif;
-  --fc: 'Comfortaa', cursive;
-  --fb: 'DM Sans', sans-serif;
+  --ff: 'Jost', sans-serif;
+  --fc: 'Jost', cursive;
+  --fb: 'Jost', sans-serif;
   --max: 1080px;
   --r: 20px;
 }
@@ -172,8 +172,10 @@ footer { background: #1a2e1a; padding: 52px 0; }
   .pull{padding:36px 28px;}
 }
 /* CUSTOM CURSOR STYLES */
-*, *::before, *::after { cursor: none !important; }
 </style>
+<link rel="stylesheet" href="/case-soft.css">
+<script src="/case-soft.js"></script>
+<style id="no-italic">em,i,cite{font-style:normal}q,blockquote,.review-text,.voice q{font-style:italic}</style>
 </head>
 <body>
 
@@ -198,7 +200,7 @@ footer { background: #1a2e1a; padding: 52px 0; }
     <div class="hero-meta">
       <div class="hm-item"><span class="hm-label">Timeline</span><span class="hm-value">Sep – Nov 2024</span></div>
       <div class="hm-item"><span class="hm-label">Type</span><span class="hm-value">Academic · School Project</span></div>
-      <div class="hm-item"><span class="hm-label">Style</span><span class="hm-value">Neumorphism · Comfortaa · Mint</span></div>
+      <div class="hm-item"><span class="hm-label">Style</span><span class="hm-value">Neumorphism · 'Jost' · Mint</span></div>
     </div>
   </div>
 
@@ -285,25 +287,25 @@ footer { background: #1a2e1a; padding: 52px 0; }
 
     <div class="insights reveal">
       <div class="ins-card">
-        <div class="ins-icon">➕</div>
+        <div class="ins-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M12 5v14M5 12h14"/></svg></div>
         <div class="ins-title">Simplify the upload flow</div>
         <div class="ins-body">Users got confused by separate "upload" and "share" buttons — they expected one action. Consolidated into a single "+" CTA that handles both.</div>
         <span class="ins-tag">Upload simplified</span>
       </div>
       <div class="ins-card">
-        <div class="ins-icon">🗂️</div>
+        <div class="ins-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
         <div class="ins-title">Explore tab felt overwhelming</div>
         <div class="ins-body">Too much in one place. Added segmented sub-tabs — Trending, Discussions, and Spotlight — so users can switch contexts without cognitive overload.</div>
         <span class="ins-tag">Navigation clarity</span>
       </div>
       <div class="ins-card">
-        <div class="ins-icon">🔔</div>
+        <div class="ins-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></div>
         <div class="ins-title">Visual feedback in notifications</div>
         <div class="ins-body">Users couldn't quickly recognise which post triggered a notification. Adding mini image previews in the notifications tab fixed this instantly.</div>
         <span class="ins-tag">Visual feedback wins</span>
       </div>
       <div class="ins-card">
-        <div class="ins-icon">🔍</div>
+        <div class="ins-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></div>
         <div class="ins-title">Search must be persistent</div>
         <div class="ins-body">Users expected the search bar to follow them across every community view — not disappear when switching tabs. Made it globally persistent.</div>
         <span class="ins-tag">Global search</span>
@@ -365,7 +367,7 @@ footer { background: #1a2e1a; padding: 52px 0; }
       <div class="proc-step">
         <div class="proc-num">Step 03</div>
         <div class="proc-title">Visual Language</div>
-        <div class="proc-body">Soft neumorphism + Comfortaa typeface + mint palette. Tactile, fresh, and community-warm — nothing cold or corporate.</div>
+        <div class="proc-body">Soft neumorphism + 'Jost' typeface + mint palette. Tactile, fresh, and community-warm — nothing cold or corporate.</div>
       </div>
       <div class="proc-step">
         <div class="proc-num">Step 04</div>
@@ -399,7 +401,7 @@ footer { background: #1a2e1a; padding: 52px 0; }
   <div class="showcase-header">
     <div class="showcase-eyebrow">High Fidelity Prototypes · Neumorphism UI</div>
     <h3 class="showcase-title">3D Hub — Final Screens</h3>
-    <p class="showcase-sub">Soft neumorphism · Comfortaa · Mint palette · Community-first</p>
+    <p class="showcase-sub">Soft neumorphism · 'Jost' · Mint palette · Community-first</p>
   </div>
   <div style="max-width: 1400px; margin: 0 auto; padding: 0 40px; position:relative; z-index:1">
     <div class="ui-grid">
@@ -438,7 +440,7 @@ footer { background: #1a2e1a; padding: 52px 0; }
           text-decoration:none;color:var(--text);
           transition:background 0.2s,border-color 0.2s;
         " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(61,153,112,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border)'">
-          <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
+          <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg> Previous Case Study</div>
           <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Cleaneró</div>
           <div style="font-size:13px;color:var(--muted)">Smart water pitcher with live proof</div>
         </a>
@@ -450,7 +452,7 @@ footer { background: #1a2e1a; padding: 52px 0; }
           text-decoration:none;color:var(--text);
           transition:background 0.2s,border-color 0.2s;
         " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(61,153,112,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border)'">
-          <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
+          <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
           <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Travelogue</div>
           <div style="font-size:13px;color:var(--muted)">Plan. Share. Remember.</div>
         </a>

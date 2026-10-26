@@ -1,0 +1,629 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="no-italic">em,i,cite{font-style:normal}q,blockquote,.review-text,.voice q{font-style:italic}</style>
+</head><body>
+<title>Stepper Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: a 960px column with a browser-style tab strip at the top. Each tab swaps the whole page into one material: surface, type softness and physics. Single light theme on purpose; both materials are lit from the top left. */
+:root{
+  --bg:#E5E5E8; --strip:#D2D2D7; --ink:#4B4E57; --ink-2:#6F727B; --ink-3:#9497A0; --rule:rgba(140,145,160,.3);
+  --lo:rgba(158,163,176,.58); --hi:#FFFFFF; --green-ink:#3E8F59; --red-ink:#B65A5A; --soft:100;
+  --display:'Jost', "Iowan Old Style", Georgia, serif;
+  --sans:'Jost', "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+body[data-mat="alu"]{--bg:#DADADC; --strip:#C6C6CA; --ink:#2F3136; --ink-2:#5D6068; --ink-3:#8C8F96; --rule:rgba(0,0,0,.1); --green-ink:#1F8A40; --red-ink:#C23B3B; --soft:0}
+*{box-sizing:border-box}
+html{background:#E5E5E8}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);padding-inline:16px;padding-block:44px 120px;-webkit-font-smoothing:antialiased;transition:background-color .35s}
+.sheet{max-width:960px;margin:0 auto;display:flex;flex-direction:column}
+h1,h2,h3{margin:0;text-wrap:balance;font-family:var(--display);font-variation-settings:"SOFT" var(--soft),"opsz" 96;font-weight:500;color:var(--ink)}
+p{margin:0}
+.label{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.intro{display:flex;flex-direction:column;gap:14px;margin-bottom:34px}
+.intro h1{font-size:clamp(36px,6vw,58px);line-height:1.04;letter-spacing:-.015em}
+.intro p{font-size:17.5px;color:var(--ink-2);max-width:640px}
+
+/* chrome-style tabs */
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;display:flex;align-items:flex-end;gap:2px;padding:8px 10px 0;background:var(--strip);border-radius:14px 14px 0 0;transition:background-color .35s}
+.tab{position:relative;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;padding:11px 22px 12px 16px;min-width:0;border-radius:11px 11px 0 0;background:transparent;font:500 14px var(--sans);color:var(--ink-2);white-space:nowrap}
+.tab:hover:not([aria-selected="true"]){background:rgba(255,255,255,.35)}
+.tab[aria-selected="true"]{background:var(--bg);color:var(--ink)}
+.tab[aria-selected="true"]::before,.tab[aria-selected="true"]::after{content:"";position:absolute;bottom:0;width:12px;height:12px;pointer-events:none}
+.tab[aria-selected="true"]::before{left:-12px;background:radial-gradient(circle at 0 0,transparent 11.5px,var(--bg) 12px)}
+.tab[aria-selected="true"]::after{right:-12px;background:radial-gradient(circle at 100% 0,transparent 11.5px,var(--bg) 12px)}
+.tab:focus-visible{outline:2px solid var(--green-ink);outline-offset:-4px}
+.tab .ico{width:16px;height:16px;border-radius:50%;flex:none}
+.ico-clay{background:radial-gradient(circle at 36% 30%,#fff,#e3e3e7);box-shadow:2px 2px 4px rgba(130,135,150,.5),-1px -1px 2px #fff}
+.ico-alu{background:repeating-radial-gradient(circle,rgba(255,255,255,.2) 0 .5px,rgba(0,0,0,.06) .5px 1px),conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35)}
+.tab .sub{color:var(--ink-3);font-weight:400}
+.panelwrap{padding-top:48px}
+[role="tabpanel"]{display:flex;flex-direction:column;gap:100px}
+[role="tabpanel"][hidden]{display:none!important}
+
+.hero{display:flex;flex-direction:column;gap:20px}
+.hero h2{font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.015em}
+.hero h2 em{font-style: normal;color:var(--green-ink)}
+.lede{font-size:18px;color:var(--ink-2);max-width:620px}
+
+/* plates per material */
+.plate{display:flex;flex-direction:column;gap:22px;padding:28px;min-width:0}
+.m-clay .plate{border-radius:30px;background:linear-gradient(145deg,#ececef,#e0e0e4);box-shadow:14px 14px 30px var(--lo),-14px -14px 30px var(--hi),inset 1px 1px 1px rgba(255,255,255,.8)}
+.m-alu .plate{border-radius:18px;background:linear-gradient(180deg,#EEEEEF,#DFDFE1);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 14px 30px rgba(40,42,48,.13),0 2px 4px rgba(40,42,48,.12)}
+.plate-top{display:flex;justify-content:space-between;align-items:center;gap:12px 18px;flex-wrap:wrap}
+.live{display:inline-flex;gap:8px;align-items:center}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:#5FBF7C}
+.stage{display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:36px 24px;padding:30px 8px}
+.slot{display:flex;flex-direction:column;align-items:center;gap:26px;min-width:0}
+.row-btn{display:flex;align-items:center;gap:20px}
+.cancel{font:500 15px var(--sans);color:var(--ink-2)}
+.readout{font:400 13px/1.5 var(--mono);color:var(--ink-2);min-height:20px;text-align:center;max-width:380px}
+.msg{font-size:14px;color:var(--red-ink);min-height:22px;text-align:center;max-width:360px}
+
+section{display:flex;flex-direction:column;gap:26px}
+.head{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:baseline}
+.num{font:400 64px/1 var(--display);font-variation-settings:"SOFT" var(--soft),"opsz" 144;color:#BDBFC6;grid-row:span 2}
+.head h3{font-size:32px;line-height:1.15;letter-spacing:-.01em}
+.head p{color:var(--ink-2);max-width:600px}
+@media (max-width:560px){.head{grid-template-columns:1fr}.num{grid-row:auto;font-size:48px}}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.notes>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.notes p{font-size:15px;color:var(--ink-2)}
+@media (max-width:680px){.notes{grid-template-columns:1fr}}
+.detail{font-size:15px;color:var(--ink-2);max-width:740px;padding-top:18px;border-top:1px solid var(--rule)}
+.detail b{color:var(--ink);font-weight:600}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+.ctl{display:flex;align-items:center;gap:12px;font:500 13px var(--sans);color:var(--ink-2)}
+.ctl output{font:500 12px var(--mono);color:var(--ink);min-width:62px}
+.check{display:inline-flex;align-items:center;gap:10px;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.check input{accent-color:#5FBF7C;width:16px;height:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:10px;border-radius:5px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;cursor:pointer}
+.m-clay input[type=range]{background:linear-gradient(145deg,#d9d9dd,#ececef);box-shadow:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi)}
+.m-clay input[type=range]::-webkit-slider-thumb{background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5),-2px -2px 5px #fff}
+.m-clay input[type=range]::-moz-range-thumb{background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5)}
+.m-alu input[type=range]{height:8px;background:linear-gradient(180deg,#1b1b1d,#38383b);box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 1px 0 #fff}
+.m-alu input[type=range]::-webkit-slider-thumb{background:repeating-radial-gradient(circle,rgba(255,255,255,.18) 0 .6px,rgba(0,0,0,.06) .6px 1.3px),conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35),0 3px 5px rgba(0,0,0,.35)}
+.m-alu input[type=range]::-moz-range-thumb{background:conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35)}
+input[type=range]:focus-visible{outline:2px solid #5FBF7C;outline-offset:4px}
+.seg{display:inline-flex;gap:4px;padding:4px}
+.seg button{border:0;background:none;font:500 13px var(--sans);color:var(--ink-2);padding:7px 13px;cursor:pointer}
+.seg button:focus-visible{outline:2px solid #5FBF7C;outline-offset:2px}
+.m-clay .seg{border-radius:16px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 8px var(--lo),inset -4px -4px 8px var(--hi)}
+.m-clay .seg button{border-radius:11px}
+.m-clay .seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(145deg,#f3f3f5,#e2e2e6);box-shadow:4px 4px 9px var(--lo),-3px -3px 7px var(--hi)}
+.m-alu .seg{border-radius:10px;background:linear-gradient(180deg,#cfcfd2,#dedee0);box-shadow:inset 0 2px 3px rgba(0,0,0,.18),0 1px 0 #fff}
+.m-alu .seg button{border-radius:7px}
+.m-alu .seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(180deg,#fbfbfb,#e3e3e5);box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,0,0,.25)}
+
+/* comparison */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:720px){.vs{grid-template-columns:1fr}}
+.alu-pad{border-radius:18px;padding:34px;background:linear-gradient(180deg,#EEEEEF,#DFDFE1);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(40,42,48,.12)}
+.scroll{overflow-x:auto}
+.spec{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.spec th,.spec td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.spec th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.spec td:first-child{font-weight:600;color:var(--ink)}
+.common{margin-top:110px;display:flex;flex-direction:column;gap:26px}
+.common .plate{border-radius:24px;background:linear-gradient(160deg,#ececef,#dfdfe2);box-shadow:inset 0 1px 0 #fff,0 14px 30px rgba(40,42,48,.12)}
+footer{margin-top:80px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--rule)}
+
+/* sound switch */
+.sound{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom, 0px));z-index:10;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;padding:8px 16px 8px 8px;border-radius:999px;font:500 13px var(--sans);color:#2F3136;
+  background:linear-gradient(180deg,#fafafa,#e1e1e3);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.25)}
+.sound:focus-visible{outline:2px solid #2BB556;outline-offset:3px}
+.sound .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#1b1b1d,#333336);box-shadow:inset 0 2px 3px rgba(0,0,0,.6);color:#8c8f96}
+.sound[aria-pressed="true"] .ic{color:#7fe39c;box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 0 10px rgba(43,181,86,.45)}
+.sound .on-ic{display:none}
+.sound[aria-pressed="true"] .on-ic{display:block}
+.sound[aria-pressed="true"] .off-ic{display:none}
+
+/* ---- clay stepper ---- */
+.sc{display:flex;align-items:center;gap:6px;padding:12px;border-radius:52px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 7px 7px 14px var(--lo),inset -7px -7px 14px var(--hi)}
+.sc .k{width:72px;height:72px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:#7A7D86;touch-action:manipulation;will-change:transform;
+  background:radial-gradient(circle at 36% 30%,#ffffff 0%,#f6f6f8 50%,#e3e3e7 100%);
+  box-shadow:6px 8px 14px rgba(130,135,150,.45),-3px -3px 8px rgba(255,255,255,.7),inset -5px -6px 10px rgba(0,0,0,.07),inset 4px 5px 8px #fff;transition:box-shadow .15s,color .2s}
+.sc .k.down{box-shadow:2px 3px 6px rgba(130,135,150,.4),-2px -2px 5px rgba(255,255,255,.6),inset 4px 5px 10px rgba(130,135,150,.35),inset -3px -3px 6px #fff}
+.sc .k.at-limit{color:#B7BAC2}
+.sc .k:focus-visible{outline:none;box-shadow:6px 8px 14px rgba(130,135,150,.45),0 0 0 3px var(--bg),0 0 0 6px rgba(124,203,147,.7)}
+.sc .val{min-width:104px;height:72px;display:grid;place-items:center;border-radius:20px;outline:none;cursor:default}
+.sc .val:focus-visible{box-shadow:0 0 0 3px rgba(124,203,147,.6)}
+.sc .num{font:500 40px/1 var(--display);font-variation-settings:"SOFT" 100,"opsz" 72;color:var(--ink);font-variant-numeric:tabular-nums lining-nums;will-change:transform;display:inline-block}
+
+/* ---- aluminium stepper ---- */
+.sa{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:50px;
+  background:linear-gradient(180deg,#f7f7f7 0%,#e4e4e5 60%,#d3d3d4 100%);
+  box-shadow:inset 0 1.5px 0 #fff,inset 0 -2px 3px rgba(0,0,0,.12),0 10px 18px rgba(0,0,0,.14),0 2px 3px rgba(0,0,0,.18)}
+.sa .k{position:relative;width:72px;height:72px;border-radius:50%;border:0;padding:0;cursor:pointer;touch-action:manipulation;
+  background:conic-gradient(from 0deg,#f8f8f8,#8d8d90 30deg,#ffffff 60deg,#4d4d50 95deg,#d7d7d9 130deg,#ffffff 165deg,#6a6a6d 200deg,#f2f2f2 235deg,#3f3f42 270deg,#cfcfd1 305deg,#ffffff 335deg,#f8f8f8);
+  box-shadow:0 0 0 1px rgba(0,0,0,.3),0 4px 8px rgba(0,0,0,.28)}
+.sa .k::before{content:"";position:absolute;inset:6px;border-radius:50%;background:#1c1c1e;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}
+.sa .face{position:absolute;inset:8px;border-radius:50%;display:grid;place-items:center;color:#4A4D53;
+  background:linear-gradient(180deg,#f7f8fa 0%,#d9dbdf 100%);box-shadow:inset 0 2px 2px rgba(255,255,255,.9),inset 0 -5px 8px rgba(0,0,0,.08),0 2px 3px rgba(0,0,0,.45);transition:transform 40ms linear,box-shadow 40ms linear,background 40ms}
+.sa .face svg{filter:drop-shadow(0 1px 0 rgba(255,255,255,.9))}
+.sa .k.down .face{transform:translateY(2px);background:linear-gradient(180deg,#e0e2e5,#eff0f2);box-shadow:inset 0 3px 6px rgba(0,0,0,.22),0 1px 1px rgba(0,0,0,.35)}
+.sa .k.at-limit .face{color:#A4A7AD}
+.sa .k:focus-visible{outline:2px solid #2BB556;outline-offset:4px}
+.sa .val{position:relative;display:flex;gap:3px;padding:6px;border-radius:12px;background:#121214;outline:none;
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.9),0 1.5px 0 rgba(255,255,255,.95),0 -1px 0 rgba(0,0,0,.25)}
+.sa .val:focus-visible{box-shadow:inset 0 3px 6px rgba(0,0,0,.9),0 0 0 3px rgba(43,181,86,.55)}
+.sa .drum{position:relative;width:34px;height:54px;overflow:hidden;border-radius:4px;background:linear-gradient(180deg,#1e1e21,#2b2b2f 50%,#1e1e21)}
+.sa .drum::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,0) 32%,rgba(255,255,255,.04) 50%,rgba(0,0,0,0) 68%,rgba(0,0,0,.75) 100%)}
+.sa .reel{display:flex;flex-direction:column;will-change:transform;transition-property:transform;transition-timing-function:cubic-bezier(.45,0,1,1)}
+.sa .reel span{height:54px;display:grid;place-items:center;font:500 34px/1 var(--mono);color:#ECECEA;font-variant-numeric:tabular-nums}
+.sa .drum.lead .reel span{color:#56575c}
+
+/* ---- the usual ---- */
+.su{display:flex;align-items:center;gap:0;border:1px solid #C3C5CB;border-radius:10px;background:#fff;overflow:hidden}
+.su button{width:48px;height:48px;border:0;background:#F2F3F5;font:500 22px var(--sans);color:#3B3E45;cursor:pointer}
+.su button:focus-visible{outline:2px solid #2BB556;outline-offset:-2px}
+.su .val{min-width:64px;text-align:center;font:600 18px var(--sans);color:#2F3136;font-variant-numeric:tabular-nums;outline:none}
+
+/* graph */
+.graph{width:100%;height:auto;display:block}
+.g-grid{stroke:var(--rule);stroke-width:1}
+.g-flat{fill:none;stroke:var(--ink-3);stroke-width:1.6;stroke-dasharray:5 5}
+.g-acc{fill:none;stroke:var(--green-ink);stroke-width:2.6;stroke-linejoin:round}
+.g-t{fill:var(--ink-3);font:500 11px var(--mono)}
+.g-t1{fill:var(--green-ink);font:500 11px var(--mono)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.m-clay .stat{border-radius:16px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 9px var(--lo),inset -4px -4px 9px var(--hi)}
+.m-alu .stat{border-radius:12px;background:linear-gradient(180deg,#d6d6d8,#e4e4e6);box-shadow:inset 0 2px 4px rgba(0,0,0,.12),0 1px 0 #fff}
+.stat b{font:500 20px var(--mono);color:var(--ink)}
+@media (max-width:520px){.stats{grid-template-columns:1fr}}
+.log{display:flex;flex-direction:column;gap:6px;min-width:0;padding:16px 18px}
+.m-clay .log{border-radius:18px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 9px var(--lo),inset -4px -4px 9px var(--hi)}
+.m-alu .log{border-radius:12px;background:linear-gradient(180deg,#1a1a1c,#2a2a2d);box-shadow:inset 0 2px 5px rgba(0,0,0,.6),0 1px 0 #fff}
+.log ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.log li{font:400 13px/1.5 var(--mono);color:var(--ink-3)}
+.m-clay .log li:first-child{color:var(--ink)}
+.m-alu .log li{color:#7d8087}
+.m-alu .log li:first-child{color:#7fe39c}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;color:var(--ink-2);align-items:center;margin-top:6px}
+.m-alu .log .keys{color:#a3a6ad}
+kbd{font:500 12px var(--mono);border:1px solid var(--rule);border-bottom-width:2px;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.m-alu .log kbd{border-color:#444;color:#ddd}
+@media (prefers-reduced-motion:reduce){.sa .reel{transition-duration:0s!important}}
+
+</style>
+<main class="sheet">
+  <div class="intro">
+    <span class="label">Material study 04 · Stepper</span>
+    <h1>One stepper, two materials</h1>
+    <p>Two keys and a number, used everywhere from shopping carts to settings panels. Choose a material below and watch how the same count feels when it’s soft and when it’s machined.</p>
+  </div>
+  <div class="strip" role="tablist" aria-label="Material">
+    <button class="tab" role="tab" id="tab-clay" aria-controls="panel-clay" aria-selected="true" tabindex="0"><span class="ico ico-clay"></span>Clay <span class="sub">· Soft</span></button>
+    <button class="tab" role="tab" id="tab-alu" aria-controls="panel-alu" aria-selected="false" tabindex="-1"><span class="ico ico-alu"></span>Aluminium <span class="sub">· Hard</span></button>
+  </div>
+  <div class="panelwrap">
+    <div role="tabpanel" id="panel-clay" aria-labelledby="tab-clay" class="m-clay"></div>
+    <div role="tabpanel" id="panel-alu" aria-labelledby="tab-alu" class="m-alu" hidden></div>
+  </div>
+
+  <div class="common">
+    <div class="head"><span class="num">06</span><h3>Clay and aluminium, side by side</h3><p>Same count, same limits, same keyboard support. Tap and hold both and notice what each material does with the same step.</p></div>
+    <div class="plate">
+      <div class="vs">
+        <div class="slot clay-pad" id="vs-clay-slot"></div>
+        <div class="slot alu-pad" id="vs-alu-slot"></div>
+      </div>
+      <div class="scroll">
+      <table class="spec">
+        <thead><tr><th>Moment</th><th>Clay</th><th>Aluminium</th></tr></thead>
+        <tbody>
+          <tr><td>Press</td><td>Key squishes, number changes at once</td><td>Key clicks down 2 px, drum rolls at once</td></tr>
+          <tr><td>Release</td><td>Key springs back with a small wobble</td><td>A softer click as the key rises</td></tr>
+          <tr><td>Direction</td><td>Number swells going up, shrinks going down</td><td>Digits roll up or down and carry past 9</td></tr>
+          <tr><td>Hold</td><td>Steps speed up, each one a small swell</td><td>Steps speed up, each one a ratchet tick</td></tr>
+          <tr><td>Limit</td><td>Key squashes further, number shakes, value stays</td><td>Key won’t travel, a dull thunk, drum stays still</td></tr>
+          <tr><td>Shared rules</td><td colspan="2">Changes on press · 400 ms before repeating · speeds up to 25 steps a second · Shift steps by 10 · arrows, Page Up/Down, Home/End · announced as a spin button</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <footer><span class="label">Material study 04 · Ashish Dixit</span><span class="label">Next: the date picker</span></footer>
+</main>
+
+<button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound for the aluminium stepper">
+  <span class="ic" aria-hidden="true">
+    <svg class="off-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+    <svg class="on-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+  </span>
+  <span id="sound-t">Sound off</span>
+</button>
+<div id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>
+
+<script>
+(function(){
+"use strict";
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const MINUS = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5.5 12h13"/></svg>';
+const PLUS = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg>';
+
+const COPY = {
+  clay:{
+    h:'Made of <em>clay</em>',
+    lede:'Two soft keys and a number. The keys squish under your finger, the number swells when it grows and shrinks when it drops, and at the limit the key gives but refuses.',
+    s1:['A number swap, then a material','The usual stepper swaps one number for the next and nothing else moves. Here the keys and the number both react, so every step is felt as well as read.'],
+    n1:[['Why','People often tap a stepper several times without looking at the number. A reaction in the keys tells them each tap landed.'],['Why the layout never moves','The number swells for a moment and settles back to its size, and every digit has the same width, so the keys never shift as the count changes.']],
+    s2:['It answers on the way down','Press and hold one key, then let go. The number changes the moment the key squishes, not when you release it.'],
+    n2:[['Why','Waiting for release adds a delay you can feel on every tap. Changing on press makes the stepper feel quick even when you tap fast.'],['Why it squishes, not shrinks','Shrinking reads as the key backing away. Flattening and widening reads as weight on something soft.']],
+    s3:['The number shows which way it moved','Tap up and down. Going up, the number swells and settles. Going down, it shrinks and recovers. Turn on slow motion to watch it.'],
+    n3:[['Why','When you tap fast, the direction is easy to lose. A swell for more and a shrink for less makes the direction readable without reading the digits.'],['Why not slide the digits','Sliding is a mechanical idea, the drum of a counter. A soft number grows and shrinks instead. The aluminium tab shows the drum.']],
+    s4:['Hold it and it speeds up','Hold a key. After a short pause the steps start, slowly at first, then faster and faster. The graph shows the curve next to a steady rate.'],
+    n4:[['Why','A steady rate is either too slow for big jumps or too fast for small ones. Starting slow and speeding up serves both: let go early for precision, keep holding to travel far.'],['Why the pause first','Without it, a slightly long tap becomes two or three steps. 400 ms is long enough to tell a tap from a hold.']],
+    s5:['At the limit it gives, but refuses','This one stops at 0 and 5. Push past either end: the key squashes further than usual, the number shakes its head, and the value stays put.'],
+    n5:[['Why','A key that silently does nothing looks broken. A key that clearly refuses tells you that you’ve reached the end.'],['Why it isn’t disabled','A disabled key can’t be focused and can’t explain itself. This one stays usable, looks quieter, and announces “Maximum, 5”.']]
+  },
+  alu:{
+    h:'Made of <em>aluminium</em>',
+    lede:'Two chrome push keys and a counter drum. Every press clicks, every step rolls the drum and ticks like a ratchet, and at the limit the key won’t go down. Turn the sound on at the bottom right.',
+    s1:['A number swap, then a mechanism','The usual stepper swaps one number for the next. Here the number lives on drums that roll like a mechanical counter, and the keys travel and click.'],
+    n1:[['Why','Metal can’t swell or squish, so the change is shown by motion: the digits physically roll into place.'],['Why the leading zeros','A mechanical counter always shows every drum. The unused ones are printed dimmer, so the real number still reads first.']],
+    s2:['It clicks on the way down','Press and hold one key, then let go. The key clicks down, the drum rolls immediately, and a softer click follows on release.'],
+    n2:[['Why','Waiting for release adds a delay you can feel on every tap. A real counter advances when the lever bottoms out, so this one does too.'],['Why only the face moves','The chrome ring is part of the housing. Only the part you touch travels.']],
+    s3:['The drum rolls the way it changed','Tap up and down. Going up, the digits roll upward; going down, they roll back. When a digit passes 9 it carries over, like a real counter. Turn on slow motion to watch.'],
+    n3:[['Why','The direction of the roll tells you which way the number moved before you read it. That matters most when tapping fast.'],['Why it stops dead','A drum has no spring in it. Each digit accelerates into place and stops with no bounce, landing exactly on the number.']],
+    s4:['Hold it and it ratchets faster','Hold a key. After a short pause the drum starts stepping, slowly at first, then faster, each step a tick. The graph shows the curve next to a steady rate.'],
+    n4:[['Why','A steady rate is either too slow for big jumps or too fast for small ones. Starting slow and speeding up serves both: let go early for precision, keep holding to travel far.'],['Why the ticks matter','You can hear the speed change before you see it. Counting ticks is how people judge a long hold without watching the drum.']],
+    s5:['At the limit the key won’t go down','This one stops at 0 and 5. Push past either end: the key stays up, you hear a dull thunk, and the drum doesn’t move.'],
+    n5:[['Why','A metal key that has hit its stop simply doesn’t travel. That missing movement, and a thunk instead of a click, says “end” more clearly than a grey-out.'],['Why it isn’t disabled','A disabled key can’t be focused and can’t explain itself. This one stays usable, looks quieter, and announces “Maximum, 5”.']]
+  }
+};
+
+function stepperHTML(m, id, o){
+  const sb = `role="spinbutton" tabindex="0" aria-label="${o.label}" aria-valuemin="${o.min}" aria-valuemax="${o.max}" aria-valuenow="${o.value}"`;
+  if(m === "clay") return `<div class="sc" id="${id}" role="group" aria-label="${o.label}"><button type="button" class="k" data-k="minus" aria-label="Decrease">${MINUS}</button><div class="val" ${sb}><span class="num">${o.value}</span></div><button type="button" class="k" data-k="plus" aria-label="Increase">${PLUS}</button></div>`;
+  if(m === "alu"){
+    const n = String(o.max).length;
+    let drums = "";
+    for(let i = 0; i < n; i++) drums += `<span class="drum"><span class="reel">${[0,1,2,3,4,5,6,7,8,9,0].map(d => `<span>${d}</span>`).join("")}</span></span>`;
+    return `<div class="sa" id="${id}" role="group" aria-label="${o.label}"><button type="button" class="k" data-k="minus" aria-label="Decrease"><span class="face">${MINUS}</span></button><div class="val" ${sb}>${drums}</div><button type="button" class="k" data-k="plus" aria-label="Increase"><span class="face">${PLUS}</span></button></div>`;
+  }
+  return `<div class="su" id="${id}" role="group" aria-label="${o.label}"><button type="button" data-k="minus" aria-label="Decrease">−</button><div class="val" ${sb}>${o.value}</div><button type="button" data-k="plus" aria-label="Increase">+</button></div>`;
+}
+function notes(n){ return `<div class="notes">${n.map(([t,p]) => `<div><span class="label">${t}</span><p>${p}</p></div>`).join("")}</div>`; }
+function head(num, s){ return `<div class="head"><span class="num">${num}</span><h3>${s[0]}</h3><p>${s[1]}</p></div>`; }
+const R = {
+  h:{min:0,max:20,value:2,label:"Quantity"}, u1:{min:0,max:20,value:2,label:"Quantity"}, m1:{min:0,max:20,value:2,label:"Quantity"},
+  s2:{min:0,max:20,value:3,label:"Quantity"}, s3:{min:0,max:99,value:8,label:"Count"}, s4:{min:0,max:500,value:0,label:"Count"}, s5:{min:0,max:5,value:4,label:"Seats"}
+};
+function panel(m){
+  const c = COPY[m], p = m;
+  return `
+  <header class="hero">
+    <h2>${c.h}</h2>
+    <p class="lede">${c.lede}</p>
+    <div class="plate" style="margin-top:10px">
+      <div class="plate-top"><span class="label live">The finished stepper</span><span class="label">Tap · hold · Shift for ×10</span></div>
+      <div class="stage"><div class="slot">${stepperHTML(m, p+"-h", R.h)}<span class="label">Quantity · 0 to 20</span></div></div>
+    </div>
+  </header>
+
+  <section>${head("01", c.s1)}
+    <div class="plate"><div class="plate-top"><span class="label live">Compare</span></div>
+      <div class="stage">
+        <div class="slot">${stepperHTML("usual", p+"-1u", R.u1)}<span class="label">The usual · number swap</span></div>
+        <div class="slot">${stepperHTML(m, p+"-1m", R.m1)}<span class="label">${m === "clay" ? "Clay · keys and number react" : "Aluminium · keys click, drum rolls"}</span></div>
+      </div></div>
+    ${notes(c.n1)}
+  </section>
+
+  <section>${head("02", c.s2)}
+    <div class="plate"><div class="plate-top"><span class="label live">Press and hold</span></div>
+      <div class="stage"><div class="slot">${stepperHTML(m, p+"-2", R.s2)}<span class="readout" id="${p}-2-r">Press a key and keep holding it.</span></div></div></div>
+    ${notes(c.n2)}
+  </section>
+
+  <section>${head("03", c.s3)}
+    <div class="plate"><div class="plate-top"><span class="label live">Tap up and down</span><label class="check"><input type="checkbox" id="${p}-3-slow" checked> Slow motion</label></div>
+      <div class="stage"><div class="slot">${stepperHTML(m, p+"-3", R.s3)}<span class="readout">${m === "clay" ? "Try + twice, then − twice." : "Try + twice to see 9 carry over into 10."}</span></div></div></div>
+    ${notes(c.n3)}
+  </section>
+
+  <section>${head("04", c.s4)}
+    <div class="plate"><div class="plate-top"><span class="label live">Hold a key</span>
+        <div class="controls">
+          <div class="ctl"><label for="${p}-4-del">Pause before repeat</label><input type="range" id="${p}-4-del" min="200" max="800" step="50" value="400"><output id="${p}-4-del-o">400 ms</output></div>
+          <div class="ctl"><label for="${p}-4-ramp">Full speed after</label><input type="range" id="${p}-4-ramp" min="0.8" max="4" step="0.1" value="2.2"><output id="${p}-4-ramp-o">2.2 s</output></div>
+        </div></div>
+      <div class="split">
+        <div class="stage" style="padding:10px 0"><div class="slot">${stepperHTML(m, p+"-4", R.s4)}<button type="button" class="seg" id="${p}-4-reset" style="cursor:pointer"><span style="padding:3px 10px;font:500 13px var(--sans);color:var(--ink-2)">Reset to 0</span></button></div></div>
+        <svg class="graph" id="${p}-4-g" viewBox="0 0 440 230" role="img" aria-label="Steps over time while holding, accelerating compared with a steady rate"></svg>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="label">After 1 second</span><b id="${p}-4-s1">0</b></div>
+        <div class="stat"><span class="label">After 2 seconds</span><b id="${p}-4-s2">0</b></div>
+        <div class="stat"><span class="label">After 4 seconds</span><b id="${p}-4-s4">0</b></div>
+      </div>
+    </div>
+    ${notes(c.n4)}
+    <p class="detail"><b>In detail.</b> The first step happens on press. After the pause, steps repeat every 170 ms, and the gap shrinks along an S-curve to 40 ms, which is 25 steps a second. Hold Shift to step by 10. With the keyboard, focus the number: the arrow keys step by one, Page Up and Page Down by ten, and Home and End jump to the limits.</p>
+  </section>
+
+  <section>${head("05", c.s5)}
+    <div class="plate"><div class="plate-top"><span class="label live">Push past the ends</span></div>
+      <div class="split">
+        <div class="stage" style="padding:10px 0"><div class="slot">${stepperHTML(m, p+"-5", R.s5)}<span class="label">Seats · 0 to 5</span></div></div>
+        <div class="log"><span class="label">What just happened</span><ol id="${p}-5-log"><li>Nothing yet.</li></ol>
+          <div class="keys"><span><kbd>↑</kbd> <kbd>↓</kbd></span><span>Step by one</span><span><kbd>PgUp</kbd> <kbd>PgDn</kbd></span><span>Step by ten</span><span><kbd>Home</kbd> <kbd>End</kbd></span><span>Jump to a limit</span></div>
+        </div>
+      </div></div>
+    ${notes(c.n5)}
+  </section>`;
+}
+document.getElementById("panel-clay").innerHTML = panel("clay");
+document.getElementById("panel-alu").innerHTML = panel("alu");
+document.getElementById("vs-clay-slot").innerHTML = stepperHTML("clay", "vs-c", R.h) + '<span class="label">Clay · soft</span>';
+document.getElementById("vs-alu-slot").innerHTML = stepperHTML("alu", "vs-a", R.h) + '<span class="label">Aluminium · hard</span>';
+
+/* ---------- sound ---------- */
+const Snd = {
+  ctx:null, on:false, buf:null,
+  ensure(){
+    if(!this.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return null; this.ctx = new AC(); }
+    if(this.ctx.state === "suspended") this.ctx.resume();
+    if(!this.buf){ const n = Math.floor(this.ctx.sampleRate*0.08), b = this.ctx.createBuffer(1, n, this.ctx.sampleRate), d = b.getChannelData(0); for(let i=0;i<n;i++) d[i] = Math.random()*2-1; this.buf = b; }
+    return this.ctx;
+  },
+  hit(t, f, q, g, dur, type){
+    const c = this.ctx, s = c.createBufferSource(), fl = c.createBiquadFilter(), a = c.createGain();
+    s.buffer = this.buf; fl.type = type || "bandpass"; fl.frequency.value = f; fl.Q.value = q;
+    a.gain.setValueAtTime(0.0001, t); a.gain.linearRampToValueAtTime(g, t+0.0008); a.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    s.connect(fl); fl.connect(a); a.connect(c.destination); s.start(t); s.stop(t+dur+0.02);
+  },
+  play(k){
+    if(!this.on) return; const c = this.ensure(); if(!c) return; const t = c.currentTime + 0.002;
+    if(k === "down"){ this.hit(t, 380, 0.9, 0.3, 0.03, "lowpass"); this.hit(t, 2300, 3, 0.45, 0.016); this.hit(t+0.006, 3900, 5, 0.25, 0.018); }
+    if(k === "up"){ this.hit(t, 2900, 4, 0.18, 0.012); }
+    if(k === "tick"){ this.hit(t, 3400, 6, 0.24, 0.009); this.hit(t, 1100, 2, 0.08, 0.012); }
+    if(k === "thunk"){ this.hit(t, 170, 0.8, 0.55, 0.07, "lowpass"); this.hit(t, 520, 1.5, 0.14, 0.035); }
+  }
+};
+const soundBtn = document.getElementById("sound"), soundT = document.getElementById("sound-t");
+function setSound(v){ Snd.on = v; soundBtn.setAttribute("aria-pressed", String(v)); soundT.textContent = v ? "Sound on" : "Sound off"; try{ localStorage.setItem("alu-sound", v ? "1" : "0"); }catch(e){} }
+soundBtn.addEventListener("click", () => { const v = !Snd.on; setSound(v); if(v){ Snd.ensure(); Snd.play("down"); } });
+try{ if(localStorage.getItem("alu-sound") === "1"){ soundBtn.setAttribute("aria-pressed","true"); soundT.textContent = "Sound on (tap to resume)"; } }catch(e){}
+document.addEventListener("pointerdown", function once(e){
+  try{ if(localStorage.getItem("alu-sound") === "1" && !Snd.on && !e.target.closest(".sound")){ setSound(true); Snd.ensure(); } }catch(_){}
+  document.removeEventListener("pointerdown", once, true);
+}, true);
+const live = document.getElementById("live");
+function announce(t){ live.textContent = ""; setTimeout(() => live.textContent = t, 30); }
+
+/* ---------- views ---------- */
+const views = [];
+function ClayV(root, o){
+  const num = root.querySelector(".num");
+  const keys = {}; root.querySelectorAll(".k").forEach(k => keys[k.dataset.k] = {el:k, sx:1, sy:1, vx:0, vy:0, pressed:false, lim:0});
+  const s = {sc:1, vsc:0, ox:0, vox:0};
+  const v = {
+    slow:false,
+    value(val, dir){ num.textContent = val; if(!reduce) s.vsc += dir * 5.5; },
+    press(which, b, atLimit){ const k = keys[which]; k.pressed = b; k.el.classList.toggle("down", b); },
+    limit(which){ if(reduce) return; s.vox += (which === "plus" ? 1 : -1) * 150; keys[which].lim = 0.16; },
+    tick(){},
+    limits(atMin, atMax){ keys.minus.el.classList.toggle("at-limit", atMin); keys.plus.el.classList.toggle("at-limit", atMax); },
+    frame(dt){
+      if(v.slow) dt *= 0.25;
+      if(reduce){ num.style.transform = ""; return; }
+      const k = 420, c = 2*0.28*Math.sqrt(k);
+      for(let i=0;i<3;i++){ const h = dt/3;
+        s.vsc += (k*(1 - s.sc) - c*s.vsc)*h; s.sc += s.vsc*h;
+        s.vox += (k*(0 - s.ox) - c*s.vox)*h; s.ox += s.vox*h; }
+      num.style.transform = `translate3d(${s.ox.toFixed(2)}px,0,0) scale(${s.sc.toFixed(4)})`;
+      for(const name in keys){
+        const kk = keys[name];
+        let tx = 1, ty = 1;
+        if(kk.lim > 0){ kk.lim -= dt; tx = 1.2; ty = 0.76; }
+        else if(kk.pressed){ tx = 1.08; ty = 0.88; }
+        const k2 = 380, c2 = 2*0.3*Math.sqrt(k2);
+        for(let i=0;i<3;i++){ const h = dt/3;
+          kk.vx += (k2*(tx - kk.sx) - c2*kk.vx)*h; kk.sx += kk.vx*h;
+          kk.vy += (k2*(ty - kk.sy) - c2*kk.vy)*h; kk.sy += kk.vy*h; }
+        kk.el.style.transform = `scale(${kk.sx.toFixed(4)},${kk.sy.toFixed(4)})`;
+      }
+    }
+  };
+  views.push(v); return v;
+}
+function AluV(root, o){
+  const n = String(o.max).length, H = 54;
+  const cols = Array.from(root.querySelectorAll(".drum")).map(d => ({drum:d, strip:d.querySelector(".reel"), pos:0, timer:null}));
+  const keys = {}; root.querySelectorAll(".k").forEach(k => keys[k.dataset.k] = {el:k, down:false});
+  function place(col, p, ms){ col.strip.style.transitionDuration = ms + "ms"; col.strip.style.transform = `translate3d(0,${-p*H}px,0)`; col.pos = p; }
+  function digits(val){ return String(val).padStart(n, "0").split("").map(Number); }
+  function lead(val){ const len = String(val).length; cols.forEach((c, i) => c.drum.classList.toggle("lead", i < n - len)); }
+  const v = {
+    slow:false,
+    init(val){ digits(val).forEach((d, i) => place(cols[i], d, 0)); lead(val); },
+    value(val, dir, interval){
+      const ds = digits(val);
+      let ms = Math.min(110, (interval || 110) * 0.8);
+      if(v.slow) ms *= 4;
+      if(reduce) ms = 0;
+      ds.forEach((t, i) => {
+        const col = cols[i];
+        if(col.timer){ clearTimeout(col.timer); col.timer = null; if(col.pos === 10) place(col, 0, 0); }
+        const c = col.pos;
+        if(t === c) return;
+        if(dir > 0 && c === 9 && t === 0){
+          place(col, 10, ms);
+          col.timer = setTimeout(() => { place(col, 0, 0); col.timer = null; }, ms + 20);
+        } else if(dir < 0 && c === 0 && t === 9){
+          place(col, 10, 0); void col.strip.offsetHeight; place(col, 9, ms);
+        } else place(col, t, ms);
+      });
+      lead(val);
+    },
+    press(which, b, atLimit){
+      const k = keys[which];
+      if(b){ if(atLimit) return; k.down = true; k.el.classList.add("down"); Snd.play("down"); }
+      else if(k.down){ k.down = false; k.el.classList.remove("down"); Snd.play("up"); }
+    },
+    limit(which){ Snd.play("thunk"); },
+    tick(){ Snd.play("tick"); },
+    limits(atMin, atMax){ keys.minus.el.classList.toggle("at-limit", atMin); keys.plus.el.classList.toggle("at-limit", atMax); },
+    frame(){}
+  };
+  v.init(o.value);
+  views.push(v); return v;
+}
+function UsualV(root){
+  const val = root.querySelector(".val");
+  const v = {slow:false, value(x){ val.textContent = x; }, press(){}, limit(){}, tick(){}, limits(){}, frame(){}};
+  views.push(v); return v;
+}
+
+/* ---------- controller: the shared rules ---------- */
+function Stepper(id, m, opts){
+  const root = document.getElementById(id);
+  const o = Object.assign({delay:400, startI:170, minI:40, ramp:2.2, repeat:m !== "usual", onChange:null, onLimit:null}, opts);
+  const view = m === "clay" ? ClayV(root, o) : m === "alu" ? AluV(root, o) : UsualV(root, o);
+  const spin = root.querySelector('[role="spinbutton"]');
+  let v = o.value, hold = null;
+  view.limits(v <= o.min, v >= o.max);
+  function set(nv, dir, interval){
+    v = nv; spin.setAttribute("aria-valuenow", v);
+    view.value(v, dir, interval); view.limits(v <= o.min, v >= o.max);
+    o.onChange && o.onChange(v, dir);
+  }
+  function stepBy(d, repeat, interval){
+    const nv = Math.min(o.max, Math.max(o.min, v + d));
+    if(nv === v){
+      view.limit(d > 0 ? "plus" : "minus");
+      announce(d > 0 ? `Maximum, ${o.max}` : `Minimum, ${o.min}`);
+      o.onLimit && o.onLimit(d > 0 ? "max" : "min");
+      return false;
+    }
+    set(nv, Math.sign(d), interval);
+    if(repeat) view.tick();
+    return true;
+  }
+  function begin(which, shift){
+    const d = (which === "plus" ? 1 : -1) * (shift ? 10 : 1);
+    const atLimit = which === "plus" ? v >= o.max : v <= o.min;
+    view.press(which, true, atLimit);
+    hold = {which, d, t0:performance.now(), timer:null};
+    const ok = stepBy(d, false);
+    if(ok && o.repeat) hold.timer = setTimeout(rep, o.delay);
+  }
+  function rep(){
+    if(!hold) return;
+    const t = Math.max(0, (performance.now() - hold.t0 - o.delay) / 1000);
+    const u = Math.min(t / o.ramp, 1), e = u*u*(3 - 2*u);
+    const iv = o.startI + (o.minI - o.startI) * e;
+    if(stepBy(hold.d, true, iv)) hold.timer = setTimeout(rep, iv);
+  }
+  function end(){ if(!hold) return; clearTimeout(hold.timer); view.press(hold.which, false); hold = null; announce(`${o.label} ${v}`); }
+  root.querySelectorAll("button[data-k]").forEach(b => {
+    const which = b.dataset.k;
+    b.addEventListener("pointerdown", e => { if(e.button !== 0) return; e.preventDefault(); b.setPointerCapture(e.pointerId); b.focus({preventScroll:true}); begin(which, e.shiftKey); });
+    b.addEventListener("pointerup", end); b.addEventListener("pointercancel", end); b.addEventListener("lostpointercapture", end);
+    b.addEventListener("click", e => e.preventDefault());
+    b.addEventListener("keydown", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(!e.repeat && !hold) begin(which, e.shiftKey); } });
+    b.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); end(); } });
+    b.addEventListener("blur", end);
+  });
+  spin.addEventListener("keydown", e => {
+    let d = 0;
+    if(e.key === "ArrowUp" || e.key === "ArrowRight") d = 1;
+    else if(e.key === "ArrowDown" || e.key === "ArrowLeft") d = -1;
+    else if(e.key === "PageUp") d = 10;
+    else if(e.key === "PageDown") d = -10;
+    else if(e.key === "Home") d = o.min - v;
+    else if(e.key === "End") d = o.max - v;
+    else return;
+    e.preventDefault();
+    if(d === 0){ stepBy(e.key === "Home" ? -1 : 1, false); return; }
+    const which = d > 0 ? "plus" : "minus";
+    view.press(which, true, false); stepBy(d, e.repeat, e.repeat ? 60 : 110);
+    setTimeout(() => view.press(which, false), 90);
+  });
+  return {o, view, get value(){ return v; }, reset(x){ set(x, x > v ? 1 : -1); }};
+}
+
+/* ---------- mount ---------- */
+["clay","alu"].forEach(m => {
+  const $ = id => document.getElementById(`${m}-${id}`);
+  Stepper(`${m}-h`, m, R.h);
+  Stepper(`${m}-1u`, "usual", R.u1);
+  Stepper(`${m}-1m`, m, R.m1);
+  const r2 = $("2-r");
+  Stepper(`${m}-2`, m, Object.assign({}, R.s2, {onChange(v){ r2.textContent = `Changed to ${v} on press. Still holding? It starts repeating.`; }}));
+  const s3 = Stepper(`${m}-3`, m, R.s3);
+  s3.view.slow = true;
+  $("3-slow").addEventListener("change", e => { s3.view.slow = e.target.checked; });
+  const s4 = Stepper(`${m}-4`, m, R.s4);
+  const del = $("4-del"), ramp = $("4-ramp"), g = $("4-g");
+  function draw(){
+    const D = +del.value/1000, RP = +ramp.value, startI = 0.17, minI = 0.04, DUR = 4;
+    const times = [0]; let t = D;
+    while(t <= DUR){ times.push(t); const u = Math.min((t - D)/RP, 1), e = u*u*(3-2*u); t += startI + (minI - startI)*e; }
+    const flat = [0]; for(let ft = D; ft <= DUR; ft += startI) flat.push(ft);
+    const L = 44, Rt = 424, TOP = 26, BOT = 186, maxY = Math.max(times.length, 10);
+    const X = x => L + (x/DUR)*(Rt - L), Y = y => BOT - (y/maxY)*(BOT - TOP);
+    const stair = arr => { let pts = `${X(0)},${Y(0)}`; arr.forEach((tt, i) => { pts += ` ${X(tt).toFixed(1)},${Y(i).toFixed(1)} ${X(tt).toFixed(1)},${Y(i+1).toFixed(1)}`; }); pts += ` ${X(DUR)},${Y(arr.length).toFixed(1)}`; return pts; };
+    const count = sec => times.filter(x => x <= sec).length;
+    g.innerHTML = `
+      <line class="g-grid" x1="${L}" y1="${BOT}" x2="${Rt}" y2="${BOT}"/>
+      <line class="g-grid" x1="${L}" y1="${TOP}" x2="${L}" y2="${BOT}"/>
+      <polyline class="g-flat" points="${stair(flat)}"/>
+      <polyline class="g-acc" points="${stair(times)}"/>
+      <text class="g-t" x="${L-8}" y="${Y(maxY)+4}" text-anchor="end">${maxY}</text>
+      <text class="g-t" x="${L-8}" y="${BOT+4}" text-anchor="end">0</text>
+      <text class="g-t1" x="${Rt}" y="${Y(times.length)-8}" text-anchor="end">speeds up · ${times.length} steps</text>
+      <text class="g-t" x="${Rt}" y="${Y(flat.length)+16}" text-anchor="end">steady rate · ${flat.length} steps</text>
+      <text class="g-t" x="${L}" y="${BOT+22}">press</text>
+      <text class="g-t" x="${X(D)}" y="${BOT+22}" text-anchor="middle">${Math.round(D*1000)} ms</text>
+      <text class="g-t" x="${Rt}" y="${BOT+22}" text-anchor="end">4 s</text>`;
+    $("4-s1").textContent = count(1); $("4-s2").textContent = count(2); $("4-s4").textContent = count(4);
+    $("4-del-o").textContent = `${del.value} ms`; $("4-ramp-o").textContent = `${(+ramp.value).toFixed(1)} s`;
+    s4.o.delay = +del.value; s4.o.ramp = RP;
+  }
+  del.addEventListener("input", draw); ramp.addEventListener("input", draw); draw();
+  $("4-reset").addEventListener("click", () => s4.reset(0));
+  const log = $("5-log"); let logged = false;
+  const add = t => { if(!logged){ log.innerHTML = ""; logged = true; } const li = document.createElement("li"); li.textContent = t; log.prepend(li); while(log.children.length > 5) log.lastChild.remove(); };
+  Stepper(`${m}-5`, m, Object.assign({}, R.s5, {
+    onChange(v, dir){ add(`${dir > 0 ? "Up" : "Down"} to ${v}.`); },
+    onLimit(which){ add(which === "max" ? `Pushed past 5: ${m === "clay" ? "the key squashed and refused" : "the key wouldn’t go down"}.` : `Pushed past 0: ${m === "clay" ? "the key squashed and refused" : "the key wouldn’t go down"}.`); }
+  }));
+});
+Stepper("vs-c", "clay", R.h); Stepper("vs-a", "alu", R.h);
+
+/* ---------- tabs ---------- */
+const tabs = [document.getElementById("tab-clay"), document.getElementById("tab-alu")];
+function select(i, focus){
+  tabs.forEach((t, j) => { const on = i === j; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute("aria-controls")).hidden = !on; });
+  document.body.dataset.mat = i === 0 ? "clay" : "alu";
+  if(focus) tabs[i].focus();
+  try{ localStorage.setItem("stepper-mat", String(i)); }catch(e){}
+}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => select(i));
+  t.addEventListener("keydown", e => { if(e.key === "ArrowRight" || e.key === "ArrowLeft"){ e.preventDefault(); select(1 - i, true); } });
+});
+let startTab = 0;
+if(location.hash === "#aluminium" || location.hash === "#hard") startTab = 1;
+else if(location.hash !== "#clay" && location.hash !== "#soft"){ try{ if(localStorage.getItem("stepper-mat") === "1") startTab = 1; }catch(e){} }
+select(startTab);
+
+let last = performance.now();
+(function frame(now){ const dt = Math.min((now - last)/1000, 1/30); last = now; for(const v of views) v.frame(dt); requestAnimationFrame(frame); })(last);
+})();
+</script>
+
+</body></html>

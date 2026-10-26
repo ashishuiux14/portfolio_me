@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-case="cleanero">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cleaneró — Case Study</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #f7f9fc;
@@ -24,8 +24,8 @@
   --cyan: #0891b2;
   --cyan-dim: rgba(8,145,178,0.08);
   --navy: #0c1a2e;
-  --ff: 'Syne', sans-serif;
-  --fb: 'DM Sans', sans-serif;
+  --ff: 'Jost', sans-serif;
+  --fb: 'Jost', sans-serif;
   --max: 1080px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -115,7 +115,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--fb); overfl
 .split-overline { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
 .split-title { font-family: var(--ff); font-size: clamp(22px,2.8vw,34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
 .split-body { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
-.split-quote { border-left: 2px solid var(--blue); padding: 14px 20px; background: var(--blue-dim); border-radius: 0 10px 10px 0; font-size: 15px; font-style: italic; color: var(--text); line-height: 1.6; }
+.split-quote { border-left: 2px solid var(--blue); padding: 14px 20px; background: var(--blue-dim); border-radius: 0 10px 10px 0; font-size: 15px; font-style: normal; color: var(--text); line-height: 1.6; }
 
 /* ── PULL QUOTE ── */
 .pull-quote {
@@ -228,8 +228,10 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
   .pull-quote{padding:36px 28px;}
 }
 /* CUSTOM CURSOR STYLES */
-*, *::before, *::after { cursor: none !important; }
 </style>
+<link rel="stylesheet" href="/case-soft.css">
+<script src="/case-soft.js"></script>
+<style id="no-italic">em,i,cite{font-style:normal}q,blockquote,.review-text,.voice q{font-style:italic}</style>
 </head>
 <body>
 
@@ -596,7 +598,7 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
         text-decoration:none;color:var(--text);
         transition:background 0.2s,border-color 0.2s;
       " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(37,99,235,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border2)'">
-        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">← Previous Case Study</div>
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg> Previous Case Study</div>
         <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">Atelier</div>
         <div style="font-size:13px;color:var(--muted)">A second brain for solo architects</div>
         <div style="display:flex;gap:8px;margin-top:4px">
@@ -612,7 +614,7 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
         text-decoration:none;color:var(--text);
         transition:background 0.2s,border-color 0.2s;
       " onmouseover="this.style.background='var(--white)';this.style.borderColor='rgba(37,99,235,0.4)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border2)'">
-        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study →</div>
+        <div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em">Next Case Study <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
         <div style="font-family:var(--ff);font-size:22px;font-weight:800;letter-spacing:-0.02em">3D Hub Social</div>
         <div style="font-size:13px;color:var(--muted)">Connecting maker ecosystems</div>
         <div style="display:flex;gap:8px;margin-top:4px">
@@ -630,7 +632,7 @@ footer { border-top: 1px solid var(--bordergray); padding: 60px 0; }
 <footer>
   <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
     <div>
-      <div style="font-family:var(--ff);font-size:14px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)">💧 Cleaneró</div>
+      <div style="font-family:var(--ff);font-size:14px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg> Cleaneró</div>
       <div style="font-size:12px;color:var(--dim);margin-top:5px">Smart water filtration · Designed with trust at the core</div>
     </div>
     <div style="text-align:right">

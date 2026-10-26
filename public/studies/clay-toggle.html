@@ -1,0 +1,437 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="no-italic">em,i,cite{font-style:normal}q,blockquote,.review-text,.voice q{font-style:italic}</style>
+</head><body>
+<title>Clay Toggle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: one 960px column of moulded plates on a single clay surface. Deliberately one light theme: the material depends on light falling from the top left. */
+:root{
+  --surface:#E5E5E8; --hi:#FFFFFF; --lo:rgba(158,163,176,.58);
+  --ink:#4B4E57; --ink-2:#6F727B; --ink-3:#9497A0;
+  --green:#C6EAD0; --green-2:#DCF5E3; --green-ink:#3E8F59;
+  --display:'Jost', "Iowan Old Style", Georgia, serif;
+  --sans:'Jost', "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--surface)}
+body{background:var(--surface);color:var(--ink);font:400 16px/1.65 var(--sans);padding-inline:16px;padding-block:48px 96px;-webkit-font-smoothing:antialiased}
+.sheet{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:104px}
+h1,h2,h3{margin:0;text-wrap:balance;font-family:var(--display);font-variation-settings:"SOFT" 100,"opsz" 96;font-weight:500;color:var(--ink)}
+p{margin:0}
+.label{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+code{font:400 .88em var(--mono);color:var(--ink)}
+
+/* hero */
+.hero{display:flex;flex-direction:column;gap:22px}
+.hero h1{font-size:clamp(44px,8vw,84px);line-height:1;letter-spacing:-.015em}
+.hero h1 em{font-style: normal;color:var(--green-ink)}
+.lede{font-size:18.5px;color:var(--ink-2);max-width:620px}
+.meta{display:flex;gap:8px 20px;flex-wrap:wrap}
+
+/* plates */
+.plate{border-radius:30px;padding:28px;background:linear-gradient(145deg,#ececef,#e0e0e4);
+  box-shadow:14px 14px 30px var(--lo),-14px -14px 30px var(--hi),inset 1px 1px 1px rgba(255,255,255,.8);
+  display:flex;flex-direction:column;gap:22px;min-width:0}
+.plate-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.live{display:inline-flex;gap:8px;align-items:center}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:#7CCB93;box-shadow:0 0 0 3px rgba(124,203,147,.25)}
+.stage{display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:36px 24px;padding:26px 8px}
+.slot{display:flex;flex-direction:column;align-items:center;gap:22px;min-width:180px}
+.caption{font-size:14.5px;color:var(--ink-2)}
+
+/* sections */
+section{display:flex;flex-direction:column;gap:26px}
+.head{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:baseline}
+.num{font:400 64px/1 var(--display);font-variation-settings:"SOFT" 100,"opsz" 144;color:#C3C5CC;grid-row:span 2}
+.head h2{font-size:32px;line-height:1.15;letter-spacing:-.01em}
+.head p{color:var(--ink-2);max-width:600px}
+@media (max-width:560px){.head{grid-template-columns:1fr}.num{grid-row:auto;font-size:48px}}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.notes>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.notes p{font-size:15px;color:var(--ink-2)}
+@media (max-width:680px){.notes{grid-template-columns:1fr}}
+.detail{font-size:15px;color:var(--ink-2);max-width:740px;padding-top:18px;border-top:1px solid rgba(158,163,176,.35)}
+.detail b{color:var(--ink);font-weight:600}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center}
+.ctl{display:flex;align-items:center;gap:12px;font:500 13px var(--sans);color:var(--ink-2)}
+.ctl output{font:500 12px var(--mono);color:var(--ink);min-width:52px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:12px;border-radius:6px;background:linear-gradient(145deg,#d9d9dd,#ececef);box-shadow:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5),-2px -2px 5px #fff;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5),-2px -2px 5px #fff;cursor:pointer}
+input[type=range]:focus-visible{box-shadow:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi),0 0 0 3px rgba(124,203,147,.55)}
+.check{display:inline-flex;align-items:center;gap:10px;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.check input{accent-color:#7CCB93;width:16px;height:16px}
+.seg{display:inline-flex;gap:4px;padding:5px;border-radius:16px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 8px var(--lo),inset -4px -4px 8px var(--hi)}
+.seg button{border:0;background:none;font:500 13px var(--sans);color:var(--ink-2);padding:8px 14px;border-radius:11px;cursor:pointer}
+.seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(145deg,#f3f3f5,#e2e2e6);box-shadow:4px 4px 9px var(--lo),-3px -3px 7px var(--hi)}
+.seg button:focus-visible{outline:2px solid #7CCB93;outline-offset:2px}
+
+/* the toggle */
+.ct{position:relative;width:172px;height:84px;border-radius:42px;border:0;padding:0;cursor:grab;flex:none;
+  background:linear-gradient(145deg,#dcdce0,#ececef);
+  box-shadow:inset 7px 7px 14px var(--lo),inset -7px -7px 14px var(--hi);
+  touch-action:none;-webkit-tap-highlight-color:transparent;outline:none}
+.ct:active{cursor:grabbing}
+.ct.sq{border-radius:26px}
+.ct-floor{position:absolute;inset:0;border-radius:inherit;opacity:0;pointer-events:none;
+  background:linear-gradient(145deg,var(--green),var(--green-2));
+  box-shadow:inset 7px 7px 14px rgba(112,160,126,.45),inset -7px -7px 14px rgba(255,255,255,.85)}
+.ct-knob{position:absolute;left:10px;top:10px;width:64px;height:64px;border-radius:50%;pointer-events:none;will-change:transform;
+  background:radial-gradient(circle at 36% 30%,#ffffff 0%,#f6f6f8 50%,#e3e3e7 100%);
+  box-shadow:6px 8px 14px rgba(130,135,150,.45),-3px -3px 8px rgba(255,255,255,.7),inset -5px -6px 10px rgba(0,0,0,.07),inset 4px 5px 8px #fff}
+.ct.sq .ct-knob{border-radius:18px;background:linear-gradient(150deg,#ffffff,#ebebee)}
+.ct:focus-visible{box-shadow:inset 7px 7px 14px var(--lo),inset -7px -7px 14px var(--hi),0 0 0 4px var(--surface),0 0 0 7px rgba(124,203,147,.7)}
+
+/* readouts */
+.readout{font:400 13px/1.5 var(--mono);color:var(--ink-2);min-height:20px;text-align:center}
+.log{display:flex;flex-direction:column;gap:6px;min-width:0;padding:16px 18px;border-radius:18px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 9px var(--lo),inset -4px -4px 9px var(--hi)}
+.log ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.log li{font:400 13px/1.5 var(--mono);color:var(--ink-3)}
+.log li:first-child{color:var(--ink)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:720px){.split{grid-template-columns:1fr}}
+
+/* graph */
+.graph{width:100%;height:auto;display:block}
+.g-grid{stroke:rgba(158,163,176,.35);stroke-width:1}
+.g-rest{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:4 5}
+.g-wall{stroke:#C98F8F;stroke-width:1;stroke-dasharray:2 4}
+.g-curve{fill:none;stroke:var(--green-ink);stroke-width:2.5;stroke-linejoin:round}
+.g-t{fill:var(--ink-3);font:500 11px var(--mono)}
+.g-t2{fill:#B07272;font:500 11px var(--mono)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{padding:14px 16px;border-radius:16px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 9px var(--lo),inset -4px -4px 9px var(--hi);display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat b{font:500 20px var(--mono);color:var(--ink)}
+@media (max-width:520px){.stats{grid-template-columns:1fr}}
+
+/* spec table */
+.spec{width:100%;border-collapse:collapse;font-size:14.5px}
+.spec th,.spec td{text-align:left;padding:11px 10px;border-bottom:1px solid rgba(158,163,176,.3);vertical-align:top}
+.spec th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.spec td:nth-child(2){font:500 13px var(--mono);color:var(--ink);white-space:nowrap}
+.spec td:last-child{color:var(--ink-2)}
+.scroll{overflow-x:auto}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid rgba(158,163,176,.35)}
+</style>
+
+<main class="sheet">
+  <header class="hero">
+    <span class="label">Material study 01 · Toggle · Soft</span>
+    <h1>A toggle made of <em>clay</em></h1>
+    <p class="lede">Claymorphism is usually treated as a look: puffy shapes and soft shadows. This study treats it as a material. If the knob is soft, it should give when you press it, stretch when it moves and settle like something with weight. Press one, hold it, drag it, let go.</p>
+    <div class="meta"><span class="label">Ashish Dixit</span><span class="label">4 behaviours</span><span class="label">Spring physics · no libraries</span></div>
+    <div class="plate" style="margin-top:14px">
+      <div class="plate-top"><span class="label live">The finished toggle</span></div>
+      <div class="stage">
+        <div class="slot"><button class="ct" id="h1" role="switch" aria-checked="false" aria-label="Round clay toggle"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">Round knob</span></div>
+        <div class="slot"><button class="ct sq" id="h2" role="switch" aria-checked="true" aria-label="Square clay toggle"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">Square knob</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="head"><span class="num">01</span><h2>A snap, then a material</h2><p>Most toggles slide the knob across in a fixed time and stop. It works, and it could be made of anything. Clay should behave like clay.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Compare</span><label class="check"><input type="checkbox" id="slow1"> Slow motion</label></div>
+      <div class="stage">
+        <div class="slot"><button class="ct" id="s1a" role="switch" aria-checked="false" aria-label="Usual toggle"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">The usual · 150 ms slide</span></div>
+        <div class="slot"><button class="ct" id="s1b" role="switch" aria-checked="false" aria-label="Clay toggle"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">Clay · stretch and settle</span></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>The material is the promise the interface makes. A soft, rounded knob that moves like a rigid slider breaks that promise, and people feel it even if they can’t name it.</p></div>
+      <div><span class="label">Why not more bounce</span><p>The wobble has to end quickly. A toggle that keeps jiggling after you’ve moved on draws attention to itself instead of to the setting you just changed.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">02</span><h2>It gives when you press</h2><p>Press and hold either toggle. The knob stretches toward the side it’s about to travel to, from whichever end it sits at.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Press and hold</span>
+        <div class="ctl"><label for="press">Press stretch</label><input type="range" id="press" min="0" max="0.3" step="0.01" value="0.16"><output id="press-o">16%</output></div>
+      </div>
+      <div class="stage">
+        <div class="slot"><button class="ct" id="s2a" role="switch" aria-checked="false" aria-label="Clay toggle, off"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">From the left end</span></div>
+        <div class="slot"><button class="ct" id="s2b" role="switch" aria-checked="true" aria-label="Clay toggle, on"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">From the right end</span></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why</span><p>The press is answered the moment your finger goes down, before anything moves. The knob gets wider and flatter by the same amount, so it reads as the same lump of clay being pushed, not as something growing.</p></div>
+      <div><span class="label">Why it stretches one way</span><p>The outer edge stays against the wall of the track, because the wall is in the way. Only the inner edge reaches out, which also hints at where the knob is about to go.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">03</span><h2>It overshoots, then becomes round again</h2><p>The knob arrives with momentum, runs a few pixels past its resting place, flattens against the wall and springs back into a perfect circle.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Tune the material</span>
+        <div class="controls">
+          <div class="ctl"><label for="zeta">Elasticity</label><input type="range" id="zeta" min="0.2" max="1" step="0.01" value="0.38"><output id="zeta-o">clay</output></div>
+          <label class="check"><input type="checkbox" id="slow3" checked> Slow motion</label>
+        </div>
+      </div>
+      <div class="split">
+        <div class="stage" style="padding:10px 0"><div class="slot"><button class="ct" id="s3" role="switch" aria-checked="false" aria-label="Clay toggle with tunable elasticity"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="label">Click it, back and forth</span></div></div>
+        <svg class="graph" id="graph" viewBox="0 0 440 220" role="img" aria-label="Knob position over time after a click"></svg>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="label">Overshoot</span><b id="st-over">0 px</b></div>
+        <div class="stat"><span class="label">Settles in</span><b id="st-settle">0 ms</b></div>
+        <div class="stat"><span class="label">Reads as</span><b id="st-reads">clay</b></div>
+      </div>
+    </div>
+    <p class="detail"><b>In detail.</b> The knob is a damped spring: a weight on a spring, released toward the other end. Elasticity sets how little the spring is damped. At 1 the curve meets its rest line and stops, like a firm material. Lower values let it shoot past and swing back. The track only allows 7 px of overshoot, so anything beyond that turns into squash against the wall instead of travel, and the knob’s height grows by the same proportion its width shrinks.</p>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">04</span><h2>It waits while you hold it</h2><p>While your finger is down, the knob stays stretched and ready. Drag it and it follows, with resistance at the ends. Let go past the middle and it carries on to the other side. Let go short of that and it springs back.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Press, drag, release</span>
+        <div class="seg" id="mode" role="group" aria-label="What a tap does">
+          <button type="button" data-v="tap" aria-pressed="true">Tap or drag</button>
+          <button type="button" data-v="drag" aria-pressed="false">Drag only</button>
+        </div>
+      </div>
+      <div class="split">
+        <div class="stage" style="padding:10px 0"><div class="slot"><button class="ct" id="s4" role="switch" aria-checked="false" aria-label="Clay toggle you can drag"><span class="ct-floor"></span><span class="ct-knob"></span></button><span class="readout" id="s4-read">Press and hold, then drag.</span></div></div>
+        <div class="log"><span class="label">What just happened</span><ol id="s4-log"><li>Nothing yet.</li></ol></div>
+      </div>
+    </div>
+    <div class="notes">
+      <div><span class="label">Why the knob follows the finger</span><p>Holding the stretched knob and pulling it is the most physical moment of the interaction. Letting the finger decide, and backing out by dragging home, makes the toggle feel held rather than triggered.</p></div>
+      <div><span class="label">Why a tap still toggles by default</span><p>A tap is the most common way to use a switch, and it’s how keyboards and screen readers operate it. “Drag only” shows the stricter behaviour: a tap just squishes the knob and lets it go.</p></div>
+    </div>
+    <p class="detail"><b>In detail.</b> Movement under 4 px counts as a tap. Past that, the knob tracks the pointer one to one, and beyond the ends it moves at a quarter of the pointer’s speed, like clay being pulled against a wall. On release, the knob keeps the speed of your drag, so a flick throws it across and a slow drag eases it. It changes state once it has travelled 30% of the way.</p>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">05</span><h2>The numbers</h2><p>Everything above comes from a handful of values, the way a material is described by a few properties.</p></div>
+    <div class="plate">
+      <div class="scroll">
+      <table class="spec">
+        <thead><tr><th>Property</th><th>Value</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>Stiffness</td><td>300</td><td>How hard the spring pulls the knob toward its end.</td></tr>
+          <tr><td>Damping ratio</td><td>0.38</td><td>Below 1 the knob overshoots; 0.38 gives one clear swing and a small wobble.</td></tr>
+          <tr><td>Press stretch</td><td>16%</td><td>Extra width while held, anchored to the wall side.</td></tr>
+          <tr><td>Motion stretch</td><td>up to 25%</td><td>Grows with speed, so the knob is longest mid-flight.</td></tr>
+          <tr><td>Overshoot room</td><td>7 px</td><td>Past this the knob squashes against the wall instead of travelling.</td></tr>
+          <tr><td>Volume</td><td>width × height = 1</td><td>Whatever the knob gains in width it loses in height.</td></tr>
+          <tr><td>Tap threshold</td><td>4 px</td><td>Smaller movements count as a tap.</td></tr>
+          <tr><td>Commit point</td><td>30% of travel</td><td>How far a drag must go to change the state.</td></tr>
+          <tr><td>Reduced motion</td><td>damping 1, no stretch</td><td>For people who turn animation off, the knob slides and stops cleanly.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <footer><span class="label">Material study 01 · Ashish Dixit</span><span class="label">Next: the same toggle in aluminium</span></footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const all = [];
+
+function Clay(el, opts){
+  const o = Object.assign({mode:"clay", k:300, zeta:0.38, press:0.16, tap:true, slow:false, onEvent:null}, opts);
+  const knob = el.querySelector(".ct-knob"), floor = el.querySelector(".ct-floor");
+  const on0 = el.getAttribute("aria-checked") === "true";
+  const s = {x:on0?1:0, v:0, target:on0?1:0, p:0, pv:0, pressed:false, drag:null, anchor:on0?-1:1};
+  let PAD = 10, W = 64, T = 88;
+  function measure(){ W = knob.offsetWidth || 64; T = el.clientWidth - 2*PAD - W; }
+  measure();
+
+  function emit(type, info){ if(o.onEvent) o.onEvent(type, info); }
+  function setTarget(t){ s.target = t; el.setAttribute("aria-checked", String(t === 1)); }
+  function toggle(){ setTarget(1 - s.target); }
+
+  function step(dt){
+    if(o.slow) dt *= 0.25;
+    const clay = o.mode === "clay" && !reduce;
+    // knob position
+    if(s.drag && s.drag.active){ /* x set by pointer */ }
+    else if(o.mode === "snap"){
+      const d = s.target - s.x, stepX = dt/0.15;
+      s.x = Math.abs(d) <= stepX ? s.target : s.x + Math.sign(d)*stepX; s.v = 0;
+    } else {
+      const zeta = reduce ? 1 : o.zeta, k = o.k, c = 2*zeta*Math.sqrt(k);
+      const n = 4, h = dt/n;
+      for(let i=0;i<n;i++){ const a = k*(s.target - s.x) - c*s.v; s.v += a*h; s.x += s.v*h; }
+      if(Math.abs(s.target - s.x) < 1e-4 && Math.abs(s.v) < 1e-3){ s.x = s.target; s.v = 0; }
+    }
+    // press amount, its own small spring
+    const pt = (s.pressed && clay) ? 1 : 0, pk = 700, pc = 2*0.5*Math.sqrt(pk);
+    const n2 = 3, h2 = dt/n2;
+    for(let i=0;i<n2;i++){ const a = pk*(pt - s.p) - pc*s.pv; s.pv += a*h2; s.p += s.pv*h2; }
+    if(!s.pressed && Math.abs(s.p) < 1e-4 && Math.abs(s.pv) < 1e-3){ s.p = 0; s.pv = 0; }
+    render(clay);
+  }
+
+  function render(clay){
+    const ROOM = 7;
+    let pos = s.x * T, over = 0;
+    if(pos > T){ over = pos - T; pos = T + Math.min(over, ROOM); }
+    else if(pos < 0){ over = -pos; pos = -Math.min(over, ROOM); }
+    let sx = 1, shift = 0;
+    if(clay){
+      const ps = o.press * Math.max(0, s.p);
+      const vs = Math.min(Math.abs(s.v) * T / 5000, 0.25);
+      const squash = Math.min(Math.max(over - ROOM, 0) / W * 1.4 + over / W * 0.25, 0.18);
+      sx = 1 + ps + vs - squash;
+      shift = s.anchor * ps * W / 2;  // stretch toward the open side, outer edge stays on the wall
+      if(over > 0) shift += (s.x > 1 ? 1 : -1) * squash * W / 2;
+    }
+    sx = Math.max(sx, 0.6);
+    const sy = 1 / sx;
+    knob.style.transform = `translate3d(${(pos + shift).toFixed(2)}px,0,0) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
+    floor.style.opacity = Math.min(Math.max(s.x, 0), 1).toFixed(3);
+  }
+
+  // pointer
+  el.addEventListener("pointerdown", e => {
+    if(e.button !== 0) return;
+    el.setPointerCapture(e.pointerId); el.focus({preventScroll:true});
+    measure();
+    s.pressed = true; s.anchor = s.target === 0 ? 1 : -1;
+    s.drag = {x0:e.clientX, from:s.target, startX:s.x, active:false, moved:0, t:performance.now(), lastX:s.x};
+    emit("press");
+  });
+  el.addEventListener("pointermove", e => {
+    const d = s.drag; if(!d || !s.pressed) return;
+    if(o.mode === "snap") return;
+    const dx = e.clientX - d.x0;
+    d.moved = Math.max(d.moved, Math.abs(dx));
+    if(!d.active && Math.abs(dx) > 4) d.active = true;
+    if(d.active){
+      let nx = d.startX + dx / T;
+      if(nx > 1) nx = 1 + (nx - 1) * 0.25;
+      if(nx < 0) nx = nx * 0.25;
+      const now = performance.now(), dt = Math.max((now - d.t)/1000, 1/240);
+      s.v = s.v*0.5 + ((nx - s.x)/dt)*0.5; s.x = nx; d.t = now;
+    }
+  });
+  function release(cancel){
+    const d = s.drag; if(!d) return;
+    s.pressed = false;
+    if(cancel){ s.drag = null; return; }
+    if(!d.active){
+      if(o.tap || o.mode === "snap"){ toggle(); emit("tap", {toggled:true, on:s.target===1}); }
+      else emit("tap", {toggled:false, on:s.target===1});
+    } else {
+      const travelled = d.from === 0 ? s.x : 1 - s.x;
+      const px = Math.round((s.x - d.startX) * T);
+      if(travelled >= 0.3){ setTarget(1 - d.from); emit("drag", {px, toggled:true, on:s.target===1}); }
+      else emit("drag", {px, toggled:false, on:s.target===1});
+    }
+    s.drag = null;
+  }
+  el.addEventListener("pointerup", () => release(false));
+  el.addEventListener("pointercancel", () => release(true));
+  el.addEventListener("lostpointercapture", () => { if(s.drag) release(true); });
+  el.addEventListener("click", e => e.preventDefault());
+  // keyboard: press on keydown, toggle on keyup
+  el.addEventListener("keydown", e => {
+    if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(!e.repeat){ s.pressed = true; s.anchor = s.target === 0 ? 1 : -1; emit("press"); } }
+  });
+  el.addEventListener("keyup", e => {
+    if(e.key === " " || e.key === "Enter"){ e.preventDefault(); if(s.pressed){ s.pressed = false; toggle(); emit("key", {on:s.target===1}); } }
+  });
+  el.addEventListener("blur", () => { if(s.pressed && !s.drag) s.pressed = false; });
+
+  const api = {step, o, measure, replay(){ setTarget(s.target); s.x = 1 - s.target; s.v = 0; }, toggle};
+  all.push(api);
+  render(o.mode === "clay" && !reduce);
+  return api;
+}
+
+let last = performance.now();
+function frame(now){
+  const dt = Math.min((now - last)/1000, 1/30); last = now;
+  for(const t of all) t.step(dt);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.addEventListener("resize", () => all.forEach(t => t.measure()));
+
+/* hero */
+Clay(document.getElementById("h1"));
+Clay(document.getElementById("h2"));
+
+/* 01 */
+const s1a = Clay(document.getElementById("s1a"), {mode:"snap"});
+const s1b = Clay(document.getElementById("s1b"));
+document.getElementById("slow1").addEventListener("change", e => { s1a.o.slow = s1b.o.slow = e.target.checked; });
+
+/* 02 */
+const s2a = Clay(document.getElementById("s2a")), s2b = Clay(document.getElementById("s2b"));
+const press = document.getElementById("press"), pressO = document.getElementById("press-o");
+press.addEventListener("input", () => { s2a.o.press = s2b.o.press = +press.value; pressO.textContent = Math.round(press.value*100) + "%"; });
+
+/* 03 */
+const s3 = Clay(document.getElementById("s3"), {slow:true});
+const zeta = document.getElementById("zeta"), zetaO = document.getElementById("zeta-o");
+const graph = document.getElementById("graph");
+function readsAs(z){ return z >= 0.85 ? "firm" : z >= 0.55 ? "rubber" : z >= 0.3 ? "clay" : "jelly"; }
+function drawGraph(){
+  const z = +zeta.value, k = 300, c = 2*z*Math.sqrt(k), T = 88, ROOM = 7;
+  const dur = 1.2, dt = 1/600; let x = 0, v = 0, maxX = 0, settle = dur;
+  const pts = [];
+  const L = 44, R = 424, TOP = 26, BOT = 186;
+  const yOf = val => BOT - (val / 1.45) * (BOT - TOP);
+  let lastOut = 0;
+  for(let t = 0; t <= dur; t += dt){
+    const a = k*(1 - x) - c*v; v += a*dt; x += v*dt;
+    maxX = Math.max(maxX, x);
+    if(Math.abs(1 - x) > 0.01 || Math.abs(v) > 0.05) lastOut = t;
+    if(Math.round(t/dt) % 6 === 0) pts.push(`${(L + (t/dur)*(R-L)).toFixed(1)},${yOf(x).toFixed(1)}`);
+  }
+  settle = lastOut;
+  const wallY = yOf(1 + ROOM/T);
+  graph.innerHTML = `
+    <line class="g-grid" x1="${L}" y1="${BOT}" x2="${R}" y2="${BOT}"/>
+    <line class="g-rest" x1="${L}" y1="${yOf(1)}" x2="${R}" y2="${yOf(1)}"/>
+    <line class="g-wall" x1="${L}" y1="${wallY}" x2="${R}" y2="${wallY}"/>
+    <text class="g-t" x="${L-8}" y="${yOf(1)+4}" text-anchor="end">rest</text>
+    <text class="g-t2" x="${R}" y="${wallY-7}" text-anchor="end">wall · squash above this</text>
+    <text class="g-t" x="${L-8}" y="${BOT+4}" text-anchor="end">off</text>
+    <text class="g-t" x="${L}" y="${BOT+22}">click</text>
+    <text class="g-t" x="${R}" y="${BOT+22}" text-anchor="end">1.2 s</text>
+    <polyline class="g-curve" points="${pts.join(" ")}"/>`;
+  const overPx = Math.max(0, (maxX - 1) * T);
+  document.getElementById("st-over").textContent = overPx < 0.5 ? "0 px" : `${Math.min(overPx, ROOM).toFixed(0)} px${overPx > ROOM ? " + squash" : ""}`;
+  document.getElementById("st-settle").textContent = `${Math.round(settle*1000)} ms`;
+  document.getElementById("st-reads").textContent = readsAs(z);
+  zetaO.textContent = `${z.toFixed(2)} · ${readsAs(z)}`;
+}
+zeta.addEventListener("input", () => { s3.o.zeta = +zeta.value; drawGraph(); });
+document.getElementById("slow3").addEventListener("change", e => { s3.o.slow = e.target.checked; });
+drawGraph();
+
+/* 04 */
+const log = document.getElementById("s4-log"), read = document.getElementById("s4-read");
+let logged = false;
+function addLog(t){ if(!logged){ log.innerHTML = ""; logged = true; } const li = document.createElement("li"); li.textContent = t; log.prepend(li); while(log.children.length > 5) log.lastChild.remove(); }
+const s4 = Clay(document.getElementById("s4"), {onEvent:(type, i) => {
+  if(type === "press"){ read.textContent = "Held. Stretched and ready to move."; return; }
+  if(type === "tap") { const m = i.toggled ? `Tap: switched ${i.on ? "on" : "off"}.` : "Tap: squished, stayed put."; read.textContent = m; addLog(m); }
+  if(type === "drag"){ const dir = i.px >= 0 ? "right" : "left"; const m = i.toggled ? `Dragged ${Math.abs(i.px)} px ${dir}: switched ${i.on ? "on" : "off"}.` : `Dragged ${Math.abs(i.px)} px ${dir}: not far enough, sprang back.`; read.textContent = m; addLog(m); }
+  if(type === "key"){ const m = `Keyboard: switched ${i.on ? "on" : "off"}.`; read.textContent = m; addLog(m); }
+}});
+document.getElementById("mode").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  e.currentTarget.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  s4.o.tap = b.dataset.v === "tap";
+  read.textContent = s4.o.tap ? "Tap or drag to switch." : "Only a drag switches it now. Try a tap.";
+});
+})();
+</script>
+
+</body></html>

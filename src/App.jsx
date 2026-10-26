@@ -1,65 +1,74 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect, Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Suspense, lazy, useEffect } from 'react';
+import { Rail, Topbar, Footer, ScrollTop, useTheme } from './components/Shell';
 
-// Components
-import Nav from './components/Nav';
-import HUD from './components/HUD';
-import BackgroundCanvas from './components/BackgroundCanvas';
-import CursorCanvas from './components/CursorCanvas';
-import Footer from './components/Footer';
-
-// Pages
 const Home = lazy(() => import('./pages/Home'));
+const Work = lazy(() => import('./pages/Work'));
+const Lab = lazy(() => import('./pages/Lab'));
+const LabSoftUI = lazy(() => import('./pages/LabSoftUI'));
+const LabControls = lazy(() => import('./pages/LabControls'));
+const LabSeatPicker = lazy(() => import('./pages/LabSeatPicker'));
+const LabCrosshair = lazy(() => import('./pages/LabCrosshair'));
+const Printing = lazy(() => import('./pages/Printing'));
 const About = lazy(() => import('./pages/About'));
-const Projects = lazy(() => import('./pages/Projects'));
-const ThreeDPrinting = lazy(() => import('./pages/ThreeDPrinting'));
 const Contact = lazy(() => import('./pages/Contact'));
-const ProjectCleanero = lazy(() => import('./pages/ProjectCleanero'));
-const Project3DHub = lazy(() => import('./pages/Project3DHub'));
-const ProjectTravelogue = lazy(() => import('./pages/ProjectTravelogue'));
-const ProjectIphoneDock = lazy(() => import('./pages/ProjectIphoneDock'));
-const ProjectAtelier = lazy(() => import('./pages/ProjectAtelier'));
+const CaseStudy = lazy(() => import('./pages/CaseStudy'));
 
-function App() {
-  useEffect(() => {
-    // We append the portfolio.js script dynamically here to initialize
-    // the canvases and events after the React component mounts.
-    const script = document.createElement('script');
-    script.src = '/portfolio.js';
-    script.async = true;
-    document.body.appendChild(script);
+const TITLES = {
+  '/': 'Ashish Dixit — Senior Product Designer',
+  '/work': 'Case studies — Ashish Dixit',
+  '/lab': 'Interaction Lab — Ashish Dixit',
+  '/lab/soft-ui': 'Soft UI language — Ashish Dixit',
+  '/lab/controls': 'Controls — Ashish Dixit',
+  '/lab/seat-picker': 'Seat picker — Ashish Dixit',
+  '/3d-printing': '3D printing — Ashish Dixit',
+  '/about': 'About — Ashish Dixit',
+  '/contact': 'Contact — Ashish Dixit',
+};
 
-    return () => {
-      document.body.removeChild(script);
-    }
-  }, []);
+function Frame() {
+  const [theme, setTheme] = useTheme();
+  const { pathname } = useLocation();
+  const isCase = pathname.startsWith('/projects/');
+  useEffect(() => { if (TITLES[pathname]) document.title = TITLES[pathname]; }, [pathname]);
 
   return (
-    <Router>
-      <CursorCanvas />
-      <BackgroundCanvas />
-      <HUD />
-      <Nav />
-      <div className="page">
-        <Suspense fallback={<div className="page-loader"></div>}>
+    <div className="shell">
+      <Rail theme={theme} setTheme={setTheme} />
+      <main className="main" id="content">
+        <Topbar theme={theme} setTheme={setTheme} />
+        <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/work" element={<Work />} />
+            <Route path="/projects" element={<Navigate to="/work" replace />} />
+            <Route path="/lab" element={<Lab />} />
+            <Route path="/lab/soft-ui" element={<LabSoftUI />} />
+            <Route path="/lab/controls" element={<LabControls />} />
+            <Route path="/lab/seat-picker" element={<LabSeatPicker />} />
+
+            <Route path="/lab/crosshair" element={<LabCrosshair />} />
+            <Route path="/3d-printing" element={<Printing />} />
             <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/3d-printing" element={<ThreeDPrinting />} />
-            <Route path="/projects/cleanero" element={<ProjectCleanero />} />
-            <Route path="/projects/3d-hub" element={<Project3DHub />} />
-            <Route path="/projects/travelogue" element={<ProjectTravelogue />} />
-            <Route path="/projects/atelier" element={<ProjectAtelier />} />
-            <Route path="/projects/iphone-dock" element={<ProjectIphoneDock />} />
-            <Route path="/projects/ev-trip-intelligence" element={<Navigate to="/projects" replace />} />
-            <Route path="/projects/ev-trip-screens" element={<Navigate to="/projects" replace />} />
             <Route path="/contact" element={<Contact />} />
+            {/* retired links from the previous site */}
+            <Route path="/projects/ev-trip-intelligence" element={<Navigate to="/work" replace />} />
+            <Route path="/projects/ev-trip-screens" element={<Navigate to="/work" replace />} />
+            <Route path="/projects/:slug" element={<CaseStudy />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
-      </div>
-    </Router>
+        {!isCase && <Footer />}
+      </main>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <ScrollTop />
+      <Frame />
+    </Router>
+  );
+}

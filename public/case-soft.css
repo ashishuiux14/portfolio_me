@@ -1,0 +1,143 @@
+/* =========================================================
+   Case studies → soft UI
+   Shared layer loaded by every case-study page. Each page keeps its
+   own content and accent colour; ground, ink, lines, type and depth
+   come from the site, in light and dark.
+   ========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+html[data-case] {
+  --s-bg: #EBE6E2; --s-soft: #E6E0DB; --s-raised: #EFEBE7; --s-deep: #E1DAD4;
+  --s-ink: #2A2724; --s-ink2: #5E5750; --s-ink3: #7C736B;
+  --s-line: rgba(42,39,36,.13); --s-faint: rgba(42,39,36,.07);
+  --s-hi: #FFFFFF; --s-lo: #CFC6BD;
+  --s-display: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
+  color-scheme: light;
+}
+html[data-case][data-theme="dark"] {
+  --s-bg: #2A2725; --s-soft: #252220; --s-raised: #302C29; --s-deep: #1F1D1B;
+  --s-ink: #EFE9E4; --s-ink2: #C9C0B8; --s-ink3: #A0978F;
+  --s-line: rgba(239,233,228,.14); --s-faint: rgba(239,233,228,.07);
+  --s-hi: #36322F; --s-lo: #1B1918;
+  color-scheme: dark;
+}
+
+/* ---------- per-page variable maps ---------- */
+html[data-case="atelier"] {
+  --bg: var(--s-bg); --bg-soft: var(--s-soft); --bg-deep: var(--s-deep);
+  --cream: var(--s-ink); --cream-dim: var(--s-ink2); --muted: var(--s-ink3); --faint: var(--s-ink3);
+  --line: var(--s-line); --line-faint: var(--s-faint); --grid: transparent;
+  --rust: #B04A30; --rust-deep: #8a3a26;
+}
+html[data-case="atelier"][data-theme="dark"] { --rust: #E07A5C; }
+
+html[data-case="3d-hub"] {
+  --bg: var(--s-bg); --surface: var(--s-raised); --white: var(--s-raised); --card: var(--s-soft);
+  --border: var(--s-line); --text: var(--s-ink); --muted: var(--s-ink2); --dim: var(--s-ink3);
+  --neu-light: rgba(255,255,255,.8); --neu-dark: rgba(150,138,126,.38);
+  --ff: var(--s-display); --fb: var(--s-display); --fc: var(--s-display);
+}
+html[data-case="3d-hub"][data-theme="dark"] { --neu-light: rgba(255,255,255,.06); --neu-dark: rgba(0,0,0,.55); --mint: #5CC497; --teal: #5CC497; }
+
+html[data-case="travelogue"] {
+  --bg: var(--s-bg); --surface: var(--s-bg); --surface2: var(--s-raised); --surface3: var(--s-soft);
+  --bordergray: var(--s-line); --text: var(--s-ink); --muted: var(--s-ink2); --dim: var(--s-ink3);
+  --orange: #C2562F; --ff: var(--s-display); --fb: var(--s-display);
+}
+html[data-case="travelogue"][data-theme="dark"] { --orange: #EE8A62; }
+
+html[data-case="cleanero"] {
+  --bg: var(--s-bg); --white: var(--s-raised); --surface: var(--s-soft);
+  --bordergray: var(--s-line); --text: var(--s-ink); --muted: var(--s-ink2); --dim: var(--s-ink3); --navy: #2C2926;
+  --ff: var(--s-display); --fb: var(--s-display);
+}
+html[data-case="cleanero"][data-theme="dark"] { --blue: #7FA6F5; --blue-mid: #7FA6F5; --navy: #1F1D1B; }
+
+html[data-case="iphone-dock"] {
+  --bg: var(--s-bg); --surface: var(--s-bg); --surface2: var(--s-raised); --surface3: var(--s-soft);
+  --bordergray: var(--s-line); --border: var(--s-line); --text: var(--s-ink); --muted: var(--s-ink2); --dim: var(--s-ink3);
+  --silver: var(--s-ink2); --accent: var(--s-ink); --white: var(--s-ink);
+  --ff: var(--s-display); --fb: var(--s-display);
+}
+
+/* ---------- shared ---------- */
+html[data-case], html[data-case] body {
+  background: var(--s-bg) !important;
+  color: var(--s-ink);
+  font-family: var(--s-display);
+  transition: background-color .35s, color .35s;
+}
+/* the case pages had hidden the system cursor for the old custom one */
+html[data-case] *, html[data-case] *::before, html[data-case] *::after { cursor: auto; }
+html[data-case] a, html[data-case] button, html[data-case] [role="button"], html[data-case] label, html[data-case] summary { cursor: pointer; }
+html[data-case] ::selection { background: #D9572B; color: #fff; }
+
+/* raised and pressed surfaces, applied by case-soft.js */
+html[data-case] .soft-raised {
+  border-color: transparent !important;
+  box-shadow: 8px 8px 18px var(--s-lo), -8px -8px 18px var(--s-hi) !important;
+}
+html[data-case] .soft-well {
+  border-color: transparent !important;
+  box-shadow: inset 4px 4px 9px var(--s-lo), inset -4px -4px 9px var(--s-hi) !important;
+}
+html[data-case] .soft-chip {
+  box-shadow: 3px 3px 7px var(--s-lo), -3px -3px 7px var(--s-hi) !important;
+}
+
+/* ---------- page-specific fixes for hard-coded dark fills ---------- */
+html[data-case="iphone-dock"] .hero-overlay-top { background: linear-gradient(to bottom, color-mix(in srgb, var(--s-bg) 85%, transparent) 0%, transparent 100%) !important; }
+html[data-case="iphone-dock"] .hero-overlay-bottom { background: linear-gradient(to top, var(--s-bg) 0%, color-mix(in srgb, var(--s-bg) 70%, transparent) 40%, transparent 100%) !important; }
+html[data-case="iphone-dock"] .photo-card .photo-label { color: #F5F5F5; }
+html[data-case="3d-hub"] footer { background: var(--s-deep) !important; color: var(--s-ink); }
+html[data-case="atelier"] nav, html[data-case="atelier"] header[style*="sticky"], html[data-case="atelier"] .topbar { background: color-mix(in srgb, var(--s-bg) 85%, transparent) !important; }
+
+/* ---------- headlines: outline-only words were drawn for dark heroes ---------- */
+html[data-case] .hero-title em { color: var(--s-ink3) !important; -webkit-text-stroke: 0 !important; }
+html[data-case] .section-ghost, html[data-case] .chapter-ghost, html[data-case] .chapter-num,
+html[data-case] [class*="ghost"] { -webkit-text-stroke: 1px var(--s-line) !important; }
+
+/* the dock's hero render sits to the right and fades out under the headline */
+html[data-case="iphone-dock"] .hero-img-wrap {
+  left: 34% !important;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+          mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+}
+
+/* ---------- images lie flat on the surface: no drop shadows ---------- */
+html[data-case] img, html[data-case] picture, html[data-case] video { box-shadow: none !important; filter: none !important; }
+html[data-case] .soft-flat { box-shadow: none !important; }
+html[data-case]:not([data-case="3d-hub"]) .hero-title { color: var(--s-ink) !important; }
+html[data-case="3d-hub"] .hero-title em { color: rgba(255,255,255,.62) !important; }
+
+/* Cleaneró hero: sits on the page, not on a dark slab; dark navy stays for quote and showcase panels */
+html[data-case="cleanero"] .hero { background: var(--s-bg) !important; }
+html[data-case="cleanero"] .hero-grid { display: none; }
+html[data-case="cleanero"] .hero-img { opacity: 1 !important; }
+html[data-case="cleanero"] .hero-img-overlay { background: linear-gradient(to right, var(--s-bg) 0%, transparent 30%), linear-gradient(to top, var(--s-bg) 0%, transparent 25%) !important; }
+html[data-case="cleanero"] .hero-sub { color: var(--s-ink2) !important; }
+html[data-case="cleanero"] .hero-tag { color: var(--s-ink2) !important; border-color: var(--s-line) !important; }
+html[data-case="cleanero"] .hero-meta-label { color: var(--s-ink3) !important; }
+html[data-case="cleanero"] .hero-meta-value { color: var(--s-ink) !important; }
+html[data-case="cleanero"] .hero-kicker { color: var(--blue) !important; }
+html[data-case] figure, html[data-case] [class*="img"], html[data-case] [class*="image"], html[data-case] [class*="photo"],
+html[data-case] [class*="shot"], html[data-case] [class*="gallery"], html[data-case] [class*="media"], html[data-case] [class*="visual"], html[data-case] [class*="frame"] { box-shadow: none !important; }
+
+/* ---------- one type system, one rhythm (matches the main site) ---------- */
+html[data-case] { --max: 1240px; --ff: var(--s-display); --fb: var(--s-display); --fc: var(--s-display); }
+html[data-case] body { font-family: var(--s-display); }
+html[data-case] h1, html[data-case] .hero-title, html[data-case] [class*="hero"] h1 { font-weight: 300 !important; letter-spacing: -.01em !important; }
+html[data-case] h2, html[data-case] h3, html[data-case] [class*="title"]:not(h1):not(.hero-title) { font-weight: 400 !important; letter-spacing: -.005em !important; }
+html[data-case] strong, html[data-case] b { font-weight: 500; }
+html[data-case] em, html[data-case] i, html[data-case] cite { font-style: normal; }
+html[data-case] q, html[data-case] blockquote, html[data-case] .review-text { font-style: italic; }
+/* vertical rhythm scales with the screen height, so laptops don't scroll through empty bands */
+html[data-case] .chapter { padding-top: clamp(56px, 3vw + 4vh, 100px) !important; }
+html[data-case] .split { padding-block: clamp(40px, 2vw + 3vh, 72px) !important; }
+html[data-case] .section { padding-block: clamp(48px, 3vw + 4vh, 96px) !important; }
+html[data-case] .hero-left { padding-top: clamp(64px, 3vw + 7vh, 144px) !important; padding-bottom: clamp(44px, 2vw + 5vh, 100px) !important; }
+
+/* theme change arriving from the site's ink spill: the page soaks rather than snapping */
+html[data-case].theme-soak *, html[data-case].theme-soak *::before, html[data-case].theme-soak *::after, html[data-case].theme-soak body {
+  transition: background-color .9s cubic-bezier(.45,.05,.4,1), border-color .9s ease, box-shadow .9s ease, color .28s ease .38s, fill .28s ease .38s !important;
+}

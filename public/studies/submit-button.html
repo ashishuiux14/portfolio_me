@@ -1,0 +1,554 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="no-italic">em,i,cite{font-style:normal}q,blockquote,.review-text,.voice q{font-style:italic}</style>
+</head><body>
+<title>Submit Button Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: a 960px column with a browser-style tab strip at the top. Each tab swaps the whole page into one material: surface, type softness and physics. Single light theme on purpose; both materials are lit from the top left. */
+:root{
+  --bg:#E5E5E8; --strip:#D2D2D7; --ink:#4B4E57; --ink-2:#6F727B; --ink-3:#9497A0; --rule:rgba(140,145,160,.3);
+  --lo:rgba(158,163,176,.58); --hi:#FFFFFF; --green-ink:#3E8F59; --red-ink:#B65A5A; --soft:100;
+  --display:'Jost', "Iowan Old Style", Georgia, serif;
+  --sans:'Jost', "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+body[data-mat="alu"]{--bg:#DADADC; --strip:#C6C6CA; --ink:#2F3136; --ink-2:#5D6068; --ink-3:#8C8F96; --rule:rgba(0,0,0,.1); --green-ink:#1F8A40; --red-ink:#C23B3B; --soft:0}
+*{box-sizing:border-box}
+html{background:#E5E5E8}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);padding-inline:16px;padding-block:44px 120px;-webkit-font-smoothing:antialiased;transition:background-color .35s}
+.sheet{max-width:960px;margin:0 auto;display:flex;flex-direction:column}
+h1,h2,h3{margin:0;text-wrap:balance;font-family:var(--display);font-variation-settings:"SOFT" var(--soft),"opsz" 96;font-weight:500;color:var(--ink)}
+p{margin:0}
+.label{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.intro{display:flex;flex-direction:column;gap:14px;margin-bottom:34px}
+.intro h1{font-size:clamp(36px,6vw,58px);line-height:1.04;letter-spacing:-.015em}
+.intro p{font-size:17.5px;color:var(--ink-2);max-width:640px}
+
+/* chrome-style tabs */
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;display:flex;align-items:flex-end;gap:2px;padding:8px 10px 0;background:var(--strip);border-radius:14px 14px 0 0;transition:background-color .35s}
+.tab{position:relative;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;padding:11px 22px 12px 16px;min-width:0;border-radius:11px 11px 0 0;background:transparent;font:500 14px var(--sans);color:var(--ink-2);white-space:nowrap}
+.tab:hover:not([aria-selected="true"]){background:rgba(255,255,255,.35)}
+.tab[aria-selected="true"]{background:var(--bg);color:var(--ink)}
+.tab[aria-selected="true"]::before,.tab[aria-selected="true"]::after{content:"";position:absolute;bottom:0;width:12px;height:12px;pointer-events:none}
+.tab[aria-selected="true"]::before{left:-12px;background:radial-gradient(circle at 0 0,transparent 11.5px,var(--bg) 12px)}
+.tab[aria-selected="true"]::after{right:-12px;background:radial-gradient(circle at 100% 0,transparent 11.5px,var(--bg) 12px)}
+.tab:focus-visible{outline:2px solid var(--green-ink);outline-offset:-4px}
+.tab .ico{width:16px;height:16px;border-radius:50%;flex:none}
+.ico-clay{background:radial-gradient(circle at 36% 30%,#fff,#e3e3e7);box-shadow:2px 2px 4px rgba(130,135,150,.5),-1px -1px 2px #fff}
+.ico-alu{background:repeating-radial-gradient(circle,rgba(255,255,255,.2) 0 .5px,rgba(0,0,0,.06) .5px 1px),conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35)}
+.tab .sub{color:var(--ink-3);font-weight:400}
+.panelwrap{padding-top:48px}
+[role="tabpanel"]{display:flex;flex-direction:column;gap:100px}
+[role="tabpanel"][hidden]{display:none!important}
+
+.hero{display:flex;flex-direction:column;gap:20px}
+.hero h2{font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.015em}
+.hero h2 em{font-style: normal;color:var(--green-ink)}
+.lede{font-size:18px;color:var(--ink-2);max-width:620px}
+
+/* plates per material */
+.plate{display:flex;flex-direction:column;gap:22px;padding:28px;min-width:0}
+.m-clay .plate{border-radius:30px;background:linear-gradient(145deg,#ececef,#e0e0e4);box-shadow:14px 14px 30px var(--lo),-14px -14px 30px var(--hi),inset 1px 1px 1px rgba(255,255,255,.8)}
+.m-alu .plate{border-radius:18px;background:linear-gradient(180deg,#EEEEEF,#DFDFE1);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 14px 30px rgba(40,42,48,.13),0 2px 4px rgba(40,42,48,.12)}
+.plate-top{display:flex;justify-content:space-between;align-items:center;gap:12px 18px;flex-wrap:wrap}
+.live{display:inline-flex;gap:8px;align-items:center}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:#5FBF7C}
+.stage{display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:36px 24px;padding:30px 8px}
+.slot{display:flex;flex-direction:column;align-items:center;gap:26px;min-width:0}
+.row-btn{display:flex;align-items:center;gap:20px}
+.cancel{font:500 15px var(--sans);color:var(--ink-2)}
+.readout{font:400 13px/1.5 var(--mono);color:var(--ink-2);min-height:20px;text-align:center;max-width:380px}
+.msg{font-size:14px;color:var(--red-ink);min-height:22px;text-align:center;max-width:360px}
+
+section{display:flex;flex-direction:column;gap:26px}
+.head{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:baseline}
+.num{font:400 64px/1 var(--display);font-variation-settings:"SOFT" var(--soft),"opsz" 144;color:#BDBFC6;grid-row:span 2}
+.head h3{font-size:32px;line-height:1.15;letter-spacing:-.01em}
+.head p{color:var(--ink-2);max-width:600px}
+@media (max-width:560px){.head{grid-template-columns:1fr}.num{grid-row:auto;font-size:48px}}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.notes>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.notes p{font-size:15px;color:var(--ink-2)}
+@media (max-width:680px){.notes{grid-template-columns:1fr}}
+.detail{font-size:15px;color:var(--ink-2);max-width:740px;padding-top:18px;border-top:1px solid var(--rule)}
+.detail b{color:var(--ink);font-weight:600}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+.ctl{display:flex;align-items:center;gap:12px;font:500 13px var(--sans);color:var(--ink-2)}
+.ctl output{font:500 12px var(--mono);color:var(--ink);min-width:62px}
+.check{display:inline-flex;align-items:center;gap:10px;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.check input{accent-color:#5FBF7C;width:16px;height:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:10px;border-radius:5px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;cursor:pointer}
+.m-clay input[type=range]{background:linear-gradient(145deg,#d9d9dd,#ececef);box-shadow:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi)}
+.m-clay input[type=range]::-webkit-slider-thumb{background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5),-2px -2px 5px #fff}
+.m-clay input[type=range]::-moz-range-thumb{background:radial-gradient(circle at 36% 30%,#fff,#ececef);box-shadow:3px 4px 8px rgba(130,135,150,.5)}
+.m-alu input[type=range]{height:8px;background:linear-gradient(180deg,#1b1b1d,#38383b);box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 1px 0 #fff}
+.m-alu input[type=range]::-webkit-slider-thumb{background:repeating-radial-gradient(circle,rgba(255,255,255,.18) 0 .6px,rgba(0,0,0,.06) .6px 1.3px),conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35),0 3px 5px rgba(0,0,0,.35)}
+.m-alu input[type=range]::-moz-range-thumb{background:conic-gradient(#a6a8ac,#77797e 55deg,#fff 135deg,#76787d 225deg,#fff 315deg,#a6a8ac);box-shadow:0 0 0 1px rgba(40,42,46,.35)}
+input[type=range]:focus-visible{outline:2px solid #5FBF7C;outline-offset:4px}
+.seg{display:inline-flex;gap:4px;padding:4px}
+.seg button{border:0;background:none;font:500 13px var(--sans);color:var(--ink-2);padding:7px 13px;cursor:pointer}
+.seg button:focus-visible{outline:2px solid #5FBF7C;outline-offset:2px}
+.m-clay .seg{border-radius:16px;background:linear-gradient(145deg,#dcdce0,#ececef);box-shadow:inset 4px 4px 8px var(--lo),inset -4px -4px 8px var(--hi)}
+.m-clay .seg button{border-radius:11px}
+.m-clay .seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(145deg,#f3f3f5,#e2e2e6);box-shadow:4px 4px 9px var(--lo),-3px -3px 7px var(--hi)}
+.m-alu .seg{border-radius:10px;background:linear-gradient(180deg,#cfcfd2,#dedee0);box-shadow:inset 0 2px 3px rgba(0,0,0,.18),0 1px 0 #fff}
+.m-alu .seg button{border-radius:7px}
+.m-alu .seg button[aria-pressed="true"]{color:var(--ink);background:linear-gradient(180deg,#fbfbfb,#e3e3e5);box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,0,0,.25)}
+
+/* label stack: every label occupies the same cell, so the width never changes */
+.lbls{display:grid}
+.lbls>span{grid-area:1/1;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s}
+.lbls>span.on{opacity:1;transform:none}
+.lbls svg{flex:none}
+
+/* clay button */
+.cb{position:relative;border:0;cursor:pointer;padding:0 36px;height:72px;border-radius:36px;font:600 17px var(--sans);color:#5A5D66;
+  background:linear-gradient(145deg,#f1f1f3,#dcdce0);transform-origin:50% 100%;will-change:transform;touch-action:manipulation;
+  box-shadow:10px 10px 22px var(--lo),-10px -10px 22px var(--hi),inset 2px 2px 3px rgba(255,255,255,.9),inset -3px -3px 6px rgba(0,0,0,.05);
+  transition:box-shadow .2s,background .35s,color .35s}
+.cb.down{box-shadow:inset 7px 7px 14px var(--lo),inset -7px -7px 14px var(--hi),3px 3px 8px rgba(158,163,176,.25)}
+.cb[data-phase="ok"]{background:linear-gradient(145deg,#e6f7eb,#cdeed8);color:#3E8F59}
+.cb[data-phase="err"]{color:#B65A5A}
+.cb:focus-visible{outline:none;box-shadow:10px 10px 22px var(--lo),-10px -10px 22px var(--hi),0 0 0 4px var(--bg),0 0 0 7px rgba(124,203,147,.7)}
+.clay-pad{border-radius:28px;padding:34px;background:linear-gradient(145deg,#e9e9ec,#dedee2);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+
+/* aluminium button */
+.ab{position:relative;border:0;padding:0;background:none;cursor:pointer;border-radius:41px;display:inline-grid;touch-action:manipulation;--a:0deg}
+.ab-led{position:absolute;inset:0;border-radius:inherit;background:#BDBEC1;box-shadow:inset 0 1px 2px rgba(0,0,0,.35),0 1px 0 #fff;transition:background-color .15s}
+.ab[data-phase="waiting"] .ab-led{background:conic-gradient(from var(--a),#9c9ea2 0deg,#9c9ea2 230deg,#fff3cf 300deg,#ffcf6e 330deg,#9c9ea2 360deg);box-shadow:inset 0 1px 2px rgba(0,0,0,.35),0 0 14px rgba(255,200,100,.35)}
+.ab[data-phase="ok"] .ab-led{background:#3FD06D;box-shadow:inset 0 1px 2px rgba(0,60,20,.4),0 0 20px 3px rgba(60,220,110,.5)}
+.ab[data-phase="err"] .ab-led{background:#EF4F4F;box-shadow:inset 0 1px 2px rgba(80,0,0,.4),0 0 20px 3px rgba(240,70,70,.45);animation:blink .5s steps(1) 2}
+@keyframes blink{50%{background:#7a3a3a;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}}
+.ab-chrome{position:absolute;inset:4px;border-radius:inherit;
+  background:linear-gradient(180deg,#fdfdfd 0%,#9a9ca0 20%,#f2f2f3 42%,#5f6166 68%,#c9cacd 86%,#f4f4f5 100%);
+  box-shadow:0 1px 2px rgba(0,0,0,.45),inset 0 0 0 .5px rgba(0,0,0,.3)}
+.ab-face{position:relative;margin:10px;height:62px;border-radius:31px;padding:0 34px;display:grid;place-items:center;
+  font:600 16.5px var(--sans);color:#33363B;text-shadow:0 1px 0 rgba(255,255,255,.9);
+  background:linear-gradient(180deg,#fafbfc 0%,#dcdee2 100%);
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.95),inset 0 -6px 10px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.45);transition:transform 45ms linear,box-shadow 45ms linear,background 45ms}
+.ab-face::after{content:"";position:absolute;left:8%;right:8%;top:3px;height:46%;border-radius:30px 30px 60% 60%;background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0));pointer-events:none}
+.ab.down .ab-face{transform:translateY(2.5px);background:linear-gradient(180deg,#e0e2e5 0%,#eff0f2 100%);box-shadow:inset 0 3px 6px rgba(0,0,0,.22),0 1px 1px rgba(0,0,0,.35)}
+.ab.down .ab-face::after{opacity:.35}
+.ab[data-phase="ok"] .ab-face{color:#1F7A3A}
+.ab[data-phase="err"] .ab-face{color:#B22F2F}
+.ab:focus-visible{outline:2px solid #2BB556;outline-offset:6px}
+.ab .lbls>span{transition:opacity .08s,transform .08s}
+
+/* the usual button */
+.ub{border:0;height:54px;padding:0 24px;border-radius:10px;background:#3B3E45;color:#fff;font:600 15px var(--sans);cursor:pointer;display:inline-flex;align-items:center}
+.ub-l{display:none;align-items:center;gap:9px;white-space:nowrap}
+.ub-l.on{display:inline-flex}
+.spin{width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,.9);border-right-color:transparent;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.counter{font:500 13px var(--mono);color:var(--ink-2)}
+.counter b{color:var(--ink);font-weight:500}
+.counter.bad b{color:var(--red-ink)}
+
+/* comparison */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:720px){.vs{grid-template-columns:1fr}}
+.alu-pad{border-radius:18px;padding:34px;background:linear-gradient(180deg,#EEEEEF,#DFDFE1);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(40,42,48,.12)}
+.scroll{overflow-x:auto}
+.spec{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.spec th,.spec td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.spec th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.spec td:first-child{font-weight:600;color:var(--ink)}
+.common{margin-top:110px;display:flex;flex-direction:column;gap:26px}
+.common .plate{border-radius:24px;background:linear-gradient(160deg,#ececef,#dfdfe2);box-shadow:inset 0 1px 0 #fff,0 14px 30px rgba(40,42,48,.12)}
+footer{margin-top:80px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--rule)}
+
+/* sound switch */
+.sound{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom, 0px));z-index:10;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;padding:8px 16px 8px 8px;border-radius:999px;font:500 13px var(--sans);color:#2F3136;
+  background:linear-gradient(180deg,#fafafa,#e1e1e3);box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.25)}
+.sound:focus-visible{outline:2px solid #2BB556;outline-offset:3px}
+.sound .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#1b1b1d,#333336);box-shadow:inset 0 2px 3px rgba(0,0,0,.6);color:#8c8f96}
+.sound[aria-pressed="true"] .ic{color:#7fe39c;box-shadow:inset 0 2px 3px rgba(0,0,0,.6),0 0 10px rgba(43,181,86,.45)}
+.sound .on-ic{display:none}
+.sound[aria-pressed="true"] .on-ic{display:block}
+.sound[aria-pressed="true"] .off-ic{display:none}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2s}.ab[data-phase="err"] .ab-led{animation:none}}
+</style>
+
+<main class="sheet">
+  <div class="intro">
+    <span class="label">Material study 03 · Submit button</span>
+    <h1>One save button, two materials</h1>
+    <p>The same button, doing the same three jobs: take the press, show it’s working, say how it went. Choose a material below. Everything on the page changes with it.</p>
+  </div>
+  <div class="strip" role="tablist" aria-label="Material">
+    <button class="tab" role="tab" id="tab-clay" aria-controls="panel-clay" aria-selected="true" tabindex="0"><span class="ico ico-clay"></span>Clay <span class="sub">· Soft</span></button>
+    <button class="tab" role="tab" id="tab-alu" aria-controls="panel-alu" aria-selected="false" tabindex="-1"><span class="ico ico-alu"></span>Aluminium <span class="sub">· Hard</span></button>
+  </div>
+  <div class="panelwrap">
+    <div role="tabpanel" id="panel-clay" aria-labelledby="tab-clay" class="m-clay"></div>
+    <div role="tabpanel" id="panel-alu" aria-labelledby="tab-alu" class="m-alu" hidden></div>
+  </div>
+
+  <div class="common">
+    <div class="head"><span class="num">06</span><h3>Clay and aluminium, side by side</h3><p>Same button, same outcomes. Press both and notice what each material does with the same moment.</p></div>
+    <div class="plate">
+      <div class="plate-top"><span class="label live">Both, live</span>
+        <div class="seg" id="vs-out" role="group" aria-label="Result"><button type="button" data-v="ok" aria-pressed="true">Saves</button><button type="button" data-v="err" aria-pressed="false">Fails</button></div>
+      </div>
+      <div class="vs">
+        <div class="slot clay-pad" id="vs-clay-slot"></div>
+        <div class="slot alu-pad" id="vs-alu-slot"></div>
+      </div>
+      <div class="scroll">
+      <table class="spec">
+        <thead><tr><th>Moment</th><th>Clay</th><th>Aluminium</th></tr></thead>
+        <tbody>
+          <tr><td>Press</td><td>Flattens and widens into the surface</td><td>Face drops 2.5 px with a click</td></tr>
+          <tr><td>Release</td><td>Springs back up with a small wobble</td><td>Rises with a softer click</td></tr>
+          <tr><td>Waiting</td><td>Breathes, a slow even swell</td><td>Light runs around the rim</td></tr>
+          <tr><td>Success</td><td>Puffs up, turns green, shows a check</td><td>Rim lights green with a clean click</td></tr>
+          <tr><td>Failure</td><td>Sags and wobbles back, reason below</td><td>Rim blinks red twice, low double buzz</td></tr>
+          <tr><td>Shared rules</td><td colspan="2">Width never changes · nothing shown for the first 150 ms · waiting shown for at least 400 ms · presses ignored while busy · every state announced to screen readers</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <footer><span class="label">Material study 03 · Ashish Dixit</span><span class="label">Next: the +/− stepper</span></footer>
+</main>
+
+<button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound for the aluminium button">
+  <span class="ic" aria-hidden="true">
+    <svg class="off-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+    <svg class="on-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+  </span>
+  <span id="sound-t">Sound off</span>
+</button>
+<div class="sr" id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>
+
+<script>
+(function(){
+"use strict";
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const CHECK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+/* ---------- copy ---------- */
+const COPY = {
+  clay:{
+    h:'Made of <em>clay</em>',
+    lede:'In clay, every state is a change of shape. Press it and it gives. While it waits it breathes. When the answer comes it puffs up or sags. The words change too, but the body says it first.',
+    s1:['A label swap, then a material','The usual button swaps its text for a spinner and back, and its width jumps while it does. Here the button’s body does the talking, and the width never moves.'],
+    n1:[['Why','A soft button that answers with a spinner is two materials glued together. Letting the body react keeps the message and the material in one place.'],['Why the label still changes','Shape alone is ambiguous. The words make each state readable for everyone, and screen readers announce every change.']],
+    s2:['It squashes when you press','Press and hold. The button flattens and widens from the bottom, keeping its volume, and its shadows turn inward as it sinks into the surface.'],
+    n2:[['Why','The press is answered on the way down, before anything is sent, so the button never feels like it ignored you.'],['Why it doesn’t shrink','Shrinking reads as the button backing away. Flattening reads as weight pressing into something soft.']],
+    s3:['It breathes while it waits','Set how long the server takes, then press. Quick saves skip the waiting state entirely. Slower ones get a slow breath, kept on screen long enough to read.'],
+    n3:[['Why','A loader that flashes for 40 ms reads as a glitch. Waiting 150 ms before showing anything, then keeping it for at least 400 ms, removes the flicker at both ends.'],['Why a breath, not a spinner','A spinner is a mechanical idea. A slow, even swell is what a soft thing does when it’s busy.']],
+    s4:['It puffs up, or it sags','Choose an outcome and press. Success puffs the button up and settles it with a check. Failure lets it sag, wobble back and show the reason underneath.'],
+    n4:[['Why','People read shape faster than words. The body says how it went a moment before the label does.'],['Why the error stays','Success clears itself after two seconds. An error stays until it’s dealt with, and the button itself becomes the way to retry.']],
+    s5:['Twice is never twice','Double-click both buttons. The usual one sends two payments. This one ignores presses while it’s busy.'],
+    n5:[['Why','A slow network makes people press again. Ignoring presses while busy turns a double charge into a non-event.'],['Why not disable it','A disabled button loses keyboard focus and announces nothing. This one stays focusable and says “Saving”.']]
+  },
+  alu:{
+    h:'Made of <em>aluminium</em>',
+    lede:'Machined metal can’t change shape, so this button speaks through travel, light and sound. It clicks down under your finger. While it waits, light runs around its rim. Green when it worked, red when it didn’t. Turn the sound on at the bottom right.',
+    s1:['A label swap, then a mechanism','The usual button swaps its text for a spinner and back, and its width jumps while it does. This one keeps its size and lets the hardware show what’s happening.'],
+    n1:[['Why','A metal button with a spinner pasted on its face would look like a sticker. A real device shows status with an indicator built into its housing.'],['Why the label still changes','Light alone isn’t enough, and red and green are hard to tell apart for many people. The words carry the meaning; the light confirms it.']],
+    s2:['It clicks down when you press','Press and hold. The face drops 2.5 px into the chrome bezel with a click at the bottom, then rises with a softer click when you let go.'],
+    n2:[['Why','Two clicks, down and up, are how a real push button tells your finger it registered. The first happens before anything is sent.'],['Why only the face moves','The chrome ring and the light are part of the housing, so they stay put. Only the part you touch travels.']],
+    s3:['Light runs around the rim while it waits','Set how long the server takes, then press. Quick saves skip the waiting light entirely. Slower ones get a light that runs around the rim, kept on long enough to read.'],
+    n3:[['Why','An indicator that flashes for 40 ms reads as a fault. Waiting 150 ms before lighting it, then keeping it on for at least 400 ms, removes the flicker at both ends.'],['Why a running light','It’s how hardware says it’s busy: the indicator lives on the device, and its motion shows that work is happening without guessing at progress.']],
+    s4:['Green when it worked, red when it didn’t','Choose an outcome and press. Success lights the rim green with a clean click. Failure blinks it red twice with a low double buzz and shows the reason underneath.'],
+    n4:[['Why','The light is visible from the corner of your eye, so you know the result before you look back at the button.'],['Why the error stays','Success clears itself after two seconds. An error stays lit until it’s dealt with, and pressing again retries.']],
+    s5:['Twice is never twice','Double-click both buttons. The usual one sends two payments. This one ignores presses while it’s busy.'],
+    n5:[['Why','A slow network makes people press again. Ignoring presses while busy turns a double charge into a non-event.'],['Why not disable it','A disabled button loses keyboard focus and announces nothing. This one stays focusable and says “Saving”.']]
+  }
+};
+const LBL = {save:{idle:"Save changes", waiting:"Saving", ok:`${CHECK}Saved`, err:"Try again"}, pay:{idle:"Pay $48.00", waiting:"Paying", ok:`${CHECK}Paid`, err:"Try again"}};
+function lbls(set){ const L = LBL[set]; return `<span class="lbls"><span data-s="idle" class="on">${L.idle}</span><span data-s="waiting">${L.waiting}</span><span data-s="ok">${L.ok}</span><span data-s="err">${L.err}</span></span>`; }
+function btn(m, id, set){
+  set = set || "save";
+  if(m === "clay") return `<button type="button" class="cb" id="${id}" data-phase="idle">${lbls(set)}</button>`;
+  return `<button type="button" class="ab" id="${id}" data-phase="idle"><span class="ab-led"></span><span class="ab-chrome"></span><span class="ab-face">${lbls(set)}</span></button>`;
+}
+function usual(id, set){ const L = LBL[set || "save"]; return `<button type="button" class="ub" id="${id}"><span class="ub-l on" data-s="idle">${L.idle}</span><span class="ub-l" data-s="waiting"><i class="spin"></i>${L.waiting}…</span></button>`; }
+function notes(n){ return `<div class="notes">${n.map(([t,p]) => `<div><span class="label">${t}</span><p>${p}</p></div>`).join("")}</div>`; }
+function head(num, s){ return `<div class="head"><span class="num">${num}</span><h3>${s[0]}</h3><p>${s[1]}</p></div>`; }
+function seg(id, items, label){ return `<div class="seg" id="${id}" role="group" aria-label="${label}">${items.map(([v,t],i) => `<button type="button" data-v="${v}" aria-pressed="${i===0}">${t}</button>`).join("")}</div>`; }
+
+function panel(m){
+  const c = COPY[m], p = m;
+  return `
+  <header class="hero">
+    <h2>${c.h}</h2>
+    <p class="lede">${c.lede}</p>
+    <div class="plate" style="margin-top:10px">
+      <div class="plate-top"><span class="label live">The finished button</span>
+        <div class="controls">${seg(p+"-h-out", [["ok","Saves"],["err","Fails"]], "Result")}${seg(p+"-h-spd", [["900","Normal"],["120","Fast"],["2600","Slow"]], "Server speed")}</div>
+      </div>
+      <div class="stage"><div class="slot"><div class="row-btn">${btn(m, p+"-h")}<span class="cancel">Cancel</span></div><p class="msg" id="${p}-h-msg" role="status"></p><span class="counter" id="${p}-h-cnt">Requests sent: <b>0</b></span></div></div>
+    </div>
+  </header>
+
+  <section>${head("01", c.s1)}
+    <div class="plate"><div class="plate-top"><span class="label live">Compare · watch the Cancel link</span></div>
+      <div class="stage">
+        <div class="slot"><div class="row-btn">${usual(p+"-1u")}<span class="cancel">Cancel</span></div><span class="label">The usual · label swap</span></div>
+        <div class="slot"><div class="row-btn">${btn(m, p+"-1m")}<span class="cancel">Cancel</span></div><span class="label">${m === "clay" ? "Clay · the body reacts" : "Aluminium · the hardware reacts"}</span></div>
+      </div></div>
+    ${notes(c.n1)}
+  </section>
+
+  <section>${head("02", c.s2)}
+    <div class="plate"><div class="plate-top"><span class="label live">Press and hold</span></div>
+      <div class="stage"><div class="slot">${btn(m, p+"-2")}<span class="readout" id="${p}-2-r">Hold it down. Nothing is sent until you let go.</span></div></div></div>
+    ${notes(c.n2)}
+  </section>
+
+  <section>${head("03", c.s3)}
+    <div class="plate"><div class="plate-top"><span class="label live">Tune the wait</span>
+        <div class="controls">
+          <div class="ctl"><label for="${p}-3-srv">Server answers in</label><input type="range" id="${p}-3-srv" min="50" max="2000" step="10" value="190"><output id="${p}-3-o">190 ms</output></div>
+          <label class="check"><input type="checkbox" id="${p}-3-rule" checked> 150 / 400 rule</label>
+        </div></div>
+      <div class="stage"><div class="slot">${btn(m, p+"-3")}<span class="readout" id="${p}-3-r">Press it to see what gets shown.</span></div></div></div>
+    ${notes(c.n3)}
+    <p class="detail"><b>In detail.</b> Nothing changes for the first 150 ms after a press, because most saves on a good connection finish inside that window and can go straight to done. If the request is still running at 150 ms, the waiting state appears and stays for at least 400 ms, even if the answer arrives sooner. Turn the rule off and drag the slider to 190 ms to see the flicker it prevents.</p>
+  </section>
+
+  <section>${head("04", c.s4)}
+    <div class="plate"><div class="plate-top"><span class="label live">Choose the answer</span>${seg(p+"-4-out", [["ok","Saves"],["err","Fails"]], "Result")}</div>
+      <div class="stage"><div class="slot">${btn(m, p+"-4")}<p class="msg" id="${p}-4-msg" role="status"></p></div></div></div>
+    ${notes(c.n4)}
+  </section>
+
+  <section>${head("05", c.s5)}
+    <div class="plate"><div class="plate-top"><span class="label live">Double-click both</span><button type="button" class="seg" id="${p}-5-reset" style="cursor:pointer"><span style="padding:3px 10px;font:500 13px var(--sans);color:var(--ink-2)">Reset counts</span></button></div>
+      <div class="stage">
+        <div class="slot">${usual(p+"-5u", "pay")}<span class="counter" id="${p}-5u-c">Charges: <b>0</b></span></div>
+        <div class="slot">${btn(m, p+"-5m", "pay")}<span class="counter" id="${p}-5m-c">Charges: <b>0</b></span></div>
+      </div></div>
+    ${notes(c.n5)}
+  </section>`;
+}
+document.getElementById("panel-clay").innerHTML = panel("clay");
+document.getElementById("panel-alu").innerHTML = panel("alu");
+document.getElementById("vs-clay-slot").innerHTML = btn("clay", "vs-c") + '<span class="label">Clay · soft</span>';
+document.getElementById("vs-alu-slot").innerHTML = btn("alu", "vs-a") + '<span class="label">Aluminium · hard</span>';
+
+/* ---------- sound ---------- */
+const Snd = {
+  ctx:null, on:false, buf:null,
+  ensure(){
+    if(!this.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return null; this.ctx = new AC(); }
+    if(this.ctx.state === "suspended") this.ctx.resume();
+    if(!this.buf){ const n = Math.floor(this.ctx.sampleRate*0.08), b = this.ctx.createBuffer(1, n, this.ctx.sampleRate), d = b.getChannelData(0); for(let i=0;i<n;i++) d[i] = Math.random()*2-1; this.buf = b; }
+    return this.ctx;
+  },
+  hit(t, f, q, g, dur, type){
+    const c = this.ctx, s = c.createBufferSource(), fl = c.createBiquadFilter(), a = c.createGain();
+    s.buffer = this.buf; fl.type = type || "bandpass"; fl.frequency.value = f; fl.Q.value = q;
+    a.gain.setValueAtTime(0.0001, t); a.gain.linearRampToValueAtTime(g, t+0.0008); a.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    s.connect(fl); fl.connect(a); a.connect(c.destination); s.start(t); s.stop(t+dur+0.02);
+  },
+  tone(t, f, g, dur, type){
+    const c = this.ctx, o = c.createOscillator(), a = c.createGain();
+    o.type = type || "sine"; o.frequency.value = f;
+    a.gain.setValueAtTime(0.0001, t); a.gain.linearRampToValueAtTime(g, t+0.002); a.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.connect(a); a.connect(c.destination); o.start(t); o.stop(t+dur+0.02);
+  },
+  play(k){
+    if(!this.on) return; const c = this.ensure(); if(!c) return; const t = c.currentTime + 0.002;
+    if(k === "down"){ this.hit(t, 380, 0.9, 0.3, 0.03, "lowpass"); this.hit(t, 2300, 3, 0.45, 0.016); this.hit(t+0.006, 3900, 5, 0.25, 0.018); }
+    if(k === "up"){ this.hit(t, 2900, 4, 0.18, 0.012); }
+    if(k === "ok"){ this.hit(t, 2600, 3, 0.4, 0.018); this.tone(t+0.01, 1568, 0.05, 0.16); this.tone(t+0.09, 2093, 0.05, 0.22); }
+    if(k === "err"){ this.tone(t, 150, 0.12, 0.12, "square"); this.tone(t+0.17, 150, 0.12, 0.12, "square"); }
+  }
+};
+const soundBtn = document.getElementById("sound"), soundT = document.getElementById("sound-t");
+function setSound(v){ Snd.on = v; soundBtn.setAttribute("aria-pressed", String(v)); soundT.textContent = v ? "Sound on" : "Sound off"; try{ localStorage.setItem("alu-sound", v ? "1" : "0"); }catch(e){} }
+soundBtn.addEventListener("click", () => { const v = !Snd.on; setSound(v); if(v){ Snd.ensure(); Snd.play("down"); } });
+try{ if(localStorage.getItem("alu-sound") === "1"){ soundBtn.setAttribute("aria-pressed","true"); soundT.textContent = "Sound on (tap to resume)"; } }catch(e){}
+document.addEventListener("pointerdown", function once(e){
+  try{ if(localStorage.getItem("alu-sound") === "1" && !Snd.on && !e.target.closest(".sound")){ setSound(true); Snd.ensure(); } }catch(_){}
+  document.removeEventListener("pointerdown", once, true);
+}, true);
+
+const live = document.getElementById("live");
+function announce(t){ live.textContent = ""; setTimeout(() => live.textContent = t, 30); }
+
+/* ---------- views ---------- */
+const views = [];
+function setLabel(el, phase){
+  const key = phase === "pending" ? "idle" : phase;
+  el.querySelectorAll(".lbls>span").forEach(s => s.classList.toggle("on", s.dataset.s === key));
+}
+function ClayView(el){
+  const s = {sx:1, sy:1, y:0, vx:0, vy:0, vyy:0, pressed:false, phase:"idle", sag:0, t:0};
+  const v = {
+    el,
+    phase(p){
+      s.phase = p; el.dataset.phase = p; setLabel(el, p);
+      if(reduce) return;
+      if(p === "ok"){ s.vx += 2.4; s.vy += 2.6; }
+      if(p === "err"){ s.sag = 0.26; }
+    },
+    press(b){ s.pressed = b; el.classList.toggle("down", b); },
+    frame(dt){
+      s.t += dt;
+      let tx = 1, ty = 1, tyy = 0;
+      if(s.pressed){ tx = 1.05; ty = 0.9; tyy = 2; }
+      if(s.sag > 0){ s.sag -= dt; tx = 1.07; ty = 0.86; tyy = 3; }
+      if(s.phase === "waiting" && !s.pressed && !reduce){ const b = 0.024 * Math.sin(s.t * 2 * Math.PI / 1.4); tx += b; ty += b; }
+      if(reduce){ s.sx = tx; s.sy = ty; s.y = tyy; }
+      else {
+        const k = 300, c = 2*0.32*Math.sqrt(k);
+        for(let i=0;i<3;i++){ const h = dt/3;
+          s.vx += (k*(tx - s.sx) - c*s.vx)*h; s.sx += s.vx*h;
+          s.vy += (k*(ty - s.sy) - c*s.vy)*h; s.sy += s.vy*h;
+          s.vyy += (k*(tyy - s.y) - c*s.vyy)*h; s.y += s.vyy*h; }
+      }
+      el.style.transform = `translate3d(0,${s.y.toFixed(2)}px,0) scale(${s.sx.toFixed(4)},${s.sy.toFixed(4)})`;
+    }
+  };
+  views.push(v); return v;
+}
+function AluView(el){
+  const s = {a:0, phase:"idle", pressed:false};
+  const v = {
+    el,
+    phase(p){
+      s.phase = p; el.dataset.phase = p; setLabel(el, p);
+      if(p === "ok") Snd.play("ok");
+      if(p === "err"){ Snd.play("err"); const led = el.querySelector(".ab-led"); led.style.animation = "none"; void led.offsetWidth; led.style.animation = ""; }
+    },
+    press(b){ if(b === s.pressed) return; s.pressed = b; el.classList.toggle("down", b); Snd.play(b ? "down" : "up"); },
+    frame(dt){ if(s.phase === "waiting"){ s.a = (s.a + dt * (reduce ? 120 : 330)) % 360; el.style.setProperty("--a", s.a.toFixed(1) + "deg"); } }
+  };
+  views.push(v); return v;
+}
+function UsualView(el){
+  const v = { el,
+    phase(p){ el.querySelectorAll(".ub-l").forEach(s => s.classList.toggle("on", s.dataset.s === (p === "waiting" ? "waiting" : "idle"))); },
+    press(){}, frame(){} };
+  views.push(v); return v;
+}
+
+/* ---------- controller: the shared rules ---------- */
+function Controller(view, opts){
+  const o = Object.assign({delay:150, min:400, rule:true, guard:true, server:900, outcome:"ok", usual:false, msg:null, onRequest:null, onReport:null}, opts);
+  let phase = "idle", token = 0, shownAt = 0;
+  function set(p){ phase = p; view.phase(p); }
+  function start(){
+    if(o.guard && (phase === "pending" || phase === "waiting")) return;
+    const my = ++token; o.onRequest && o.onRequest();
+    if(o.msg) o.msg.textContent = "";
+    if(o.usual || !o.rule){ set("waiting"); shownAt = performance.now(); if(!o.usual) announce("Saving"); }
+    else { set("pending"); setTimeout(() => { if(my === token && phase === "pending"){ set("waiting"); shownAt = performance.now(); announce("Saving"); } }, o.delay); }
+    const server = o.server;
+    setTimeout(() => {
+      if(!o.usual && my !== token) return;
+      const finish = () => {
+        if(!o.usual && my !== token) return;
+        const shown = phase === "waiting" ? Math.round(performance.now() - shownAt) : 0;
+        if(o.usual){ set("idle"); o.onReport && o.onReport({server, shown}); return; }
+        const ok = o.outcome === "ok";
+        set(ok ? "ok" : "err");
+        announce(ok ? "Saved" : "Couldn’t save. Check your connection and try again.");
+        if(!ok && o.msg) o.msg.textContent = "Couldn’t save. The connection dropped, but your changes are still here.";
+        o.onReport && o.onReport({server, shown});
+        if(ok) setTimeout(() => { if(my === token && phase === "ok") set("idle"); }, 2000);
+      };
+      if(phase === "waiting" && o.rule && !o.usual){ const left = o.min - (performance.now() - shownAt); left > 0 ? setTimeout(finish, left) : finish(); }
+      else finish();
+    }, server);
+  }
+  return {start, o};
+}
+function wire(el, view, ctl){
+  el.addEventListener("pointerdown", e => { if(e.button === 0) view.press(true); });
+  const up = () => view.press(false);
+  el.addEventListener("pointerup", up); el.addEventListener("pointerleave", up); el.addEventListener("pointercancel", up);
+  el.addEventListener("keydown", e => { if((e.key === " " || e.key === "Enter") && !e.repeat) view.press(true); });
+  el.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter") view.press(false); });
+  el.addEventListener("click", () => ctl.start());
+}
+function make(id, m, opts){
+  const el = document.getElementById(id);
+  const view = m === "usual" ? UsualView(el) : m === "clay" ? ClayView(el) : AluView(el);
+  const ctl = Controller(view, Object.assign({usual: m === "usual", guard: m !== "usual", rule: m !== "usual"}, opts));
+  wire(el, view, ctl); return ctl;
+}
+function segOn(id, cb){
+  const g = document.getElementById(id);
+  g.addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; g.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); cb(b.dataset.v); });
+}
+
+/* ---------- mount both panels ---------- */
+["clay","alu"].forEach(m => {
+  const $ = id => document.getElementById(`${m}-${id}`);
+  // hero
+  let sent = 0;
+  const h = make(`${m}-h`, m, {msg:$("h-msg"), onRequest(){ sent++; $("h-cnt").innerHTML = `Requests sent: <b>${sent}</b>`; }});
+  segOn(`${m}-h-out`, v => h.o.outcome = v);
+  segOn(`${m}-h-spd`, v => h.o.server = +v);
+  // 01
+  make(`${m}-1u`, "usual", {server:900});
+  make(`${m}-1m`, m, {server:900});
+  // 02
+  const r2 = $("2-r");
+  const c2 = make(`${m}-2`, m, {server:600});
+  const b2 = $("2");
+  b2.addEventListener("pointerdown", () => r2.textContent = m === "clay" ? "Held. Flattened into the surface, waiting for you to let go." : "Held. Clicked down into the bezel, waiting for you to let go.");
+  b2.addEventListener("click", () => r2.textContent = "Released, so the save was sent.");
+  // 03
+  const srv = $("3-srv"), out = $("3-o"), rule = $("3-rule"), r3 = $("3-r");
+  const c3 = make(`${m}-3`, m, {server:190, onReport({server, shown}){
+    const ruleOn = c3.o.rule;
+    if(shown === 0) r3.textContent = `Server took ${server} ms. Nothing was shown: it went straight to the result.`;
+    else if(ruleOn) r3.textContent = `Server took ${server} ms. Waiting was shown for ${shown} ms${server < 550 ? ", held so it can be read" : ""}.`;
+    else r3.textContent = `Server took ${server} ms. Waiting was shown for ${shown} ms${shown < 300 ? ". That reads as a flicker." : "."}`;
+  }});
+  srv.addEventListener("input", () => { c3.o.server = +srv.value; out.textContent = `${srv.value} ms`; });
+  rule.addEventListener("change", () => { c3.o.rule = rule.checked; });
+  // 04
+  const c4 = make(`${m}-4`, m, {server:900, msg:$("4-msg")});
+  segOn(`${m}-4-out`, v => { c4.o.outcome = v; });
+  // 05
+  let nu = 0, nm = 0;
+  const cu = $("5u-c"), cm = $("5m-c");
+  make(`${m}-5u`, "usual", {server:1400, onRequest(){ nu++; cu.innerHTML = `Charges: <b>${nu}</b>`; cu.classList.toggle("bad", nu > 1); }});
+  make(`${m}-5m`, m, {server:1400, onRequest(){ nm++; cm.innerHTML = `Charges: <b>${nm}</b>`; }});
+  $("5-reset").addEventListener("click", () => { nu = nm = 0; cu.innerHTML = cm.innerHTML = "Charges: <b>0</b>"; cu.classList.remove("bad"); });
+});
+// comparison
+const vc = make("vs-c", "clay", {server:900}), va = make("vs-a", "alu", {server:900});
+segOn("vs-out", v => { vc.o.outcome = va.o.outcome = v; });
+
+/* ---------- tabs ---------- */
+const tabs = [document.getElementById("tab-clay"), document.getElementById("tab-alu")];
+function select(i, focus){
+  tabs.forEach((t, j) => { const on = i === j; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute("aria-controls")).hidden = !on; });
+  document.body.dataset.mat = i === 0 ? "clay" : "alu";
+  if(focus) tabs[i].focus();
+  try{ localStorage.setItem("submit-mat", String(i)); }catch(e){}
+}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => select(i));
+  t.addEventListener("keydown", e => { if(e.key === "ArrowRight" || e.key === "ArrowLeft"){ e.preventDefault(); select(1 - i, true); } });
+});
+let startTab = 0;
+if(location.hash === "#aluminium" || location.hash === "#hard") startTab = 1;
+else if(location.hash === "#clay" || location.hash === "#soft") startTab = 0;
+else { try{ if(localStorage.getItem("submit-mat") === "1") startTab = 1; }catch(e){} }
+select(startTab);
+
+/* ---------- loop ---------- */
+let last = performance.now();
+(function frame(now){ const dt = Math.min((now - last)/1000, 1/30); last = now; for(const v of views) v.frame(dt); requestAnimationFrame(frame); })(last);
+})();
+</script>
+
+</body></html>
