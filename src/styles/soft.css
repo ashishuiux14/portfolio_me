@@ -225,10 +225,10 @@ button { font: inherit; color: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 /* theme switch: circular reveal (see useTheme) */
-::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-html.vt-shrink::view-transition-old(root) { z-index: 2; }
-html.vt-shrink::view-transition-new(root) { z-index: 1; }
-html.vt-grow::view-transition-new(root) { z-index: 2; }
+/* theme switch: ink spill */
+.ink-spill { position: fixed; z-index: 9999; border-radius: 50%; pointer-events: none; transform: scale(0.002); will-change: transform, opacity;
+  background: radial-gradient(circle closest-side, var(--ink) 0 97%, color-mix(in srgb, var(--ink) 0%, transparent) 100%); }
+html.theme-flip *, html.theme-flip *::before, html.theme-flip *::after { transition: none !important; }
 
 /* Home: Interaction Lab tile, four controls in a 2x2 grid */
 .lab-quad { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 14px; }

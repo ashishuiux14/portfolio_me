@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import Icon from './Icon';
 import Monogram from './Monogram';
@@ -29,28 +28,50 @@ function applyTheme(t) {
   });
 }
 
+/* Ink spill: a disc of the new background grows out of the switch until it
+   covers the page (transform only, so it stays on the GPU and never stutters),
+   the theme flips underneath it in one frame with transitions paused, then
+   the ink fades away to reveal the page already in its new colours. */
+const INK = { dark: '#2A2725', light: '#EBE6E2' };
+let spilling = false;
+function spill(next, origin, done) {
+  const r = origin.getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 40;
+  const ink = document.createElement('div');
+  ink.className = 'ink-spill';
+  ink.style.cssText = `left:${x - R}px;top:${y - R}px;width:${2 * R}px;height:${2 * R}px;--ink:${INK[next]}`;
+  document.body.appendChild(ink);
+  const grow = ink.animate(
+    [{ transform: 'scale(0.002)' }, { transform: 'scale(1)' }],
+    { duration: 820, easing: 'cubic-bezier(.62, 0, .28, 1)', fill: 'forwards' },
+  );
+  grow.finished.then(() => {
+    document.documentElement.classList.add('theme-flip');
+    done();
+    // two frames so the new colours are painted before the ink lifts
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.documentElement.classList.remove('theme-flip');
+      const fade = ink.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 520, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
+      fade.finished.then(() => { ink.remove(); spilling = false; });
+    }));
+  }).catch(() => { ink.remove(); spilling = false; done(); });
+}
+
 export function useTheme() {
   const [theme, setThemeState] = useState(() => document.documentElement.getAttribute('data-theme') || 'light');
   const setTheme = (next, origin) => {
-    if (next === theme) return;
+    if (next === theme || spilling) return;
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!document.startViewTransition || reduce || !origin) {
-      applyTheme(next); setThemeState(next); return;
+    const commit = () => { applyTheme(next); setThemeState(next); };
+    if (reduce || !origin || !Element.prototype.animate) {
+      document.documentElement.classList.add('theme-flip');
+      commit();
+      requestAnimationFrame(() => document.documentElement.classList.remove('theme-flip'));
+      return;
     }
-    const r = origin.getBoundingClientRect();
-    const x = r.left + r.width / 2, y = r.top + r.height / 2;
-    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    const toDark = next === 'dark';
-    document.documentElement.classList.add(toDark ? 'vt-grow' : 'vt-shrink');
-    const vt = document.startViewTransition(() => { applyTheme(next); flushSync(() => setThemeState(next)); });
-    vt.ready.then(() => {
-      const small = `circle(0px at ${x}px ${y}px)`, big = `circle(${radius}px at ${x}px ${y}px)`;
-      document.documentElement.animate(
-        { clipPath: toDark ? [small, big] : [big, small] },
-        { duration: 760, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: toDark ? '::view-transition-new(root)' : '::view-transition-old(root)', fill: 'both' },
-      );
-    }).catch(() => {});
-    vt.finished.finally(() => document.documentElement.classList.remove('vt-grow', 'vt-shrink'));
+    spilling = true;
+    spill(next, origin, commit);
   };
   return [theme, setTheme];
 }
