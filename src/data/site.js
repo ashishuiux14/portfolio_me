@@ -6,6 +6,7 @@ export const CONTACT = {
   linkedinHandle: 'ashishd-uiux',
   resume: '/Ashish_UX_UI_Resume.pdf',
   location: 'Chicago, IL · open to remote',
+  classic: 'https://classic-portfolio-me.adixit4.workers.dev',
 };
 
 // Case studies keep their existing HTML pages (public/*.html) for now.

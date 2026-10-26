@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Icon from '../components/Icon';
+import { ClayToggle } from '../lab/Art';
 import { PageHead, PrevNext } from '../components/Bits';
 import { CONTACT } from '../data/site';
 
@@ -22,6 +25,9 @@ const QUOTES = [
 ];
 
 export default function About() {
+  const [classic, setClassic] = useState(false);
+  // coming back from the previous site (bfcache), the switch should be off again
+  useEffect(() => { const r = () => setClassic(false); window.addEventListener('pageshow', r); return () => window.removeEventListener('pageshow', r); }, []);
   return (
     <div className="page">
       <PageHead eyebrow="About" title="The person behind it." />
@@ -98,6 +104,19 @@ export default function About() {
         <div className="in" style={{ flex: '1 1 280px', borderRadius: 28, overflow: 'hidden', maxWidth: 420, aspectRatio: '4 / 3' }}>
           <img src="/about-batman.jpg" alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
+      </section>
+
+      {/* previous portfolio */}
+      <section className="up" style={{ borderRadius: 34, padding: 'clamp(20px, 2.6vw, 30px)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }} aria-label="Previous portfolio">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, flex: '1 1 320px' }}>
+          <span className="cap">Previous portfolio · 2025</span>
+          <p style={{ margin: 0, fontSize: 18 }}>Curious where this started? The earlier dark version is still online.</p>
+          <a href={CONTACT.classic} target="_blank" rel="noreferrer" className="muted" style={{ fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}>Open the previous portfolio <Icon name="ext" size={14} /></a>
+        </div>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
+          <span className="cap">Switch to it</span>
+          <ClayToggle checked={classic} zoom={0.5} label="Open the previous portfolio" onChange={(v) => { setClassic(v); if (v) { setTimeout(() => { window.location.href = CONTACT.classic; }, 380); } }} />
+        </span>
       </section>
 
       <PrevNext prev={{ to: '/3d-printing', label: '3D printing' }} next={{ to: '/contact', label: 'Contact' }} />
