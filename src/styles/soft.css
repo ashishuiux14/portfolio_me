@@ -354,3 +354,6 @@ html[data-theme="dark"] .mini-watch:not([data-ink="light"] .mini-watch), [data-i
   --sh-in-sm: inset 3px 3px 6px var(--lo-in), inset -3px -3px 6px var(--hi);
   color: var(--ink);
 }
+
+/* the Atelier cover is shown whole, never cropped */
+img[src="/atelier-cover.png"] { object-fit: contain !important; background: #FAFAFA; }
