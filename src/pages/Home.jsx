@@ -106,7 +106,7 @@ export default function Home() {
         <section className="b-lab up" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }} aria-label="Try the controls">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="cap">Interaction Lab · try me</span>
-            <Link to="/lab/controls" className="cap accent" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>Open <Icon name="arrow" size={14} /></Link>
+            <Link to="/lab/controls" className="cap accent" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}><Icon name="arrow" size={14} />Open</Link>
           </div>
           <p className="muted" style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>Working controls from my component studies, built in soft clay and machined aluminium. Flip the toggle, count with the stepper, turn the dial, press save.</p>
           <div className="lab-quad">

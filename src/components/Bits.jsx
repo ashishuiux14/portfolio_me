@@ -45,7 +45,7 @@ export function PrevNext({ prev, next }) {
       ) : <span />}
       {next ? (
         <Link to={next.to} className="up-sm press" style={{ borderRadius: 30, padding: '24px 28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, textAlign: 'right' }}>
-          <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{next.eyebrow || 'Next'}<Icon name="arrow" size={14} /></span><span style={{ fontSize: 24, fontWeight: 300 }}>{next.label}</span>
+          <span className="cap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><Icon name="arrow" size={14} />{next.eyebrow || 'Next'}</span><span style={{ fontSize: 24, fontWeight: 300 }}>{next.label}</span>
         </Link>
       ) : <span />}
     </nav>

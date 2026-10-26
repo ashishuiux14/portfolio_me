@@ -45,7 +45,7 @@ export default function About() {
           <p>Based in <b style={{ color: 'var(--ink)', fontWeight: 500 }}>Chicago</b>, open to senior IC product design roles.</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
             <Link to="/contact" className="pill" style={{ background: 'var(--accent)', color: '#fff', fontWeight: 500, boxShadow: 'var(--sh-up-sm)' }}>Get in touch</Link>
-            <a href={CONTACT.resume} target="_blank" rel="noreferrer" className="pill up-sm press">Download CV <Icon name="download" size={18} /></a>
+            <a href={CONTACT.resume} target="_blank" rel="noreferrer" className="pill up-sm press"><Icon name="download" size={18} />Download CV</a>
           </div>
         </div>
       </section>
@@ -111,7 +111,7 @@ export default function About() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, flex: '1 1 320px' }}>
           <span className="cap">Previous portfolio · 2025</span>
           <p style={{ margin: 0, fontSize: 18 }}>Curious where this started? The earlier dark version is still online.</p>
-          <a href={CONTACT.classic} target="_blank" rel="noreferrer" className="muted" style={{ fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}>Open the previous portfolio <Icon name="ext" size={14} /></a>
+          <a href={CONTACT.classic} target="_blank" rel="noreferrer" className="muted" style={{ fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}><Icon name="ext" size={14} />Open the previous portfolio</a>
         </div>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
           <span className="cap">Switch to it</span>

@@ -494,7 +494,7 @@
     <!-- ═══ THE GATE ════════════════════ -->
     <div class="gate" id="gate">
       <p>"That's the honest half done. Now — the idea."</p>
-      <button type="button" class="btn" id="revealBtn" onclick="revealPart2()">Reveal Part 2 <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
+      <button type="button" class="btn" id="revealBtn" onclick="revealPart2()"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;margin-right:.4em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Reveal Part 2</button>
     </div>
 
     <!-- ═══ PART 2 ═══════════════════════ -->
@@ -603,7 +603,7 @@
 
       <!-- SUBMIT -->
       <div class="submit-zone">
-        <button type="submit" class="btn">Submit my answers <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
+        <button type="submit" class="btn"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;margin-right:.4em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Submit my answers</button>
         <div class="privacy">Answers go only to Ashish · Never shared · No spam, ever</div>
       </div>
 
@@ -669,7 +669,7 @@
       }
     } catch (err) {
       btn.disabled = false;
-      btn.innerHTML = 'Submit my answers <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.14em;flex:none;margin-right:.4em"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Submit my answers';
       alert('Something went wrong sending your answers. Please try again — or WhatsApp them to Ashish directly.');
     }
   });

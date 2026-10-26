@@ -89,7 +89,7 @@ export default function LabSeatPicker() {
         </div>
       </Sheet>
 
-      <a href="/studies/seat-map.html" target="_blank" rel="noreferrer" className="pill up-sm press" style={{ alignSelf: 'flex-start' }}>Read the full seat map study <Icon name="ext" size={16} /></a>
+      <a href="/studies/seat-map.html" target="_blank" rel="noreferrer" className="pill up-sm press" style={{ alignSelf: 'flex-start' }}><Icon name="ext" size={16} />Read the full seat map study</a>
 
       <PrevNext prev={{ to: '/lab/controls', label: '02 · Controls' }} next={{ to: '/lab/crosshair', label: '04 · Crosshair' }} />
     </div>
