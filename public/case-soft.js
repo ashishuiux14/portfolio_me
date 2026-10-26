@@ -31,6 +31,13 @@
       var cs = getComputedStyle(el);
       // type
       var ff = cs.fontFamily || '';
+      // the site's type is light: heavy weights read as a different font
+      if (!/mono/i.test(ff)) {
+        var fw = px(cs.fontWeight), fs = px(cs.fontSize);
+        if (fw >= 600) el.style.setProperty('font-weight', fs >= 28 ? '300' : '500', 'important');
+        else if (fw === 500 && fs >= 28) el.style.setProperty('font-weight', '400', 'important');
+        if (fs >= 28) el.style.setProperty('letter-spacing', '-0.01em', 'important');
+      }
       if (!/mono/i.test(ff) && /(Instrument Serif|Syne|DM Sans|Manrope|Comfortaa|Inter|serif)/i.test(ff)) {
         el.style.fontFamily = DISPLAY;
         if (/Instrument Serif/i.test(ff) && px(cs.fontWeight) < 500) el.style.fontWeight = '300';
