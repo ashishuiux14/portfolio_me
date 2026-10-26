@@ -14,7 +14,7 @@ export const CASE_STUDIES = [
   {
     slug: 'atelier', name: 'Atelier', tag: 'Flagship · B2B SaaS', year: '2026',
     sub: 'A second brain for the solo principal architect: projects, WhatsApp groups and client meetings in one place.',
-    src: '/atelier-case-study.html', cover: null,
+    src: '/atelier-case-study.html', cover: '/atelier-cover.svg',
   },
   {
     slug: '3d-hub', name: '3D Hub', tag: 'Mobile app', year: '2024',
