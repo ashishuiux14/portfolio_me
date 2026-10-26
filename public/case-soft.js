@@ -6,8 +6,8 @@
   var html = document.documentElement;
   function theme() {
     var t = null;
-    try { t = localStorage.getItem('theme'); } catch (e) {}
-    if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    try { t = sessionStorage.getItem('theme'); } catch (e) {}
+    if (t !== 'dark') t = 'light';
     html.setAttribute('data-theme', t);
   }
   theme();
